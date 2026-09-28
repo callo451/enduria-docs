@@ -1,0 +1,35 @@
+---
+title: Requests and responses
+description: Handle Enduria API envelopes, pagination, idempotency, errors, and rate limits.
+---
+
+# Requests and responses
+
+Successful responses wrap content in `data`. List endpoints can include pagination in `meta`, and every response carries a request identifier.
+
+```json
+{
+  "data": [],
+  "meta": {"page": 1, "limit": 25, "total": 0, "hasMore": false},
+  "request_id": "request identifier"
+}
+```
+
+## Idempotent writes
+
+Mutation endpoints accept an optional `Idempotency-Key` header. Use a unique value for each intended operation. Retrying the same method, path, query, scopes, and exact JSON bytes with that key can replay the stored result.
+
+- Keys contain 1–200 printable ASCII characters.
+- Results are retained for 24 hours.
+- Reusing a key with different request material returns `409 Conflict`.
+- `X-Idempotent-Replayed` indicates a replayed response.
+
+## Errors
+
+Errors include an HTTP status, machine-readable code, message, and `request_id`. Preserve both the body request ID and the `X-Request-Id` header in operational logs.
+
+The API may return `400`, `401`, `403`, `404`, `409`, `413`, `429`, `500`, or `503`. On `429`, honour `Retry-After`. For transient failures, retry with exponential backoff and jitter; do not retry validation or permission failures unchanged.
+
+## Limits and versioning
+
+Rate-limit headers report minute, hour, and day allowances. `X-API-Version` identifies the API contract in use. JSON request bodies are limited to 2 MiB.

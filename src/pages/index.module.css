@@ -1,0 +1,11 @@
+.hero {padding: 7rem 0 6rem; background: radial-gradient(circle at 80% 15%, rgba(0,149,154,.16), transparent 32%), linear-gradient(180deg, var(--ifm-background-surface-color), var(--ifm-background-color)); border-bottom: 1px solid var(--enduria-line);}
+.eyebrow {font: 700 .75rem/1.4 var(--ifm-font-family-monospace); letter-spacing: .14em; color: var(--ifm-color-primary); margin-bottom: 1rem;}
+.title {max-width: 850px; margin: 0; font-size: clamp(2.6rem, 6vw, 5rem); line-height: 1.02; letter-spacing: -.045em;}
+.subtitle {max-width: 680px; margin: 1.5rem 0 2rem; color: var(--ifm-color-emphasis-700); font-size: 1.2rem; line-height: 1.65;}
+.actions {display: flex; flex-wrap: wrap; gap: .75rem;}
+.grid {display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding-top: 4rem; padding-bottom: 4rem;}
+.card {padding: 2rem; border: 1px solid var(--enduria-line); border-radius: 14px; background: var(--ifm-background-surface-color); transition: border-color .2s, transform .2s, box-shadow .2s;}
+.card:hover {border-color: var(--ifm-color-primary); transform: translateY(-2px); box-shadow: var(--ifm-global-shadow-lw);}
+.card h2 {font-size: 1.25rem; margin-bottom: .65rem;}.card p {color: var(--ifm-color-emphasis-700); min-height: 3.5rem;}.card a {font-weight: 650;}
+.callout {padding: 4rem 0; border-top: 1px solid var(--enduria-line); background: var(--ifm-background-surface-color);}.callout h2 {margin-bottom: .5rem;}.callout p {max-width: 760px; color: var(--ifm-color-emphasis-700);}
+@media (max-width: 760px) {.hero {padding: 4.5rem 0 4rem;} .grid {grid-template-columns: 1fr; padding-top: 2.5rem; padding-bottom: 2.5rem;} .card p {min-height: auto;}}

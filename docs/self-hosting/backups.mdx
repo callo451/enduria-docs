@@ -1,0 +1,21 @@
+---
+title: Backups and recovery
+description: Protect Enduria data and prove that it can be restored.
+---
+
+# Backups and recovery
+
+A backup is useful only when it is complete, protected, and restorable within your recovery objectives.
+
+Back up at least:
+
+- The PostgreSQL database.
+- User-managed attachment or object storage.
+- Deployment configuration needed to reconstruct services.
+- Encryption keys and provider configuration through an appropriately protected recovery process.
+
+Keep multiple restore points, encrypt backup media, restrict access, and store a copy outside the failure domain of the running deployment.
+
+## Test recovery
+
+Regularly restore into an isolated environment, start a compatible Enduria release, run health checks, and verify representative tenant data and attachments. Record the achieved recovery time and the newest recovered transaction so you can compare them with your recovery objectives.

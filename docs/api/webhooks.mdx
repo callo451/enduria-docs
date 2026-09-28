@@ -1,0 +1,25 @@
+---
+title: Webhooks
+description: Subscribe to Enduria lifecycle events and process deliveries safely.
+---
+
+# Webhooks
+
+Webhooks notify an HTTPS endpoint when subscribed Enduria events occur. Use them for event-driven automation; use polling when you need recovery across missed events.
+
+## Create a reliable receiver
+
+1. Expose an HTTPS endpoint that can read the raw request body.
+2. Create a webhook subscription for the required event types.
+3. Store the signing secret returned at creation; it is not a general API key.
+4. Verify the signature before parsing or acting on the payload.
+5. Deduplicate deliveries using the event or delivery identifier.
+6. Return a successful response quickly and perform longer work asynchronously.
+
+Work-item changes can emit a generic `ticket.*` event and an applicable type-specific event such as `incident.*`, `change.*`, or `problem.*`. Their lifecycle vocabularies differ, so subscribe to the events your automation actually understands.
+
+Retrieve the supported event catalogue from `GET /api/v1/webhooks/events`. A webhook can be tested with its test endpoint after creation.
+
+:::warning
+Do not infer the tenant from payload fields and then use a key belonging to another organisation. Keep subscription secrets and API keys associated with the tenant that issued them.
+:::

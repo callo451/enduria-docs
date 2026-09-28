@@ -1,0 +1,26 @@
+---
+title: Self-hosting overview
+description: Plan a supported Enduria deployment.
+---
+
+# Self-hosting overview
+
+Enduria is an AGPL-3.0 web platform designed to run with PostgreSQL and its supporting services. The repository's Docker Compose configuration is the normal starting point for a self-hosted deployment.
+
+## Production responsibilities
+
+A production operator is responsible for:
+
+- DNS, TLS termination, and inbound network policy.
+- Durable PostgreSQL storage and tested backups.
+- Required application, authentication, email, storage, AI, and integration configuration.
+- A strong cron secret and a running scheduler service.
+- Applying committed database migrations before starting an upgraded application.
+- Monitoring availability, database health, background work, and capacity.
+- Timely security updates and compliance with the AGPL-3.0 licence.
+
+The public `/api/health` endpoint reports application liveness and database reachability without exposing internal error details.
+
+:::caution
+Do not use `db:push` as a production upgrade mechanism. Production upgrades apply the committed migrations shipped with the release.
+:::

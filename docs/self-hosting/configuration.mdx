@@ -1,0 +1,23 @@
+---
+title: Configuration
+description: Manage production configuration and secrets for a self-hosted Enduria deployment.
+---
+
+# Configuration
+
+Keep deployment configuration outside the container image and source repository. Use your platform's secret manager for credentials and encryption material.
+
+## Configuration checklist
+
+- Set the canonical public application URL used by authentication callbacks.
+- Configure a production PostgreSQL database with durable storage.
+- Set a strong `CRON_SECRET`; an unset production secret denies scheduled requests.
+- Configure email delivery and inbound processing if those features are enabled.
+- Configure object storage for attachments where required.
+- Select and configure an AI provider only if AI features are enabled.
+- Set provider credentials for each external integration independently.
+- Restrict any internal service secret to trusted service-to-service callers.
+
+Restart the affected service after changing environment values. Validate `/api/health`, sign-in, and one representative background job after material configuration changes.
+
+Refer to the release's example environment file and deployment configuration for the complete variable list; supported variables can change between releases.

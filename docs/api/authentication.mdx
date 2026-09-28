@@ -1,0 +1,29 @@
+---
+title: Authentication
+description: Authenticate API calls and keep Enduria credentials safe.
+---
+
+# Authentication
+
+Send an Enduria API key using either a bearer token or the `X-API-Key` header.
+
+```http
+Authorization: Bearer en_live_your_key
+```
+
+```http
+X-API-Key: en_live_your_key
+```
+
+API keys are tenant-bound and carry scopes. A valid key with insufficient scope receives `403 Forbidden`; an absent or invalid key receives `401 Unauthorized`.
+
+## Security guidance
+
+- Keep keys on servers, not in browser code or mobile packages.
+- Store them in a secret manager or protected environment variable.
+- Create separate keys for separate integrations and environments.
+- Grant the narrowest useful scopes.
+- Rotate a key after suspected exposure and update every dependent service.
+- Never include keys in logs, screenshots, source control, or support tickets.
+
+Use `admin:full` only for integrations that genuinely require unrestricted API access.

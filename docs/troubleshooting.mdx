@@ -1,0 +1,23 @@
+---
+title: Troubleshooting
+description: Collect useful evidence and resolve common Enduria issues.
+---
+
+# Troubleshooting
+
+Start by identifying whether the problem affects one record, one user, one organisation, or the whole deployment.
+
+## Useful evidence
+
+- The page or API path, without secrets.
+- The approximate time and your time zone.
+- The organisation and affected record ID.
+- What you expected and what happened instead.
+- The `X-Request-Id` response header for API failures.
+- Relevant application, scheduler, or database logs with credentials removed.
+
+For sign-in problems, confirm the user's authentication method and tenant context. For missing interface areas, check permissions. For stale integration data, review the connection state and the scheduled synchronisation worker. For self-hosted availability, check `/api/health` before inspecting individual features.
+
+:::warning
+Never post API keys, session cookies, passwords, provider secrets, or unredacted customer data in an issue.
+:::

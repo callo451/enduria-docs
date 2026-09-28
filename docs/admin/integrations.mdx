@@ -1,0 +1,18 @@
+---
+title: Integrations
+description: Connect external services and understand synchronisation behavior.
+---
+
+# Integrations
+
+Integrations connect Enduria with services such as identity, device management, productivity suites, calendars, email, and automation tools.
+
+## Before connecting a provider
+
+- Create a dedicated provider identity where the provider supports it.
+- Grant only the documented permissions.
+- Decide which organisation owns imported data.
+- Confirm scheduled synchronisation and error monitoring are enabled.
+- Run a limited initial synchronisation and review mappings before broad rollout.
+
+Connector synchronisation is durable and page-based. A page of imported data and its cursor checkpoint commit together, allowing interrupted runs to resume safely. Complete provider snapshots may reconcile provider-owned assignments; manually managed or unowned records are not assumed to belong to the connector.
