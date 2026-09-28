@@ -1,0 +1,44 @@
+---
+title: Configured vocabulary and queues
+description: Discover tenant and project-specific values before writing records.
+---
+
+# Configured vocabulary and queues
+
+Enduria organisations control their own ticket priorities, statuses, categories, asset lifecycle values, and project settings. Connectors must discover valid values instead of hardcoding labels.
+
+## Categories
+
+`GET /categories?type=ticket|asset|kb` requires `tickets:read`. The `type` filter is optional. Use returned identifiers or supported names as required by the target resource.
+
+## Priorities
+
+`GET /priorities` returns ticket priorities when `projectId` is omitted:
+
+```json
+{"id": "UUID", "value": "high", "label": "High", "level": 2, "ticketTypes": ["ticket", "incident"]}
+```
+
+`value` is the configured ticket priority name in lowercase. Do not persist an assumed P1–P4 mark.
+
+For project/task priority values, supply `projectId`:
+
+```text
+GET /priorities?projectId=PROJECT_UUID
+```
+
+The project response uses its configured slug as `value`.
+
+## Statuses
+
+`GET /statuses` accepts `type=ticket|incident|change|problem|service_request|project|task|asset` and defaults to `ticket`.
+
+Project and task types require `projectId`. Asset results come from active lifecycle settings. Ticket-family results are filtered to statuses applicable to the requested work-item type.
+
+## Queues
+
+`GET /queues` requires `tickets:read`. It supports page pagination and `isActive=true|false`. Use queue IDs returned here when filtering, assigning, or subscribing to ticket activity.
+
+## Empty results
+
+An empty vocabulary response means the organisation or project needs configuration. It is not permission to invent a fallback value in the connector. Surface the configuration problem to an administrator.

@@ -1,0 +1,79 @@
+---
+title: Time, SLA policies, and reports
+description: Record work, configure service targets, and execute available reports.
+---
+
+# Time, SLA policies, and reports
+
+## Time entries
+
+| Method | Path | Scope |
+| --- | --- | --- |
+| `GET` | `/time-entries` | `tickets:read` |
+| `POST` | `/time-entries` | `tickets:write` |
+
+Creating an entry requires `userId`, `startTime`, and at least one of `ticketId`, `projectId`, or `taskId`. When both task and project are supplied, the task must belong to that project.
+
+`duration` is a nonnegative integer in minutes. If `endTime` is supplied, it cannot precede `startTime`. Optional billing fields are `isBillable` and a nonnegative `hourlyRate`.
+
+```json
+{
+  "userId": "USER_UUID",
+  "ticketId": "TICKET_UUID",
+  "description": "Investigated authentication logs and restored access.",
+  "startTime": "2026-09-28T01:00:00Z",
+  "endTime": "2026-09-28T01:45:00Z",
+  "duration": 45,
+  "isBillable": true
+}
+```
+
+List filters include related ticket/project/task, user, billable state, and start/end date bounds.
+
+## SLA policies
+
+| Method | Path | Scope |
+| --- | --- | --- |
+| `GET` | `/sla` | `tickets:read` |
+| `POST` | `/sla` | `tickets:write` |
+
+Policy creation requires a name and response/resolution targets for the seeded keys `critical`, `high`, `medium`, and `low`. Target values are positive numbers. Optional business hours specify an IANA time zone, all seven named weekdays, and holidays.
+
+```json
+{
+  "name": "Standard support",
+  "isDefault": true,
+  "targets": {
+    "critical": {"responseTime": 15, "resolutionTime": 240},
+    "high": {"responseTime": 30, "resolutionTime": 480},
+    "medium": {"responseTime": 120, "resolutionTime": 1440},
+    "low": {"responseTime": 240, "resolutionTime": 2880}
+  },
+  "businessHours": {
+    "enabled": true,
+    "timezone": "Australia/Sydney",
+    "schedule": {
+      "monday": {"enabled": true, "start": "09:00", "end": "17:00"},
+      "tuesday": {"enabled": true, "start": "09:00", "end": "17:00"},
+      "wednesday": {"enabled": true, "start": "09:00", "end": "17:00"},
+      "thursday": {"enabled": true, "start": "09:00", "end": "17:00"},
+      "friday": {"enabled": true, "start": "09:00", "end": "17:00"},
+      "saturday": {"enabled": false, "start": "09:00", "end": "17:00"},
+      "sunday": {"enabled": false, "start": "09:00", "end": "17:00"}
+    },
+    "holidays": []
+  },
+  "escalationEnabled": true
+}
+```
+
+Times use `HH:mm`. The public surface currently lists and creates policies; it does not expose update or delete operations.
+
+## Reports
+
+| Method | Path | Scope |
+| --- | --- | --- |
+| `GET` | `/reports` | `reports:read` |
+| `POST` | `/reports/{id}/run` | `reports:read` |
+
+List reports with `limit` (1–100), `offset`, optional `category`, and `search`. Run an available report by ID. The result shape depends on the selected report, so consumers should use the report definition and returned metadata rather than assume a universal row schema.

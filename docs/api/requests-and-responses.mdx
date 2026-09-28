@@ -5,6 +5,8 @@ description: Handle Enduria API envelopes, pagination, idempotency, errors, and 
 
 # Requests and responses
 
+Send JSON objects for create and update operations. Write schemas are strict: unknown top-level fields return `400` instead of being silently discarded. UUID fields must contain UUIDs, dates use ISO 8601 timestamps, and query booleans use the literal strings `true` or `false`.
+
 Successful responses wrap content in `data`. List endpoints can include pagination in `meta`, and every response carries a request identifier.
 
 ```json
@@ -15,6 +17,10 @@ Successful responses wrap content in `data`. List endpoints can include paginati
 }
 ```
 
+Resource mutations—including creation and deletion—currently return HTTP `200`. Delete responses wrap a `deleted` boolean in `data`.
+
+Response models are extensible. Select the fields your integration needs and tolerate additional properties, especially in JSON metadata whose shape depends on tenant configuration or resource type.
+
 ## Idempotent writes
 
 Mutation endpoints accept an optional `Idempotency-Key` header. Use a unique value for each intended operation. Retrying the same method, path, query, scopes, and exact JSON bytes with that key can replay the stored result.
@@ -24,12 +30,49 @@ Mutation endpoints accept an optional `Idempotency-Key` header. Use a unique val
 - Reusing a key with different request material returns `409 Conflict`.
 - `X-Idempotent-Replayed` indicates a replayed response.
 
+Use 1–200 printable, non-space ASCII characters. A retry must preserve the same API key, scopes, method, path, query string, and exact JSON bytes. Concurrent duplicates can receive `idempotency_in_progress`; wait for `Retry-After` and send the identical request again.
+
+Successful database changes, queued webhook records, and the cached response commit together. Failed and 4xx writes roll back and do not reserve the key. After 24 hours, reusing the key represents a new operation.
+
+`POST /webhooks/{id}/test` deliberately does not support idempotency and rejects the header.
+
 ## Errors
 
 Errors include an HTTP status, machine-readable code, message, and `request_id`. Preserve both the body request ID and the `X-Request-Id` header in operational logs.
 
-The API may return `400`, `401`, `403`, `404`, `409`, `413`, `429`, `500`, or `503`. On `429`, honour `Retry-After`. For transient failures, retry with exponential backoff and jitter; do not retry validation or permission failures unchanged.
+```json
+{
+  "error": {
+    "message": "Validation error",
+    "code": "validation_error",
+    "status": 400,
+    "details": {}
+  },
+  "request_id": "req_example"
+}
+```
+
+| Status | Recommended action |
+| --- | --- |
+| `400` | Correct the request; do not retry unchanged input. |
+| `401` / `403` | Check credentials, scopes, organisation enablement, and network policy. |
+| `404` | Treat the resource as unavailable to this tenant. |
+| `409` | Resolve the conflict. For `idempotency_in_progress`, wait for `Retry-After` and retry identically. |
+| `413` | Reduce the request body. |
+| `429` | Wait for `Retry-After`; use bounded exponential backoff with jitter. |
+| `500` / `503` | Retry mutations only with a stable idempotency key; investigate persistent failures. |
+
+Common machine-readable codes include `invalid_request`, `validation_error`, `resource_not_found`, `resource_conflict`, `insufficient_scope`, `idempotency_conflict`, `idempotency_in_progress`, `request_too_large`, and `service_unavailable`.
 
 ## Limits and versioning
 
-Rate-limit headers report minute, hour, and day allowances. `X-API-Version` identifies the API contract in use. JSON request bodies are limited to 2 MiB.
+Rate limits are atomic, per-key, fixed UTC windows. Defaults are 60 requests per minute, 1,000 per hour, and 10,000 per day, and administrators can configure them per key. Concurrent requests share counters across application replicas.
+
+Admitted requests count even when validation fails, a write rolls back, audit logging fails, or an idempotent response is replayed. Headers report limits and remaining counts:
+
+- `X-RateLimit-Limit-Minute` and `X-RateLimit-Remaining-Minute`
+- `X-RateLimit-Limit-Hour` and `X-RateLimit-Remaining-Hour`
+- `X-RateLimit-Limit-Day` and `X-RateLimit-Remaining-Day`
+- `Retry-After` when a window blocks the request
+
+`X-API-Version` identifies the API contract in use. JSON request bodies are limited to 2 MiB, including streamed bodies; configure proxy limits consistently.

@@ -1,0 +1,77 @@
+---
+title: Tickets and comments
+description: Create, query, update, and discuss Enduria work items through the API.
+---
+
+# Tickets and comments
+
+Tickets, incidents, service requests, changes, and problems share `/tickets`. `ticketType` selects the lifecycle and type-specific rules.
+
+## Operations
+
+| Method | Path | Scope |
+| --- | --- | --- |
+| `GET` | `/tickets` | `tickets:read` |
+| `POST` | `/tickets` | `tickets:write` |
+| `GET` | `/tickets/{id}` | `tickets:read` |
+| `PATCH` | `/tickets/{id}` | `tickets:write` |
+| `DELETE` | `/tickets/{id}` | `tickets:delete` |
+| `GET` | `/tickets/{id}/comments` | `tickets:read` |
+| `POST` | `/tickets/{id}/comments` | `tickets:write` |
+
+## List tickets
+
+`GET /tickets` accepts `page`, `limit`, `status`, `priority`, `ticketType`, `assignedTo`, `queueId`, `clientId`, `search`, `createdAfter`, and `createdBefore`. Sort using `sortBy=createdAt|updatedAt|priority|status` and `sortOrder=asc|desc`.
+
+Retrieve valid status and priority values from `/statuses?type=...` and `/priorities`. Category values come from `/categories?type=ticket`.
+
+## Create a ticket
+
+Required fields are `title` and `description`. Common optional fields are:
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `ticketType` | enum | `ticket`, `incident`, `change`, `problem`, or `service_request`; defaults to `ticket` |
+| `priority` | string | Configured priority name in lowercase; defaults to `medium` |
+| `category`, `subcategory` | string | Tenant-configured service catalogue values |
+| `assignedTo`, `queueId`, `clientId`, `requesterId` | UUID | Referenced records must belong to the key's tenant |
+| `tags` | string[] | Optional labels |
+| `customFields` | object | Tenant-defined values |
+| `severity` | enum | `minor`, `major`, or `critical`; incidents only |
+| `impact`, `urgency` | enum | `low`, `medium`, or `high`; applicability depends on type |
+
+Change creation also requires `risk`, `impact`, `plannedStartDate`, `plannedEndDate`, and a non-empty `backoutPlan`. It can include `testPlan` and `implementationPlan`. The planned end cannot precede the planned start.
+
+```json
+{
+  "title": "Upgrade customer edge firewall",
+  "description": "Apply the approved firmware release.",
+  "ticketType": "change",
+  "priority": "medium",
+  "risk": "medium",
+  "impact": "low",
+  "plannedStartDate": "2026-10-03T10:00:00Z",
+  "plannedEndDate": "2026-10-03T11:30:00Z",
+  "implementationPlan": "Back up configuration, apply firmware, validate connectivity.",
+  "testPlan": "Verify tunnels, monitoring, and customer egress.",
+  "backoutPlan": "Restore the configuration and previous firmware image."
+}
+```
+
+Change planning fields are rejected for non-change tickets. `severity` requires an incident. `urgency` applies to incidents and problems; ordinary tickets and service requests cannot set impact or urgency.
+
+## Update a ticket
+
+`PATCH /tickets/{id}` accepts `title`, `description`, `status`, `priority`, `category`, `subcategory`, `assignedTo`, `queueId`, `tags`, `customFields`, and `resolution`. Send `null` to clear `assignedTo` or `queueId`.
+
+Status changes pass through the ticket lifecycle service. A key cannot approve a change merely by PATCHing its status; configured RFC approval policy still applies. `dueDate`, `contactEmail`, and `contactName` are not writable fields.
+
+## Comments
+
+Create a comment with:
+
+```json
+{"content": "The requester confirmed access is restored.", "isInternal": false}
+```
+
+`isInternal` defaults to `false`. Internal comments must not be exposed to customer-facing systems.

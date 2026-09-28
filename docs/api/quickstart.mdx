@@ -1,0 +1,95 @@
+---
+title: API quickstart
+description: Make your first Enduria API request and create a retry-safe ticket.
+---
+
+# API quickstart
+
+This walkthrough verifies credentials, discovers tenant vocabulary, creates a ticket safely, and reads the result.
+
+## 1. Set local variables
+
+```bash
+export ENDURIA_URL="https://your-enduria.example"
+export ENDURIA_API_KEY="en_live_replace_me"
+```
+
+Use a secret manager in deployed software. Do not commit `.env` files containing live keys.
+
+## 2. Verify read access
+
+```bash
+curl --fail-with-body \
+  --header "Authorization: Bearer $ENDURIA_API_KEY" \
+  "$ENDURIA_URL/api/v1/tickets?limit=1"
+```
+
+A successful result contains `data`, `meta`, and `request_id`. `401` means the credential was not accepted. `403` generally means the key lacks `tickets:read`, organisation API access is disabled, or a configured network policy denied the request.
+
+## 3. Discover valid values
+
+Do not assume every organisation uses the same priority, status, or category names.
+
+```bash
+curl --fail-with-body \
+  --header "Authorization: Bearer $ENDURIA_API_KEY" \
+  "$ENDURIA_URL/api/v1/priorities"
+
+curl --fail-with-body \
+  --header "Authorization: Bearer $ENDURIA_API_KEY" \
+  "$ENDURIA_URL/api/v1/categories?type=ticket"
+```
+
+Ticket priorities are written using the returned `value`, which is the configured name in lowercase.
+
+## 4. Create a ticket
+
+Use an idempotency key derived from the upstream business event. Retrying the exact request with the same key cannot create a second successful write during the 24-hour retention window.
+
+```bash
+curl --fail-with-body \
+  --request POST \
+  --header "Authorization: Bearer $ENDURIA_API_KEY" \
+  --header "Content-Type: application/json" \
+  --header "Idempotency-Key: example-order-1842-ticket" \
+  --data '{
+    "title": "Unable to access the finance application",
+    "description": "The requester receives an access denied message after sign-in.",
+    "ticketType": "incident",
+    "priority": "high",
+    "impact": "medium",
+    "urgency": "high"
+  }' \
+  "$ENDURIA_URL/api/v1/tickets"
+```
+
+Creation currently returns HTTP `200`, not `201`. Read the created record from `data` and retain `request_id` for diagnostics.
+
+## 5. Read the ticket
+
+```bash
+curl --fail-with-body \
+  --header "X-API-Key: $ENDURIA_API_KEY" \
+  "$ENDURIA_URL/api/v1/tickets/TICKET_UUID"
+```
+
+Both bearer authentication and `X-API-Key` are supported. Choose one convention and use it consistently.
+
+## JavaScript example
+
+```js
+const response = await fetch(`${process.env.ENDURIA_URL}/api/v1/tickets?limit=20`, {
+  headers: {Authorization: `Bearer ${process.env.ENDURIA_API_KEY}`},
+});
+
+const body = await response.json();
+if (!response.ok) {
+  throw new Error(`${body.error?.code}: ${body.error?.message} (${body.request_id})`);
+}
+
+for (const ticket of body.data) {
+  console.log(ticket.id, ticket.title);
+}
+```
+
+Next, review [scopes](./scopes), [requests and responses](./requests-and-responses), and the resource guide for your integration.

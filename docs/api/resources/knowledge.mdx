@@ -1,0 +1,43 @@
+---
+title: Knowledge articles
+description: Query and maintain Enduria knowledge-base articles.
+---
+
+# Knowledge articles
+
+## Operations
+
+| Method | Path | Scope |
+| --- | --- | --- |
+| `GET` | `/knowledge-base` | `knowledge:read` |
+| `POST` | `/knowledge-base` | `knowledge:write` |
+| `GET` | `/knowledge-base/{id}` | `knowledge:read` |
+| `PATCH` | `/knowledge-base/{id}` | `knowledge:write` |
+| `DELETE` | `/knowledge-base/{id}` | `knowledge:write` |
+
+## Create an article
+
+`title` and `content` are required. Supply either `categoryId` or `category`. Optional fields include `description`, `tags`, `visibility`, and `status`.
+
+| Field | Values |
+| --- | --- |
+| `visibility` | `internal` or `public`; defaults to `internal` |
+| `status` | `draft`, `published`, or `archived`; defaults to `draft` |
+
+```json
+{
+  "title": "Reset a locked account",
+  "description": "Steps for support staff to restore access.",
+  "content": "## Before you begin\n\nConfirm the requester's identity...",
+  "category": "Identity and access",
+  "tags": ["access", "account"],
+  "visibility": "internal",
+  "status": "draft"
+}
+```
+
+## List articles
+
+Filter by `categoryId`, `category`, `visibility`, `status`, comma-separated `tags`, `search`, and creation date bounds. Sort by `createdAt`, `updatedAt`, `title`, or `views`.
+
+Publishing through the API uses the supported article status field. Integrations should still respect the organisation's review and content-governance process.

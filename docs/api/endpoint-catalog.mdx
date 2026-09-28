@@ -1,0 +1,84 @@
+---
+title: Endpoint catalog
+description: All supported Enduria public API operations and required scopes.
+---
+
+# Endpoint catalog
+
+All paths are relative to `/api/v1`. `admin:full` grants every operation. The deployment's [OpenAPI document](./reference) is authoritative for machine-readable schemas.
+
+## Assets and clients
+
+| Method | Path | Scope | Purpose |
+| --- | --- | --- | --- |
+| `GET` | `/assets` | `assets:read` | List assets |
+| `POST` | `/assets` | `assets:write` | Create an asset |
+| `GET` | `/assets/{id}` | `assets:read` | Retrieve an asset |
+| `PATCH` | `/assets/{id}` | `assets:write` | Update an asset |
+| `DELETE` | `/assets/{id}` | `assets:delete` | Delete an asset |
+| `GET` | `/clients` | `clients:read` | List clients |
+| `POST` | `/clients` | `clients:write` | Create a client |
+| `GET` | `/clients/{id}` | `clients:read` | Retrieve a client |
+| `PATCH` | `/clients/{id}` | `clients:write` | Update a client |
+| `DELETE` | `/clients/{id}` | `clients:write` | Delete a client |
+
+## Knowledge, projects, and tasks
+
+| Method | Path | Scope | Purpose |
+| --- | --- | --- | --- |
+| `GET` | `/knowledge-base` | `knowledge:read` | List articles |
+| `POST` | `/knowledge-base` | `knowledge:write` | Create an article |
+| `GET` | `/knowledge-base/{id}` | `knowledge:read` | Retrieve an article |
+| `PATCH` | `/knowledge-base/{id}` | `knowledge:write` | Update an article |
+| `DELETE` | `/knowledge-base/{id}` | `knowledge:write` | Delete an article |
+| `GET` | `/projects` | `projects:read` | List projects |
+| `POST` | `/projects` | `projects:write` | Create a project |
+| `GET` | `/projects/{id}` | `projects:read` | Retrieve a project |
+| `PATCH` | `/projects/{id}` | `projects:write` | Update a project |
+| `DELETE` | `/projects/{id}` | `projects:write` | Delete a project |
+| `GET` | `/projects/{id}/tasks` | `tasks:read` | List project tasks |
+| `POST` | `/projects/{id}/tasks` | `tasks:write` | Create a project task |
+
+## Tickets, comments, and time
+
+| Method | Path | Scope | Purpose |
+| --- | --- | --- | --- |
+| `GET` | `/tickets` | `tickets:read` | List work items |
+| `POST` | `/tickets` | `tickets:write` | Create a work item |
+| `GET` | `/tickets/{id}` | `tickets:read` | Retrieve a work item |
+| `PATCH` | `/tickets/{id}` | `tickets:write` | Update a work item |
+| `DELETE` | `/tickets/{id}` | `tickets:delete` | Delete a work item |
+| `GET` | `/tickets/{id}/comments` | `tickets:read` | List comments |
+| `POST` | `/tickets/{id}/comments` | `tickets:write` | Add a comment |
+| `GET` | `/time-entries` | `tickets:read` | List time entries |
+| `POST` | `/time-entries` | `tickets:write` | Create a time entry |
+
+## Configuration, reports, and directory
+
+| Method | Path | Scope | Purpose |
+| --- | --- | --- | --- |
+| `GET` | `/categories` | `tickets:read` | Discover categories |
+| `GET` | `/priorities` | Conditional | Discover ticket or project priorities |
+| `GET` | `/statuses` | Conditional | Discover resource statuses |
+| `GET` | `/queues` | `tickets:read` | List queues |
+| `GET` | `/sla` | `tickets:read` | List SLA policies |
+| `POST` | `/sla` | `tickets:write` | Create an SLA policy |
+| `GET` | `/reports` | `reports:read` | List reports |
+| `POST` | `/reports/{id}/run` | `reports:read` | Run a report |
+| `GET` | `/users` | `users:read` | List users |
+| `GET` | `/users/{id}` | `users:read` | Retrieve a user |
+| `GET` | `/polling` | `admin:full` | Poll created or updated records |
+
+## Webhooks
+
+| Method | Path | Scope | Purpose |
+| --- | --- | --- | --- |
+| `GET` | `/webhooks/events` | `webhooks:read` | List event names |
+| `GET` | `/webhooks` | `webhooks:read` | List subscriptions |
+| `POST` | `/webhooks` | `webhooks:write` | Create a subscription |
+| `GET` | `/webhooks/{id}` | `webhooks:read` | Retrieve a subscription |
+| `PATCH` | `/webhooks/{id}` | `webhooks:write` | Update a subscription |
+| `DELETE` | `/webhooks/{id}` | `webhooks:write` | Delete a subscription |
+| `POST` | `/webhooks/{id}/test` | `webhooks:write` | Send a test delivery |
+
+There are 49 supported business operations. Enduria's route-parity test fails if a public operation is added without being registered in the generated specification.

@@ -17,6 +17,8 @@ X-API-Key: en_live_your_key
 
 API keys are tenant-bound and carry scopes. A valid key with insufficient scope receives `403 Forbidden`; an absent or invalid key receives `401 Unauthorized`.
 
+Missing, inactive, expired, or revoked keys are refused. Disabling API access for the organisation also disables its existing keys. An `orgId` query parameter or custom tenant header cannot change the organisation selected by a key.
+
 ## Security guidance
 
 - Keep keys on servers, not in browser code or mobile packages.
@@ -27,3 +29,24 @@ API keys are tenant-bound and carry scopes. A valid key with insufficient scope 
 - Never include keys in logs, screenshots, source control, or support tickets.
 
 Use `admin:full` only for integrations that genuinely require unrestricted API access.
+
+## Origin restrictions
+
+A key can be restricted to exact HTTPS origins. When configured, the request must carry an `Origin` header matching an allowed value. Many server-to-server tools do not send `Origin`; leave the restriction empty unless the client reliably supplies it.
+
+Origin policy is an additional restriction, not a replacement for authentication. It does not make a key safe to embed in browser code.
+
+## IP and CIDR restrictions
+
+A key can allow specific IPv4/IPv6 addresses or CIDR ranges. Self-hosters must configure `API_CLIENT_IP_HEADER` to a single-address header that their trusted reverse proxy overwrites, and direct access to the application port must be blocked.
+
+Forwarding chains and malformed addresses are rejected. If no trusted client-IP header is configured, the source is treated as unknown and IP-restricted keys are denied. Confirm the actual outbound addresses of automation platforms before enabling an allowlist.
+
+## Diagnosing authentication failures
+
+| Response | Check |
+| --- | --- |
+| `401` | Header format, `en_live_` prefix, key status, expiry, revocation, and organisation API enablement |
+| `403` | Required scope, origin policy, IP policy, and whether the referenced record belongs to this tenant |
+
+Never send a key to a different Enduria deployment while troubleshooting.

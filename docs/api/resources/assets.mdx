@@ -1,0 +1,52 @@
+---
+title: Assets
+description: Query and maintain tenant-scoped asset records through the Enduria API.
+---
+
+# Assets
+
+## Operations
+
+| Method | Path | Scope |
+| --- | --- | --- |
+| `GET` | `/assets` | `assets:read` |
+| `POST` | `/assets` | `assets:write` |
+| `GET` | `/assets/{id}` | `assets:read` |
+| `PATCH` | `/assets/{id}` | `assets:write` |
+| `DELETE` | `/assets/{id}` | `assets:delete` |
+
+## List assets
+
+Filter with `status`, `category`, `assignedTo`, `clientId`, or `search`. The legacy `type` filter is an alias for category. Page size is 1–100. Sort by `createdAt`, `updatedAt`, `name`, `status`, or `type` in ascending or descending order.
+
+## Create an asset
+
+`name` and `category` are required. `category` can be an active configured category name, code, or ID. `status` must be an active tenant lifecycle value and defaults to `active`.
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `assetTag` | string | Optional; generated through the asset service when omitted |
+| `manufacturer`, `model`, `serialNumber` | string | Device identity details |
+| `manufacturerLogoUrl`, `devicePhotoUrl` | string | Optional media references |
+| `purchaseDate`, `warrantyExpiry` | ISO timestamp | Optional lifecycle dates |
+| `purchaseCost` | number | Optional cost |
+| `assignedTo`, `clientId` | UUID | Must reference records in the tenant |
+| `location` | string | Configured or descriptive location |
+| `specifications` | object | String, number, or boolean values |
+| `notes` | string | Free-form operational notes |
+
+```json
+{
+  "name": "Reception laptop",
+  "category": "Laptop",
+  "status": "active",
+  "manufacturer": "Example Manufacturer",
+  "model": "ExampleBook 14",
+  "serialNumber": "SERIAL-EXAMPLE",
+  "specifications": {"memoryGb": 16, "encrypted": true}
+}
+```
+
+Updates accept the same operational fields. Nullable update fields include purchase and warranty dates, cost, assignee, location, and notes. There is no separate writable `type` or `department` field.
+
+Connector-managed devices may be updated by a later provider synchronisation. Integrations should understand which fields their connector owns before applying manual API changes.

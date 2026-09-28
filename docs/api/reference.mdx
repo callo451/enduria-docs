@@ -21,8 +21,28 @@ curl --output enduria-openapi.json \
 
 The specification lists supported paths, methods, request schemas, required scopes, response envelopes, headers, and error responses. Treat the document from the deployment you are integrating with as authoritative.
 
+OpenAPI operations expose required scopes through `x-required-scopes`. Vocabulary operations whose scope depends on the selected resource use `x-resource-scope-options`.
+
+## Generate a client
+
+Most OpenAPI generators can consume the deployment URL directly. Pin the downloaded document when reproducible generation matters.
+
+```bash
+curl --fail-with-body --output enduria-openapi.json \
+  "$ENDURIA_URL/api/v1/openapi.json"
+
+npx @openapitools/openapi-generator-cli generate \
+  -i enduria-openapi.json \
+  -g typescript-fetch \
+  -o generated/enduria
+```
+
+Generated clients do not replace integration policy. Callers must still discover tenant vocabulary, preserve idempotency keys, handle rate limits, and verify webhook signatures.
+
 ## Available resource families
 
 The current API covers assets, categories, clients, knowledge, polling, priorities, projects and tasks, queues, reports, service targets, statuses, tickets and comments, time entries, users, and webhooks.
 
 Some fields contain organisation-configured vocabulary. Obtain valid categories, statuses, and priorities from their API endpoints instead of hardcoding names.
+
+For a human-readable list of every operation and scope, see the [endpoint catalog](./endpoint-catalog).

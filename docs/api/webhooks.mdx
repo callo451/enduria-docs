@@ -1,25 +1,115 @@
 ---
 title: Webhooks
-description: Subscribe to Enduria lifecycle events and process deliveries safely.
+description: Subscribe to Enduria events, verify signatures, and process retries safely.
 ---
 
 # Webhooks
 
-Webhooks notify an HTTPS endpoint when subscribed Enduria events occur. Use them for event-driven automation; use polling when you need recovery across missed events.
+Webhooks deliver lifecycle events to an HTTPS receiver. Delivery is at least once, so receivers must verify signatures and deduplicate before applying side effects.
 
-## Create a reliable receiver
+## Operations
 
-1. Expose an HTTPS endpoint that can read the raw request body.
-2. Create a webhook subscription for the required event types.
-3. Store the signing secret returned at creation; it is not a general API key.
-4. Verify the signature before parsing or acting on the payload.
-5. Deduplicate deliveries using the event or delivery identifier.
-6. Return a successful response quickly and perform longer work asynchronously.
+| Method | Path | Scope |
+| --- | --- | --- |
+| `GET` | `/webhooks/events` | `webhooks:read` |
+| `GET` | `/webhooks` | `webhooks:read` |
+| `POST` | `/webhooks` | `webhooks:write` |
+| `GET` | `/webhooks/{id}` | `webhooks:read` |
+| `PATCH` | `/webhooks/{id}` | `webhooks:write` |
+| `DELETE` | `/webhooks/{id}` | `webhooks:write` |
+| `POST` | `/webhooks/{id}/test` | `webhooks:write` |
 
-Work-item changes can emit a generic `ticket.*` event and an applicable type-specific event such as `incident.*`, `change.*`, or `problem.*`. Their lifecycle vocabularies differ, so subscribe to the events your automation actually understands.
+Retrieve event names from `/webhooks/events` rather than maintaining a hardcoded catalogue. Work-item changes can emit a generic `ticket.*` event plus an applicable `incident.*`, `change.*`, or `problem.*` event. Their lifecycle vocabularies differ.
 
-Retrieve the supported event catalogue from `GET /api/v1/webhooks/events`. A webhook can be tested with its test endpoint after creation.
+## Create a subscription
 
-:::warning
-Do not infer the tenant from payload fields and then use a key belonging to another organisation. Keep subscription secrets and API keys associated with the tenant that issued them.
-:::
+```bash
+curl --request POST \
+  --header "Authorization: Bearer $ENDURIA_API_KEY" \
+  --header "Content-Type: application/json" \
+  --header "Idempotency-Key: create-webhook-ticket-events-v1" \
+  --data '{
+    "name": "Ticket automation",
+    "url": "https://automation.example.invalid/enduria/events",
+    "events": ["ticket.created", "ticket.updated"],
+    "eventFilters": {"ticketTypes": ["incident", "service_request"]},
+    "timeout": 10000,
+    "retryPolicy": {"maxRetries": 4, "retryDelaySeconds": [30, 120, 600, 1800]}
+  }' \
+  "$ENDURIA_URL/api/v1/webhooks"
+```
+
+Retain `data.id` and `data.secret`. The signing secret is returned on creation and exact idempotent replay, but not by ordinary subscription reads.
+
+| Field | Rules |
+| --- | --- |
+| `name` | Required on creation; 1–100 characters |
+| `url` | Public HTTPS only; no credentials or fragment |
+| `events` | At least one supported event name |
+| `eventFilters` | Optional ticket types, priorities, categories, queue UUIDs, and client UUIDs; up to 100 each |
+| `headers` | Optional custom string headers; at most 20, each value at most 8,192 characters |
+| `timeout` | 1,000–30,000 milliseconds; defaults to 30,000 |
+| `retryPolicy.maxRetries` | 0–10 retries after the initial attempt |
+| `retryPolicy.retryDelaySeconds` | 1–10 delays, each 1–86,400 seconds |
+| `status` | `active` or `inactive`; update only |
+
+Configured filters require matching fields in the event payload. A priority filter excludes an event whose payload has no priority. Filters do not replace API scopes or downstream authorization.
+
+## Transport restrictions
+
+Targets must resolve exclusively to public IP addresses. DNS is checked for every attempt and the validated address is pinned to the connection. Private and reserved destinations, URL credentials, fragments, and redirects are refused. TLS verification remains enabled.
+
+Custom headers cannot override connection, content, signing, event, proxy, or transport headers. Stored custom headers are not returned by subscription reads or copied into delivery history.
+
+The receiver must respond within the configured timeout and return no more than 64 KiB. Every 2xx status is successful; other responses and transport failures follow the retry policy. Scheduler timing means delays are minimum delays rather than exact execution times.
+
+## Payload
+
+```json
+{
+  "id": "DELIVERY_UUID",
+  "type": "ticket.created",
+  "created": 1790557200,
+  "data": {"id": "TICKET_UUID"}
+}
+```
+
+The outer `id` identifies the delivery and stays stable across retries. The timestamp and signature can change on a retry.
+
+## Verify signatures
+
+Enduria sends `X-Webhook-Signature: t=<seconds>,v1=<hex HMAC>`. Compute HMAC-SHA256 over `<timestamp>.<raw request body>` using the subscription secret. Compare in constant time and reject timestamps outside a five-minute tolerance.
+
+```js
+import crypto from 'node:crypto';
+
+export function verifyEnduriaWebhook(rawBody, header, secret, now = Date.now()) {
+  const parts = Object.fromEntries(header.split(',').map((part) => part.split('=', 2)));
+  const timestamp = Number(parts.t);
+  if (!Number.isFinite(timestamp) || Math.abs(now / 1000 - timestamp) > 300) return false;
+
+  const expected = crypto.createHmac('sha256', secret)
+    .update(`${timestamp}.${rawBody}`)
+    .digest('hex');
+  const received = parts.v1 ?? '';
+  if (expected.length !== received.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(expected, 'hex'), Buffer.from(received, 'hex'));
+}
+```
+
+Pass the raw bytes exactly as received. Parsing and reserializing JSON changes the signed content.
+
+## Receiver sequence
+
+1. Read the raw request body with a strict size limit.
+2. Verify the timestamp and signature.
+3. Parse JSON only after verification.
+4. Atomically store or reject a duplicate delivery ID.
+5. Persist work for asynchronous processing.
+6. Return 2xx quickly.
+
+Do not return 2xx before durable acceptance. Never use event payload tenant fields to choose an API key belonging to a different organisation.
+
+## Testing and deletion
+
+`POST /webhooks/{id}/test` sends an external test delivery and does not accept `Idempotency-Key`. Delete a subscription with `DELETE /webhooks/{id}` and treat the wrapped `deleted` response as confirmation.

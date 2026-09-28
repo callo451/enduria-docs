@@ -1,0 +1,65 @@
+---
+title: Pagination and polling
+description: Traverse Enduria collections and build reliable polling triggers.
+---
+
+# Pagination and polling
+
+Most resource collections use page pagination. The change polling endpoint uses an opaque cursor because updated records need a stable timestamp and UUID tie-breaker.
+
+## Page pagination
+
+Most list operations accept `page` and `limit`. `page` starts at `1`; `limit` defaults to `20` and cannot exceed `100`.
+
+```json
+{
+  "data": [],
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 147,
+    "hasMore": true
+  },
+  "request_id": "req_example"
+}
+```
+
+Increment `page` while `meta.hasMore` is true. Lists support resource-specific filters and stable sorting; see the relevant resource guide. Reports use `limit` and `offset` instead.
+
+## Change polling
+
+`GET /polling` supports these resources:
+
+```text
+tickets, incidents, changes, problems, service_requests, assets,
+projects, tasks, clients, users, kb_articles, comments
+```
+
+Parameters:
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `resource` | Yes | Resource name from the supported list |
+| `event` | No | `created` or `updated`; defaults to `created` |
+| `since` | No | Exclusive ISO 8601 lower bound |
+| `cursor` | No | Opaque cursor returned by the previous page; maximum 2,048 characters |
+| `limit` | No | 1–100; defaults to 50 |
+
+```bash
+curl --get \
+  --header "Authorization: Bearer $ENDURIA_API_KEY" \
+  --data-urlencode "resource=tickets" \
+  --data-urlencode "event=updated" \
+  --data-urlencode "limit=100" \
+  "$ENDURIA_URL/api/v1/polling"
+```
+
+Results are newest first. For `created`, each record's `id` is the resource UUID. For `updated`, `id` is revision-specific for deduplication and `resourceId` contains the underlying resource UUID.
+
+When `meta.hasMore` is true, send `meta.cursor` with the same `resource`, `event`, and `since` filters. Changing filters invalidates the cursor.
+
+## Consistency model
+
+Cursor traversal is a live latest-state view, not a frozen snapshot. Concurrent changes can move records between pages. Use overlapping polling windows and deduplicate by `id`.
+
+Polling does not report deletions or every intermediate edit. Comment update polling is unsupported. Use [webhooks](./webhooks) when either behavior is required.

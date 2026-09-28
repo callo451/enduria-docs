@@ -1,0 +1,58 @@
+---
+title: Projects and tasks
+description: Create and query projects and project-scoped tasks.
+---
+
+# Projects and tasks
+
+## Operations
+
+| Method | Path | Scope |
+| --- | --- | --- |
+| `GET` | `/projects` | `projects:read` |
+| `POST` | `/projects` | `projects:write` |
+| `GET` | `/projects/{id}` | `projects:read` |
+| `PATCH` | `/projects/{id}` | `projects:write` |
+| `DELETE` | `/projects/{id}` | `projects:write` |
+| `GET` | `/projects/{id}/tasks` | `tasks:read` |
+| `POST` | `/projects/{id}/tasks` | `tasks:write` |
+
+## Create a project
+
+Required fields are `name`, `description`, `startDate`, `endDate`, and `projectManager`. The manager must be an existing user in the tenant. If `teamMembers` is omitted, the manager becomes the initial team member.
+
+Creation currently accepts the seeded priority values `low`, `medium`, `high`, and `critical`, and statuses `planning`, `active`, `on_hold`, `completed`, and `cancelled`. After creation, use the project's configured values returned by the vocabulary endpoints.
+
+```json
+{
+  "name": "Sydney office rollout",
+  "description": "Prepare and deploy the new office technology stack.",
+  "startDate": "2026-10-01T00:00:00Z",
+  "endDate": "2026-12-15T00:00:00Z",
+  "priority": "high",
+  "status": "planning",
+  "projectManager": "USER_UUID",
+  "teamMembers": ["USER_UUID"],
+  "tags": ["office", "rollout"]
+}
+```
+
+The end date cannot precede the start date. Updates also support nullable `clientId`, nullable `budget`, and `progress` from 0 to 100.
+
+List filters include `status`, `priority`, `clientId`, `projectManager`, `search`, creation date bounds, and sorting.
+
+## Create a task
+
+Tasks are always addressed through their project. Required input is `title`; optional fields include `description`, `assignedTo`, `priority`, `status`, `dueDate`, `estimatedHours`, `milestoneId`, `dependencies`, and `labels`.
+
+The status and priority must be valid for that project. A supplied milestone and every dependency must belong to the same project. Use `labels`; the unsupported field `tags` is rejected.
+
+Retrieve project-specific values with:
+
+```text
+GET /priorities?projectId=PROJECT_UUID
+GET /statuses?type=project&projectId=PROJECT_UUID
+GET /statuses?type=task&projectId=PROJECT_UUID
+```
+
+List tasks with status, priority, assignee, or milestone filters. Sort by creation, update, due date, priority, or status.

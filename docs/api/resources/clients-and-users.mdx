@@ -1,0 +1,51 @@
+---
+title: Clients and users
+description: Work with customer organisations and directory-safe user records.
+---
+
+# Clients and users
+
+## Client operations
+
+| Method | Path | Scope |
+| --- | --- | --- |
+| `GET` | `/clients` | `clients:read` |
+| `POST` | `/clients` | `clients:write` |
+| `GET` | `/clients/{id}` | `clients:read` |
+| `PATCH` | `/clients/{id}` | `clients:write` |
+| `DELETE` | `/clients/{id}` | `clients:write` |
+
+Create a client with a required `name` and optional `email`, `phone`, `website`, `status`, structured `address`, and `tags`. Status defaults to `active` and supports `active`, `inactive`, `prospect`, or `churned`.
+
+```json
+{
+  "name": "Example Customer",
+  "email": "service@example.invalid",
+  "status": "active",
+  "address": {
+    "street": "1 Example Street",
+    "city": "Sydney",
+    "state": "NSW",
+    "postalCode": "2000",
+    "country": "AU"
+  },
+  "tags": ["managed-service"]
+}
+```
+
+Fields from older integrations such as `code`, `industry`, `billingAddress`, `primaryContact*`, and `notes` are unsupported and return `400`.
+
+List clients with status, search, and creation date filters. Sort by creation, update, name, or status.
+
+## User operations
+
+| Method | Path | Scope |
+| --- | --- | --- |
+| `GET` | `/users` | `users:read` |
+| `GET` | `/users/{id}` | `users:read` |
+
+The public API exposes directory-safe identity fields only: ID, organisation ID, email, first and last name, legacy role label, department, active state, and timestamps. It excludes password hashes, invitation tokens, permission overrides, and security settings.
+
+Filter users by `role`, `isActive`, `department`, or `search`. Sort by creation, update, first name, last name, or email.
+
+The public API does not create or update users. Use the supported administration and identity-provisioning workflows for account lifecycle management.

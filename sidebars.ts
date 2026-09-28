@@ -15,7 +15,17 @@ const sidebars: SidebarsConfig = {
   ],
   apiSidebar: [
     {type: 'doc', id: 'api/overview', label: 'API overview'},
-    'api/authentication', 'api/requests-and-responses', 'api/webhooks', 'api/reference',
+    'api/quickstart',
+    {type: 'category', label: 'Core concepts', items: [
+      'api/authentication', 'api/scopes', 'api/requests-and-responses', 'api/pagination-and-polling',
+    ]},
+    {type: 'category', label: 'Resources', items: [
+      'api/resources/tickets', 'api/resources/assets', 'api/resources/projects',
+      'api/resources/clients-and-users', 'api/resources/knowledge',
+      'api/resources/time-sla-and-reports', 'api/resources/configured-vocabulary',
+    ]},
+    'api/webhooks',
+    {type: 'category', label: 'Reference', items: ['api/endpoint-catalog', 'api/reference']},
   ],
   hostingSidebar: [
     {type: 'doc', id: 'self-hosting/overview', label: 'Self-hosting overview'},

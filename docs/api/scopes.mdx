@@ -1,0 +1,50 @@
+---
+title: API scopes
+description: Assign least-privilege scopes to Enduria API keys.
+---
+
+# API scopes
+
+API keys carry explicit scopes. `admin:full` grants every public API scope and should be reserved for integrations that truly need unrestricted access.
+
+| Scope | Allows |
+| --- | --- |
+| `assets:read` | List and retrieve assets; read asset statuses |
+| `assets:write` | Create and update assets |
+| `assets:delete` | Delete assets |
+| `clients:read` | List and retrieve clients |
+| `clients:write` | Create, update, and delete clients |
+| `knowledge:read` | List and retrieve knowledge articles |
+| `knowledge:write` | Create, update, and delete knowledge articles |
+| `projects:read` | List and retrieve projects; read project vocabulary |
+| `projects:write` | Create, update, and delete projects |
+| `tasks:read` | List project tasks; read task vocabulary |
+| `tasks:write` | Create project tasks |
+| `reports:read` | List and run reports |
+| `tickets:read` | Read tickets, comments, queues, SLA policies, time entries, and ticket vocabulary |
+| `tickets:write` | Create and update tickets, comments, SLA policies, and time entries |
+| `tickets:delete` | Delete tickets |
+| `users:read` | List and retrieve directory-safe user fields |
+| `webhooks:read` | List subscriptions and supported event types |
+| `webhooks:write` | Create, update, delete, and test subscriptions |
+| `admin:full` | All public API operations, including polling |
+
+## Conditional vocabulary scopes
+
+`GET /priorities` and `GET /statuses` choose their required scope from the requested resource:
+
+- Ticket vocabulary requires `tickets:read`.
+- Project vocabulary requires `projects:read` or, for priorities, `tasks:read`.
+- Task vocabulary requires `tasks:read`.
+- Asset statuses require `assets:read`.
+- `admin:full` satisfies every case.
+
+Project and task vocabulary also requires `projectId` because these values are configured per project.
+
+## Polling scopes
+
+The `/polling` operation is declared with `admin:full`, and the handler additionally checks access to the selected resource. Prefer webhooks and ordinary resource list operations when a connector does not need broad polling access.
+
+## Key design
+
+Create separate keys for separate systems and environments. This makes rotation, revocation, rate limits, network restrictions, and audit trails independent. Do not share one administrator key across unrelated automations.
