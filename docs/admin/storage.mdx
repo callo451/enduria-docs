@@ -1,0 +1,37 @@
+---
+title: Storage settings
+description: See how much file storage your organisation uses and, on self-hosted installs, check the storage backend.
+---
+
+# Storage settings
+
+**Settings → Storage** requires the settings management permission.
+
+## Your organisation's usage
+
+The page shows the files your organisation has stored. Only your organisation's files are counted.
+
+- **Ticket attachments**: files uploaded to tickets or received by email.
+- **Knowledge images**: images managed by knowledge-base articles.
+- **Project documents**: document entries registered against projects. Their sizes are as registered.
+
+The figures are the sizes Enduria recorded when each file was stored. They are not a bill from your storage provider.
+
+## Hosted service
+
+On the hosted service, storage is managed for you and there is nothing to configure. Download links expire after a short time and are issued only after the access checks for the record they belong to.
+
+## Self-hosted installs
+
+On a self-hosted (community) install, the page also shows:
+
+- the active backend
+- its non-secret settings (bucket, region, endpoint, credential source, encryption)
+- any configuration problems
+- a **Test connection** button, which writes, reads and deletes a small probe file
+
+The backend is set with environment variables when the application starts, so it cannot be changed from this page. See [File storage](../self-hosting/file-storage.mdx) to configure it, move to S3, or clean up stored files.
+
+## Who can download a file
+
+A ticket attachment can be downloaded only by someone who can read its ticket. Customers can download attachments on their own requests. Removing someone's access to a ticket also removes their access to its files.

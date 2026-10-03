@@ -15,7 +15,7 @@ const sidebars: SidebarsConfig = {
     {type: 'category', label: 'Email', link: {type: 'doc', id: 'admin/email/overview'}, items: [
       'admin/email/outbound', 'admin/email/inbound', 'admin/email/troubleshooting',
     ]},
-    'admin/integrations',
+    'admin/integrations', 'admin/storage',
   ],
   apiSidebar: [
     {type: 'doc', id: 'api/overview', label: 'API overview'},
@@ -33,7 +33,7 @@ const sidebars: SidebarsConfig = {
   ],
   hostingSidebar: [
     {type: 'doc', id: 'self-hosting/overview', label: 'Self-hosting overview'},
-    'self-hosting/configuration', 'self-hosting/email', 'self-hosting/upgrades', 'self-hosting/backups',
+    'self-hosting/configuration', 'self-hosting/email', 'self-hosting/file-storage', 'self-hosting/upgrades', 'self-hosting/backups',
   ],
 };
 

@@ -13,7 +13,7 @@ Keep deployment configuration outside the container image and source repository.
 - Configure a production PostgreSQL database with durable storage.
 - Set a strong `CRON_SECRET`; an unset production secret denies scheduled requests.
 - Configure email delivery and inbound processing if those features are enabled.
-- Configure object storage for attachments where required.
+- Choose the [file storage](./file-storage.mdx) backend and set `ENDURIA_EDITION`. The application refuses to start if storage cannot serve that edition.
 - Select and configure an AI provider only if AI features are enabled.
 - Set provider credentials for each external integration independently.
 - Restrict any internal service secret to trusted service-to-service callers.

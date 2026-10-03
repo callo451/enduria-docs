@@ -1,0 +1,119 @@
+---
+title: File storage
+description: Choose, configure, secure, back up and maintain where Enduria stores uploaded files.
+---
+
+# File storage
+
+Enduria keeps file bytes (ticket attachments, avatars, branding images, knowledge-base images, recorder screenshots and generated reports) in a storage backend. The database stores only each file's key and metadata. Because keys stay the same, you move between backends by copying files. No database migration is needed.
+
+## Choose a backend
+
+| Backend | `STORAGE_PROVIDER` | Use it for |
+| --- | --- | --- |
+| Local filesystem | `local` (default) | A single-server self-hosted install. |
+| S3-compatible object storage | `s3` | Multiple app instances, managed durability, or any cloud deployment. Works with AWS S3, Cloudflare R2, Backblaze B2, Wasabi, SeaweedFS, Garage and Ceph RGW. |
+
+Every application instance must see the same storage. Local storage works only when one server runs the application.
+
+## Deployment edition
+
+`ENDURIA_EDITION` tells Enduria what kind of deployment it is running in:
+
+- `community` (default): a self-hosted install. Either backend may be used, and administrators with the settings management permission see the instance's storage configuration.
+- `cloud`: a multi-tenant hosted service. Enduria **refuses to start** unless `STORAGE_PROVIDER=s3`, `AWS_S3_REGION` (or `AWS_REGION`) is set explicitly, and any `AWS_S3_ENDPOINT` uses `https://`. Tenants see only their own usage.
+
+An unrecognised edition value stops startup rather than falling back to `community`.
+
+## Configure S3
+
+| Variable | Purpose |
+| --- | --- |
+| `AWS_S3_BUCKET_NAME` | Required bucket. |
+| `AWS_S3_REGION` | Bucket region. Falls back to `AWS_REGION`. |
+| `AWS_S3_BRANDING_BUCKET_NAME` | Optional separate bucket for branding images. |
+| `AWS_S3_ENDPOINT` | Endpoint for S3-compatible stores. Leave empty for AWS. |
+| `AWS_S3_FORCE_PATH_STYLE` | `true` for path-style stores such as SeaweedFS and Ceph. |
+| `AWS_S3_ACCESS_KEY_ID`, `AWS_S3_SECRET_ACCESS_KEY` | Optional static credentials. Set both or neither. |
+| `AWS_S3_SSE` | Encryption requested on upload: `AES256`, `aws:kms` or `none`. |
+| `AWS_S3_SSE_KMS_KEY_ID` | Customer-managed KMS key when `AWS_S3_SSE=aws:kms`. |
+
+### Credentials
+
+Prefer an IAM role over static keys. If both access-key variables are empty, Enduria uses the AWS SDK default credential chain: an ECS task role, EKS IRSA or Pod Identity, an EC2 instance profile, `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY`, or a shared profile.
+
+Older community installs may still be borrowing the email `AWS_SES_*` keys for storage. That fallback is deprecated and shown as a warning under **Settings → Storage**. The cloud edition never uses it.
+
+Minimum IAM policy for the application role, with `BUCKET` replaced:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    { "Effect": "Allow", "Action": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"], "Resource": "arn:aws:s3:::BUCKET/*" },
+    { "Effect": "Allow", "Action": "s3:ListBucket", "Resource": "arn:aws:s3:::BUCKET" }
+  ]
+}
+```
+
+With `aws:kms` and a customer-managed key, also grant `kms:GenerateDataKey` and `kms:Decrypt` on that key.
+
+### Encryption
+
+By default Enduria requests `AES256` (SSE-S3) on AWS and no encryption header when `AWS_S3_ENDPOINT` is set, because some S3-compatible stores reject the header. If you use an AWS VPC endpoint, set `AWS_S3_SSE` explicitly to keep encryption on.
+
+### Bucket hardening
+
+- Turn on S3 Block Public Access. Enduria never needs public objects: downloads use short-lived signed URLs issued after access checks.
+- Turn on versioning, and add a lifecycle rule that expires noncurrent versions after your recovery window.
+- No CORS configuration is required.
+
+## Local storage
+
+Files are written under `STORAGE_LOCAL_DIR`, which defaults to `./data/storage`. The bundled Docker Compose file mounts it from the `enduria_storage` volume. On startup Enduria checks that the directory is writable and refuses to start if it is not.
+
+## How files are served
+
+- A ticket attachment is available only to someone who can read its ticket. A storage key on its own grants no access.
+- Downloads are sent as attachments with `X-Content-Type-Options: nosniff` and a sandbox content security policy, so an uploaded document never runs on the Enduria origin. SVG files are not accepted as ticket attachments.
+- On S3, download links are signed and expire after a few minutes. Avatars and branding images use links that expire after an hour.
+
+## Check the configuration
+
+**Settings → Storage** shows the active backend, its non-secret settings and your organisation's usage. On community installs it also offers **Test connection**, which writes, reads and deletes a probe object.
+
+From the command line, using the application's environment:
+
+```bash
+npx tsx scripts/storage.ts check
+```
+
+## Move from local storage to S3
+
+1. Configure the S3 variables, leaving `STORAGE_PROVIDER=local` for now.
+2. Preview the copy, then run it. Each object is read back and verified after it is copied.
+
+```bash
+STORAGE_PROVIDER=s3 npx tsx scripts/storage.ts copy --from-local /app/data/storage
+```
+
+```bash
+STORAGE_PROVIDER=s3 npx tsx scripts/storage.ts copy --from-local /app/data/storage --apply
+```
+
+3. Set `STORAGE_PROVIDER=s3`, restart, and run `check`. Objects that already exist in the target are skipped, so you can rerun the copy to pick up files uploaded during the move.
+
+## Maintenance
+
+| Task | Command (read-only without `--apply`) |
+| --- | --- |
+| Find attachment and avatar objects that no record refers to | `npx tsx scripts/storage.ts orphans --org <orgId>` |
+| Remove every object an organisation owns (offboarding or erasure) | `npx tsx scripts/storage.ts purge --org <orgId>` |
+
+Deleting a ticket removes its attachments. Replacing or removing an avatar deletes the previous image. If an object cannot be deleted, the failure is logged and the object shows up in the orphan report.
+
+`purge` deletes stored files only. Delete the organisation's database records first, following your retention policy.
+
+## Back up
+
+Back up object storage alongside the database. On local storage, include the storage volume. On S3, use versioning together with replication or AWS Backup. When you test a restore, check that representative attachments download.
