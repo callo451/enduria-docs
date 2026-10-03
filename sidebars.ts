@@ -11,7 +11,11 @@ const sidebars: SidebarsConfig = {
   ],
   adminSidebar: [
     {type: 'doc', id: 'admin/overview', label: 'Administration overview'},
-    'admin/users-and-permissions', 'admin/branding', 'admin/integrations',
+    'admin/users-and-permissions', 'admin/branding',
+    {type: 'category', label: 'Email', link: {type: 'doc', id: 'admin/email/overview'}, items: [
+      'admin/email/outbound', 'admin/email/inbound', 'admin/email/troubleshooting',
+    ]},
+    'admin/integrations',
   ],
   apiSidebar: [
     {type: 'doc', id: 'api/overview', label: 'API overview'},
@@ -29,7 +33,7 @@ const sidebars: SidebarsConfig = {
   ],
   hostingSidebar: [
     {type: 'doc', id: 'self-hosting/overview', label: 'Self-hosting overview'},
-    'self-hosting/configuration', 'self-hosting/upgrades', 'self-hosting/backups',
+    'self-hosting/configuration', 'self-hosting/email', 'self-hosting/upgrades', 'self-hosting/backups',
   ],
 };
 

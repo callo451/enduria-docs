@@ -1,0 +1,60 @@
+---
+title: Outbound email
+description: Choose how Enduria sends email for your organisation, set the sender, test the connection and understand sending limits.
+---
+
+# Outbound email
+
+Outbound settings decide how Enduria sends mail for your organisation. Open **Settings → Email Integration**. You need the **Manage Settings** (`settings.manage`) permission.
+
+## Choose a provider
+
+### Platform email
+
+1. Select **Platform email**. The description shows the address mail is sent from.
+2. Enter a **Sender name** — the name recipients see, usually your company or service desk name.
+3. Enter a **Reply-To address** so replies reach you. Use a mailbox connected under **Inbound Email** if replies should become ticket comments.
+4. Select **Save Configuration**.
+
+The page shows **Recipients see:** with the exact sender recipients will see, for example `"Acme Support" <noreply@…>`. The address part is the operator's and cannot be changed.
+
+If **Platform email** is unavailable, the operator of your installation has not configured it; use custom SMTP.
+
+### Custom SMTP
+
+1. Select **Custom SMTP Server**.
+2. Enter the **SMTP Host** and **SMTP Port** your provider gives you. Port 587 normally uses STARTTLS; port 465 uses SSL/TLS.
+3. Turn **Use SSL/TLS** on for port 465 and off for STARTTLS ports. Enduria requires an encrypted connection by default.
+4. Enter the **SMTP Username** and **SMTP Password**. Some providers require an app password rather than your normal password.
+5. Enter the **Sender name** and a **From address** your SMTP account is allowed to send as.
+6. Optionally enter a **Reply-To address**.
+7. Select **Save Configuration**.
+
+The password is stored encrypted and shown masked afterwards. Leave the masked value unchanged to keep the stored password; type a new one to replace it.
+
+## Test the connection
+
+Select **Test Connection**. Enduria checks the configured provider without sending a message: for SMTP it connects and signs in; for platform email it checks the platform sender. Fix any reported problem before relying on email; see [Troubleshooting](./troubleshooting).
+
+## Sending limits
+
+Enduria limits how many emails your organisation sends per hour and per day.
+
+- With **platform email**, the operator sets the maximum. The page shows it beside the rate-limit field. You can choose a lower hourly limit, not a higher one.
+- With **custom SMTP**, you choose the limit.
+
+When a limit is reached, further mail waits or fails until the next hour or day, depending on the kind of message. Durable deliveries such as invoices, quotes and scheduled reports record the failure so they can be retried.
+
+## Turn email off
+
+**Global Notifications** under **Advanced Settings** turns all outbound email for your organisation on or off. When it is off, Enduria sends no email through these settings.
+
+## What uses these settings
+
+Ticket and incident notifications, the notification digest, replies to inbound email, invoices and quotes, scheduled reports, appointment reminders, satisfaction surveys and booking confirmations all use these settings.
+
+Invitations use them too; if your organisation has not configured outbound email, invitations are sent through platform email where the operator offers it. Password-reset email currently requires outbound email to be configured for your organisation.
+
+## Delivery history
+
+**Settings → Email Logs** lists notification emails and their delivery status. A failed email can be resent from its details; Enduria resends through your current provider and allows a limited number of resends.

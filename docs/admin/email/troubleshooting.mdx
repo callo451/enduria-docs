@@ -1,0 +1,49 @@
+---
+title: Troubleshooting email
+description: Causes and fixes for the messages Enduria shows when sending or receiving email fails.
+---
+
+# Troubleshooting email
+
+## Outbound
+
+| Message | Cause | Fix |
+| --- | --- | --- |
+| Platform email is not available on this installation. | The operator has not configured platform email. | Use custom SMTP, or ask the operator. |
+| SMTP authentication failed. Check username and password. | The SMTP server rejected the sign-in. | Check the username and password. Some providers require an app password, or SMTP sign-in to be enabled for the account. |
+| Cannot connect to SMTP server. Check host and port. | Enduria could not reach the server. | Check the host and port, and that **Use SSL/TLS** matches the port (on for 465, off for 587). |
+| SMTP Error *code* | The server refused the message with that SMTP status code. | Look the code up in your provider's documentation. A 5xx code usually means the From address is not allowed for the account or a recipient was rejected. |
+| Email rejected by SES. Check sender verification. | Platform email was refused by the sending service. | Contact the operator of your installation. |
+| Rate limit exceeded. Please try again later. | The sending service is throttling. | Wait and retry. |
+| The sending limit has been reached | Your organisation's hourly or daily limit is used up. | Wait for the next hour or day, or raise your limit within what is allowed. |
+| Enter the SMTP password | No password is stored yet for this SMTP configuration. | Type the password and save. |
+
+**Recipients do not get email, but no error is shown.** Check that **Global Notifications** is on, check **Settings → Email Logs**, and ask recipients to check their spam folder. With custom SMTP, make sure your domain's SPF, DKIM and DMARC records allow your SMTP provider to send for it.
+
+**Replies to notifications do not reach tickets.** Set the outbound Reply-To address to a mailbox connected under **Inbound Email**, and check that the reply's subject still contains the ticket number.
+
+## Inbound
+
+**A message did not become a ticket.** Open the processing log from **Inbound Email → View Logs**:
+
+- *Ignored* — Enduria treated it as an automatic reply or bounce. The reason is shown.
+- *Retrying* — it will be tried again at the next check.
+- *Quarantined* — it failed repeatedly or cannot be processed. Open it for the reason, then **Retry** or **Dismiss**.
+- Not listed — it has not been fetched yet. Check the mailbox for connection problems, or use **Poll Now**.
+
+**A reply created a new ticket instead of a comment.** Enduria matches replies by a ticket number such as `TKT-00042` in the subject. If the number was removed, or names a ticket your organisation does not have, a new ticket is opened.
+
+### Inbound connection messages
+
+| Message | What to check |
+| --- | --- |
+| The mail server rejected the sign-in. Check the username and password, or whether the provider requires an app password. | Credentials; whether IMAP access is enabled for the account. |
+| A secure connection could not be established or the server certificate could not be verified. | The host name matches the server's certificate; the TLS setting matches the port. |
+| The mail server host name could not be found. Check the IMAP host. | Spelling of the host. |
+| The mail server could not be reached or closed the connection. Check the host, port and firewall. | Host, port, and that the server accepts connections from Enduria. |
+| The mail server did not respond in time. | Server availability; try again later. |
+| The mail server is rate-limiting this account. | Reduce how often the mailbox is checked. |
+| The mail server cannot delete or move processed mail as configured. Use a processed folder the server supports, or disable deletion. | Choose **Mark as read**, or a folder the server can move mail to. |
+| The mailbox was recreated on the server since the last poll; it will be re-read on the next poll. | No action; Enduria resumes on the next check. |
+| The inbox could not be opened. | That the account has an inbox and the user may read it. |
+| Polling failed for an unexpected reason. The operator log records the diagnostic code. | That the **Processed Folder** exists in the mailbox (or clear the field); otherwise ask the operator to check the application log. |

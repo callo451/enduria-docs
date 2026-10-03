@@ -1,0 +1,37 @@
+---
+title: How email works
+description: Outbound and inbound email in Enduria, the two ways to send, and what each setting controls.
+---
+
+# How email works
+
+Enduria uses email in two directions:
+
+- **Outbound** — Enduria sends mail on your organisation's behalf: ticket notifications, replies to requesters, invoices and quotes, scheduled reports, appointment reminders, satisfaction surveys, booking confirmations, invitations and password resets.
+- **Inbound** — Enduria reads a support mailbox you connect and turns new messages into tickets, and replies into ticket comments.
+
+The two are configured separately, under **Settings → Email Integration** (outbound) and **Settings → Inbound Email** (inbound). Both require the **Manage Settings** (`settings.manage`) permission.
+
+## Two ways to send
+
+| | Platform email | Custom SMTP |
+| --- | --- | --- |
+| Set-up | None beyond a sender name | Your SMTP server details |
+| Recipients see | Your organisation's name, sent from the platform's address | Your organisation's name and your own address |
+| Replies go to | Your Reply-To address | Your From address, or your Reply-To address if set |
+| Sending limits | Set by the platform operator; you can choose lower limits | Your choice |
+| Availability | Only where the operator offers it | Always |
+
+**Platform email** is sent through a sending service the operator of your Enduria installation manages. The From address belongs to the operator and cannot be changed by an organisation; this stops any one organisation from sending as an address it does not own. Your organisation's name is shown as the sender, and replies go to the Reply-To address you set. If the option is greyed out, the operator has not configured platform email, and you need custom SMTP.
+
+**Custom SMTP** sends through your own mail server — for example Microsoft 365, Google Workspace or a transactional email service — so mail comes from your own domain.
+
+## Making replies reach tickets
+
+Set the outbound **Reply-To address** to a mailbox you have connected under **Inbound Email**. When a requester replies to a notification, the reply arrives in that mailbox, and Enduria adds it to the ticket. See [Inbound email](./inbound).
+
+## Next steps
+
+- [Set up outbound email](./outbound)
+- [Connect an inbound mailbox](./inbound)
+- [Fix common email problems](./troubleshooting)

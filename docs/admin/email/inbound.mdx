@@ -1,0 +1,73 @@
+---
+title: Inbound email
+description: Connect a support mailbox, understand how messages become tickets and comments, and review the processing log.
+---
+
+# Inbound email
+
+Inbound email turns messages sent to a support mailbox into tickets, and replies into ticket comments. Open **Settings → Inbound Email**. You need the **Manage Settings** (`settings.manage`) permission.
+
+## Connect a mailbox
+
+Enduria reads mailboxes over IMAP with an encrypted connection (TLS or STARTTLS).
+
+1. Select **Add Account**.
+2. Enter a name, the mailbox address, and the IMAP host, port, username and password from your mail provider.
+3. Set the **Polling Interval** — how often Enduria checks the mailbox, from 60 seconds to 24 hours.
+4. Choose what happens to a message after it is processed:
+   - **Processed Folder** moves it to that folder. The field starts as `Processed`; the folder must already exist in the mailbox, and the server must support IMAP MOVE or UIDPLUS.
+   - Leave **Processed Folder** empty to mark the message as read and leave it in the inbox.
+   - **Delete After Processing** removes it instead. The server must support IMAP UIDPLUS.
+5. Optionally choose a default assignee and auto-assignment rules.
+6. Save, then use the test button to check the connection.
+
+:::caution
+If the processed folder does not exist, Enduria cannot file messages after processing them, and every check fails. Create the folder first, or leave the field empty.
+:::
+
+**Poll Now** checks every active mailbox immediately instead of waiting for the next scheduled check.
+
+## How messages are processed
+
+- **New messages** become tickets. The sender becomes the requester; if the address is not yet known, a requester account is created for it.
+- **Replies** are recognised by a ticket number such as `TKT-00042` in the subject, for example `Re: [TKT-00042] Printer not working`. The message is added to that ticket as a comment.
+- **A subject naming a ticket number your organisation does not have**, such as another company's reference in a forwarded email, opens a new ticket instead.
+- **Automatic replies and bounce notifications** — out-of-office messages, delivery failures and similar — are skipped.
+- **Attachments** are saved to the ticket.
+- **Auto-assignment rules** assign new tickets by subject, sender domain or body text; otherwise the default assignee is used.
+
+Enduria reads up to 25 unread messages per check, in the order they arrived. Messages larger than 40 MiB are not processed.
+
+## The processing log
+
+**View Logs** on the Inbound Email page opens the processing log. Each entry shows the sender, subject and outcome:
+
+| Status | Meaning |
+| --- | --- |
+| Ticket Created / Comment Added | Processed. The ticket number links to the ticket. |
+| Ignored | Skipped, with the reason — for example an automatic reply. |
+| Retrying | Processing failed. The message stays unread and is tried again at the next check. |
+| Quarantined | Processing failed five times, or the message can never be processed (too large or unreadable). It is marked read and left in the mailbox, never deleted or moved. |
+
+A failing message does not hold up the messages behind it.
+
+### Review quarantined messages
+
+Filter by **Needs attention** to see messages being retried and quarantined messages nobody has reviewed. For each quarantined message you can:
+
+- **Retry** — the message is made unread again and processed at the next check. If it has since been moved or deleted from the inbox, it returns to quarantine with that reason.
+- **Dismiss** — record that it was reviewed and needs no action.
+
+Both actions record who took them and when.
+
+The Inbound Email page shows a **Messages need attention** count for each mailbox with a **Review** link.
+
+## Connection problems
+
+If Enduria cannot connect to, sign in to or read a mailbox, the mailbox card shows **Connection problem** with the reason, how long it has been failing and when it last connected successfully. The processing log shows the same warning.
+
+After three failed checks in a row, everyone with the **Manage Settings** permission receives an in-app notification that the mailbox is not being read. When a check succeeds again, they receive one more notification that it has recovered. Mail that arrived during the outage is then processed in order.
+
+Disabling a mailbox clears its connection warning, because Enduria no longer checks it.
+
+See [Troubleshooting](./troubleshooting#inbound-connection-messages) for what each connection message means.
