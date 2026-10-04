@@ -23,6 +23,11 @@ Platform email currently uses Amazon SES. Set all of the following; platform ema
 | `AWS_SES_CONFIGURATION_SET` | Optional SES configuration set applied to every platform message, for example one that publishes bounce and complaint events. |
 | `EMAIL_PLATFORM_MAX_PER_HOUR` | Most platform emails one organisation may send per hour. Defaults to `100`. |
 | `EMAIL_PLATFORM_MAX_PER_DAY` | Most platform emails one organisation may send per day. Defaults to `1000`. |
+| `EMAIL_SYSTEM_MAX_PER_HOUR` | Most system emails (password resets, invitations) one organisation may send per hour, counted separately from its other mail. Defaults to `100`. |
+| `EMAIL_SYSTEM_MAX_PER_DAY` | The same, per day. Defaults to `1000`. |
+| `EMAIL_MAX_PER_RECIPIENT_PER_HOUR` | Most system emails, booking confirmations and survey alerts one address may receive per hour. Defaults to `10`. |
+
+Limits count calendar hours and days in UTC and are enforced in the database, so they hold across several application instances.
 
 Organisations may choose limits lower than yours, never higher. Their sender name appears as the display name and their Reply-To address receives replies; the From address is always yours.
 

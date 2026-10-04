@@ -43,7 +43,9 @@ Enduria limits how many emails your organisation sends per hour and per day.
 - With **platform email**, the operator sets the maximum. The page shows it beside the rate-limit field. You can choose a lower hourly limit, not a higher one.
 - With **custom SMTP**, you choose the limit.
 
-When a limit is reached, further mail waits or fails until the next hour or day, depending on the kind of message. Durable deliveries such as invoices, quotes and scheduled reports record the failure so they can be retried.
+Limits count calendar hours and days in UTC. When a limit is reached, further email is not sent and appears in **Settings → Email Logs** as failed with *The hourly sending limit has been reached* (or *daily*). Invoices, quotes, scheduled reports, appointment reminders and notifications about email-created tickets try again later automatically; other notifications are skipped.
+
+[System email](./overview#system-email) — password resets and invitations — has its own allowance, so reaching your notification limit never stops people signing in. Each address can also receive only a limited number of system emails, booking confirmations and survey alerts per hour, which stops these being used to flood one inbox.
 
 ## Turn email off
 
