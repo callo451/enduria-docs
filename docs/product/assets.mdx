@@ -21,6 +21,7 @@ An administrator's title does not bypass these limits. See [users and permission
 | --- | --- |
 | Add or update a record | [Create and maintain assets](#create-an-asset) |
 | Bring in a spreadsheet or recover an interrupted import | [Import assets](./asset-imports) |
+| Describe each manufacturer and model once for assets and stock | [Models](#models) (awaiting rollout) |
 | Record stock movements, approvals and transfers | [Manage inventory stock](./inventory) (awaiting rollout) |
 | Check assets out and in, and record loans and losses | [Track asset custody](./asset-custody) (awaiting rollout) |
 | Remove an asset from active use or bring it back | [Archive and restore assets](./asset-lifecycle) |
@@ -60,6 +61,45 @@ Locations are retired, not deleted, so history that names them stays readable. Y
 
 Tag previews are examples, not reservations. The saved asset receives its allocated tag. Do not depend on consecutive numbers without gaps.
 
+## Models
+
+<Admonition type="info" title="Awaiting rollout">
+
+The model catalogue requires a future application release. Publishing documentation does not change your workspace.
+
+</Admonition>
+
+A **model** describes one product once, for example *Dell Latitude 5440*, so assets and inventory items can refer to the same thing. Manage models in **Settings → Models**. Each model has a manufacturer, a model name, an optional part number and asset category, and a **tracking** type:
+
+- **Tracked asset**: each unit is its own asset record, such as a laptop or phone.
+- **Component**: a part that can be held as an asset record when it is worth tracking, such as a drive.
+- **Consumable**: counted by quantity and used up, such as cables or toner. A consumable is never an asset record, so assets can't use consumable models and consumable stock can't be deployed as assets.
+
+Manufacturer and model names are matched ignoring case and extra spaces, so you can't create *Dell Latitude 5440* twice under different spellings.
+
+### Link a model to assets and stock
+
+Choose a **Catalogue model** when you create or edit an asset or an inventory item. The record keeps the manufacturer and model text it was recorded or discovered with; choosing a model only fills those fields when they are blank. Assets deployed from stock take the stock item's model.
+
+### Link existing records
+
+Existing assets and stock items are never linked automatically. **Settings → Models → Unlinked records** groups active assets and stock items that have no model by the manufacturer and model they were recorded with, ignoring case and spacing, and shows the other spellings found. For each group:
+
+- **Create model** opens a new model filled in from the group. Saving it also links the group.
+- **Link to existing** links the group to a model you choose. Groups that include assets aren't offered consumable models.
+
+If records in the group changed after the list loaded, the link is refused and nothing is linked. Refresh the page and review the group again. Every link is recorded in the audit log with the records it changed.
+
+The suggested tracking type is only a starting point: groups that include assets or serial-tracked stock are suggested as tracked assets, and other stock as consumables.
+
+### Billing products
+
+A model can name the billing product that sells it, so asset and billing records describe the same product. Prices and tax stay in billing. Choosing or changing the billing product needs billing access; people without it see only that a product is linked.
+
+### Retire a model
+
+**Retire** a model you no longer use. Records already linked keep their link and show the model as retired, but no new asset or stock item can be linked to it, and stock linked to it can't be deployed as assets until you reactivate the model or change the item's model. Models are retired rather than deleted.
+
 ## Find an asset
 
 1. Open **Assets**.
@@ -78,7 +118,7 @@ You need asset-create permission.
 1. Select **New asset** from **Assets**.
 2. Choose **Manual entry** for a record you will maintain yourself. Use the stock source only when issuing an existing inventory item.
 3. Enter the **Asset name** and select a configured **Category**.
-4. Add the serial number and available manufacturer/model details.
+4. Add the serial number. For manual entry, optionally choose a **Catalogue model**; its category is used if you haven't chosen one.
 5. Choose **Assigned to**, **Location**, and, for MSP records, **Client** as appropriate. The assigned person must be compatible with the asset's client.
 6. Select a **Lifecycle stage** and enter purchase and warranty details when known.
 7. Check the purchase currency against the purchase evidence, then select **Create & open** or **Create another**.
@@ -113,6 +153,8 @@ Agent enrollment administration is restricted to authorised organisation-wide st
 | --- | --- |
 | A record or action is missing | Confirm the organisation, client assignment and current permissions. Check the archive if it is no longer active. |
 | An assignee, location or category is rejected | Select a current record from your organisation and check the asset's client. |
+| A catalogue model isn't offered for an asset | Consumable and retired models aren't offered for assets. Check the model's tracking type in **Settings → Models**. |
+| **These records changed since you reviewed them** | Refresh **Unlinked records** and review the group again. Nothing was linked. |
 | A tag conflicts | Another record may already use it. Choose a unique tag or use automatic allocation. |
 | A report has no combined cost | Review unknown currencies, mixed currencies and missing purchase costs. |
 | Imported device details change again | Check which fields the connector maintains. |

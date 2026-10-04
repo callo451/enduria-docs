@@ -77,7 +77,9 @@ The **Movements** page shows movements for the selected range. Only the latest 5
 
 ## Deploy stock as assets
 
-From an inventory item, deploy units as new asset records. Deployment reduces stock and links each new asset to its item. To track who holds an asset afterwards, see [Track asset custody](./asset-custody).
+From an inventory item, deploy units as new asset records. Deployment reduces stock and links each new asset to its item. Each new asset takes the item's [catalogue model](./assets#models). To track who holds an asset afterwards, see [Track asset custody](./asset-custody).
+
+Stock whose model is a **consumable** can't be deployed as assets; record it as issued instead. Stock whose model is retired can't be deployed until the model is reactivated or the item's model is changed.
 
 Checking an asset in to a stockroom records where the asset is, but doesn't yet add it back to inventory stock.
 
@@ -92,3 +94,4 @@ Checking an asset in to a stockroom records where the asset is, but doesn't yet 
 | **Showing the latest 500 movements** | Narrow the date range or filters to see older movements. |
 | A location isn't offered for stock | Stock can only be kept in active, organisation-wide stockrooms. Mark the location **Holds stock** and make it available to the whole organisation. |
 | A location can't be removed | Locations are retired, not deleted. Move its stock and stored assets first. |
+| **Consumable stock is counted by quantity and can't be deployed as assets** | The item's model is a consumable. Record the stock as issued, or change the model if it was set up wrongly. |
