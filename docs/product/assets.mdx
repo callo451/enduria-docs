@@ -3,6 +3,8 @@ title: Manage assets
 description: Set up your asset register, maintain ownership and costs, and find the right lifecycle workflow.
 ---
 
+import Admonition from '@theme/Admonition';
+
 # Manage assets
 
 Use **Assets** to keep a register of devices, their assigned people and clients, locations, purchase details, and related service work. You can add records manually, import a CSV, or use a supported device-management connector.
@@ -38,6 +40,23 @@ Before adding a large number of assets, agree your organisation's categories, lo
 - Use **Categories** and **Locations** in the asset-management navigation for the corresponding reference records.
 - Use your own configured lifecycle labels. Examples from another organisation may not be valid in yours.
 - Keep parent categories and locations within your organisation. A hierarchy cannot contain cycles; resolve active child records before retiring a parent.
+
+## Locations
+
+<Admonition type="info" title="Awaiting rollout">
+
+Shared locations, client sites and stockrooms require a future application release. Publishing documentation does not change your workspace.
+
+</Admonition>
+
+Assets and inventory use **one list of locations**, managed in **Settings → Asset locations**. A location can also be:
+
+- **A client site.** Choose a client to make the location available only to that client's assets. Locations without a client are available to the whole organisation. Staff assigned to a client see organisation-wide locations and their own client's sites only.
+- **A stockroom.** Select **Holds stock** for places that keep inventory stock or assets checked in to storage. Inventory items can only be kept in organisation-wide stockrooms; a client's stockroom can hold that client's stored assets.
+
+When the asset and inventory location lists were combined, every inventory location was added to the shared list unchanged. If its code was already in use, the code gained a `-STOCK-` suffix. Locations that may duplicate another are marked **Review** with an explanation. Check them, then edit or retire the duplicate.
+
+Locations are retired, not deleted, so history that names them stays readable. You can't retire a location, stop it holding stock, or restrict it to one client while it still holds stock or assets that don't fit.
 
 Tag previews are examples, not reservations. The saved asset receives its allocated tag. Do not depend on consecutive numbers without gaps.
 

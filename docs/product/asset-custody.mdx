@@ -29,7 +29,7 @@ A custodian must be compatible with the asset's client:
 
 - **Staff members** must be active and either unrestricted or assigned to the same client.
 - **Customer contacts** must be active portal users of the asset's own client. An asset without a client cannot be held by a customer contact.
-- **Storage locations** are your organisation's active asset locations.
+- **Stockrooms** are active locations marked **Holds stock**, either organisation-wide or belonging to the asset's own client. See [Locations](./assets#locations).
 
 The custodian list shows only compatible people, at most 50 at a time. Search to narrow it.
 
@@ -46,10 +46,10 @@ The **Custody** tab shows the holder, when custody started, any due date, and th
 ## Check an asset in
 
 1. On the **Custody** tab, choose **Check in**.
-2. Select the storage location the asset is returned to. If you don't select one, the asset becomes unassigned with no recorded location.
+2. Select the stockroom the asset is returned to. The stockroom also becomes the asset's location. If you don't select one, the asset becomes unassigned and keeps its last recorded location.
 3. Optionally record its condition, such as **Damaged** or **Needs repair**, and notes.
 
-Only an asset held by a person can be checked in.
+Only an asset held by a person can be checked in. While an asset is in storage, its location is its stockroom: to move it, check it in or out again rather than editing the location.
 
 ## Record a loss, recovery or condition
 
@@ -76,6 +76,8 @@ Archived assets keep their custody history, which stays readable. Restore an arc
 | The person you need is not listed | Check that their account is active and compatible with the asset's client. Customer contacts must belong to the asset's own client. |
 | A client change is refused | A customer contact of the current client holds the asset. Transfer or check it in first, or change the client and a compatible custodian together. |
 | Custody buttons are missing | You may have view-only access, or the asset is archived. |
+| A stockroom is not listed | Only active locations marked **Holds stock** that are organisation-wide or belong to the asset's client appear. |
+| You can't change a stored asset's location | Check the asset in to another stockroom, or check it out to a person. |
 
 ## Current limits
 

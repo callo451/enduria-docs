@@ -49,6 +49,8 @@ When an approved quantity change was requested as "set the count to 7", it appli
 
 ## Move stock between locations
 
+Inventory locations are the **stockrooms** of the shared location list: organisation-wide locations marked **Holds stock** (see [Locations](./assets#locations)). Locations you add in inventory settings appear in the shared list too.
+
 Each inventory item currently has **one location**, so a transfer moves **all** of that item's stock:
 
 - The quantity is filled in with the full stock and can't be edited.
@@ -77,7 +79,7 @@ The **Movements** page shows movements for the selected range. Only the latest 5
 
 From an inventory item, deploy units as new asset records. Deployment reduces stock and links each new asset to its item. To track who holds an asset afterwards, see [Track asset custody](./asset-custody).
 
-Checking an asset in to storage doesn't yet add it back to inventory stock. Inventory and asset locations are also separate lists for now.
+Checking an asset in to a stockroom records where the asset is, but doesn't yet add it back to inventory stock.
 
 ## Resolve common problems
 
@@ -88,3 +90,5 @@ Checking an asset in to storage doesn't yet add it back to inventory stock. Inve
 | **Stock or location changed since this transfer was requested** | Reject the pending transfer and request a new one. |
 | Inventory says you don't have access | Inventory is organisation-wide. Client-assigned staff and portal users can't use it. |
 | **Showing the latest 500 movements** | Narrow the date range or filters to see older movements. |
+| A location isn't offered for stock | Stock can only be kept in active, organisation-wide stockrooms. Mark the location **Holds stock** and make it available to the whole organisation. |
+| A location can't be removed | Locations are retired, not deleted. Move its stock and stored assets first. |
