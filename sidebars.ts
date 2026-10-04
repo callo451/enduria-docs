@@ -7,7 +7,7 @@ const sidebars: SidebarsConfig = {
     {type: 'category', label: 'Using Enduria', link: {type: 'doc', id: 'product/overview'}, items: [
       'product/tickets',
       {type: 'category', label: 'Asset management', link: {type: 'doc', id: 'product/assets'}, items: [
-        'product/asset-imports', 'product/asset-lifecycle', 'product/asset-approvals', 'product/asset-event-rules',
+        'product/asset-imports', 'product/asset-lifecycle', 'product/asset-approvals', 'product/asset-event-rules', 'product/asset-follow-up-tickets',
       ]},
       'product/projects', 'product/knowledge-base', 'product/customer-portal',
     ]},
