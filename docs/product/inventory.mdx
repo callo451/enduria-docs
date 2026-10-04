@@ -1,0 +1,90 @@
+---
+title: Manage inventory stock
+description: Record stock received, issued, counted and moved, approve stock changes, and understand current inventory limits.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Manage inventory stock
+
+Use **Inventory** to keep stock of parts and equipment: what you hold, where it is, what has been received or issued, and what is running low. Each inventory item is a stock-keeping record with a SKU, a quantity, a unit cost and a location.
+
+<Admonition type="info" title="Awaiting rollout">
+
+The approval, transfer and access behaviour described here requires a future application release. Publishing documentation does not change your workspace.
+
+</Admonition>
+
+## Before you start
+
+Inventory is shared across your whole organisation. You need inventory permissions to use it:
+
+- **View** inventory to browse items, movements and statistics. Staff who can only view movements can open the movement history.
+- **Adjust stock** to record movements and quantity changes.
+- **Manage inventory** to approve or reject movements and change settings.
+
+Customer portal users and staff assigned to a specific client can't use inventory, even if their role includes inventory permissions. This also applies to deploying stock as assets.
+
+## Record a movement
+
+1. Open **Inventory → Movements** and choose **Record movement**, or open an item and record a movement from there.
+2. Choose the item and the type:
+   - **Received** adds stock.
+   - **Issued out** removes stock.
+   - **Count adjustment** removes stock to correct a count.
+   - **Transfer** moves the item to another location (see below).
+3. Enter the quantity, an optional reference such as a ticket or purchase order number, and notes.
+
+The movement applies at once unless it needs approval.
+
+## Approve stock changes
+
+Mark an item as **Requires approval** to have every stock change for it reviewed. That includes movements, direct quantity changes on the item and bulk quantity changes. Transfers always need approval.
+
+- Pending changes appear under **Awaiting approval** on the **Movements** page. Stock doesn't change until a change is approved.
+- **A different person must approve.** The person who requested a change sees **You requested this** and can **Withdraw** it, but cannot approve it.
+- Approvers need inventory management permission. A rejection records its reason.
+
+When an approved quantity change was requested as "set the count to 7", it applies the difference recorded when it was requested. If stock changed in between, review the result and record a further adjustment if needed.
+
+## Move stock between locations
+
+Each inventory item currently has **one location**, so a transfer moves **all** of that item's stock:
+
+- The quantity is filled in with the full stock and can't be edited.
+- The item's current location isn't offered as a destination.
+- If the item's stock or location changes before approval, approval is refused. Reject the transfer and request a new one.
+
+To move several items, select them in the inventory list and choose **Move location**. Each selected item gets a full-stock transfer request, which a different person must approve. Items already at the destination are skipped.
+
+Moving part of an item's stock to another location isn't available yet.
+
+## Bulk changes
+
+Select items in the inventory list using the checkbox at the start of each row, then choose **Move location**, **Adjust quantity**, **Raise purchase order** or **Set status**. After a bulk quantity change, a message shows how many changes were applied and how many are waiting for approval.
+
+## Reorder levels and costs
+
+- When available stock falls to or below an item's reorder level, Enduria raises a low-stock alert and sends the `inventory.low_stock` or `inventory.out_of_stock` webhook. **Automatic purchase orders are not available**; raise purchase orders yourself. Older items may show an auto-reorder setting that has no effect.
+- Inventory keeps **one unit cost per item**. Stock value is quantity × unit cost. FIFO and LIFO costing aren't available. Costs have no currency recorded, so don't treat totals as converted amounts.
+- **Stock cover** on the inventory list estimates how many days current stock would last at the last 30 days' issue rate.
+
+## Movement history
+
+The **Movements** page shows movements for the selected range. Only the latest 500 movements are listed; the totals at the top always cover the whole range, and pending changes aren't counted as received or issued until approved. Narrow the range or filters to see older rows.
+
+## Deploy stock as assets
+
+From an inventory item, deploy units as new asset records. Deployment reduces stock and links each new asset to its item. To track who holds an asset afterwards, see [Track asset custody](./asset-custody).
+
+Checking an asset in to storage doesn't yet add it back to inventory stock. Inventory and asset locations are also separate lists for now.
+
+## Resolve common problems
+
+| What you see | What to do |
+| --- | --- |
+| **A transfer moves all N units of this item** | Transfers move the item's full stock. Enter the full quantity, or record issues and receipts instead. |
+| **A different person must approve this movement** | Ask another inventory manager to approve it, or withdraw it. |
+| **Stock or location changed since this transfer was requested** | Reject the pending transfer and request a new one. |
+| Inventory says you don't have access | Inventory is organisation-wide. Client-assigned staff and portal users can't use it. |
+| **Showing the latest 500 movements** | Narrow the date range or filters to see older movements. |
