@@ -1,0 +1,111 @@
+---
+title: Configure asset event rules
+description: Notify authorised staff and highlight existing reviews when retained asset events match published rules.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Configure asset event rules
+
+Use **Settings → Asset event rules** to notify selected staff when an asset is archived, reviewed restoration or disposal progresses, or a disposal hold changes. A rule can also highlight an existing review for someone who is already eligible to act on it.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Asset event rules, **Event notices** and rule-driven review highlights require a future application release. Publishing this guide does not enable these features in your workspace. Keep your existing procedures until the controls are available.
+
+</Admonition>
+
+## Before you start
+
+You need an active staff account with `settings.manage`, `assets.view` and organisation-wide access to configure rules, preview them or read their execution log. Customer-bound staff and customer portal accounts cannot manage rules.
+
+Recipients must be active staff with `assets.view` and organisation-wide access. Highlight recipients also need the affected review phase's current permissions and independent eligibility. Selecting a person never grants permissions or review authority.
+
+Configure the asset's customer, category and lifecycle vocabulary before using them as conditions. Lifecycle labels are your organisation's configured values, not a universal set. Use [asset approvals](./asset-approvals) to choose who may review a request; an event rule does not change that roster.
+
+## Choose an event and outcome
+
+| Event family | Available events |
+| --- | --- |
+| Archive | Asset archived |
+| Restoration | **Restoration requested**, **Restoration approved and completed**, **Restoration rejected**, **Restoration cancelled** |
+| Disposal | **Disposal requested**, **Disposal approved**, **Disposal execution evidence recorded**, **Disposal independently verified**, **Disposal rejected**, **Disposal cancelled** |
+| Disposal hold | **Hold placed**, **Hold independently released** |
+
+These events describe recorded actions. An archive event does not prove physical disposal, and recorded execution evidence does not replace independent verification.
+
+| Outcome | Where it appears |
+| --- | --- |
+| **Create an in-app event notice** | **Assets → Event notices** for currently authorised selected recipients |
+| **Highlight an existing eligible review** | **Assets → Reviews**, only for a selected person who already qualifies for that pending review |
+
+Review highlights are available only for restoration requests, disposal requests and recorded disposal execution evidence. They cannot appoint a reviewer, change a policy, restart a round or make an approval decision.
+
+## Prepare and publish rules
+
+1. Open **Settings → Asset event rules**.
+2. Select **Add rule**, enter a **Rule name** and choose the event under **When**.
+3. Under **If**, optionally select one **Client**, one **Category** and one **Lifecycle value**. All selected conditions must match; leaving a condition empty does not restrict that field. An unknown fact cannot satisfy a selected condition.
+4. Under **Then**, choose an outcome. Use **Find recipients** to select 1–20 named people.
+5. Set **Priority** from 0 to 999 and select **Enable when published** for the rules you want active. New rules begin disabled.
+6. Select **Save draft** to retain unfinished changes without activating them.
+7. Under **Read-only preview**, use **Find preview asset** to choose one asset and select **Preview draft**.
+8. Enter **Reason for publication or disable** and select **Publish for future events**.
+
+A rule set contains at most 20 rules and at most 100 recipient actions in total. Selecting the same person in two rules counts once for each rule. Publication and disable reasons require 10–1,000 characters.
+
+Rules are evaluated from lower to higher priority. All matching rules can produce their own recipient actions; this is not a first-match-only list. Conditions use the retained facts at the event, rather than later category or lifecycle edits.
+
+Publication applies to future matching events. It does not replay earlier asset history. Saved drafts do not change published behaviour. **Remove from draft** removes a rule from the editor; publish the change to stop that published rule. **Reload saved draft** discards unsaved editor changes and loads the latest saved version.
+
+## Preview without sending
+
+A preview evaluates hypothetical rule events against the selected asset's current facts. It does not archive an asset, create a disposal request, deliver a notice or create a review. It is not a replay of a past event or a guarantee that a recipient will still be eligible when a real event occurs.
+
+Check the selected customer, category and lifecycle conditions. If a recipient loses access, becomes inactive or no longer qualifies to review the request, the published rule cannot restore that authority.
+
+## Disable a published rule
+
+Enter **Reason for publication or disable**, then select **Disable published rule** beside the published rule. Disabling publishes a new version and stops work that has not been delivered. It does not erase prior events, publications or delivery evidence. Changing a draft alone does not disable its published rule.
+
+Disabling uses the published rule set and replaces the saved draft with that set plus the disabled rule. Preserve any draft changes you still need before using it. Previously captured actions from a rule that remains enabled retain the publication and recipients selected for their event; editing a future version does not rewrite them.
+
+## Read notices and execution history
+
+1. Open **Assets → Event notices** to read notices addressed to you. On smaller screens, follow **Event notices** from **Assets → Reviews**.
+2. Read the asset, event, rule name and recorded time.
+3. Select **Open retained asset** to inspect the asset, or **Asset reviews** to find work you are eligible to review.
+4. Use **Refresh notices** to reload current results and **Previous notices** or **Next notices** to move through pages.
+
+The inbox scans 25 recorded outcomes at a time and rechecks visibility. A page can be empty while **Next notices** remains available. There is no unread count or mark-as-read control. These notices are separate from email, the notification bell and review reminder notices.
+
+An existing review can be highlighted only while the recipient still qualifies for that phase. A highlight does not follow a restart or reassignment into a new review round. Open the review to make any required decision normally.
+
+On **Settings → Asset event rules**, expand **Publication history** to read the latest 20 retained versions, reasons and publisher references. Earlier versions remain retained. Use **Refresh log**, **Previous executions** and **Next executions** under **Execution log** to inspect recorded recipient actions in pages of 25.
+
+An execution can be `pending`, `delivered` or `skipped`. Delivered means the in-app outcome was recorded; it does not prove that a person read it or made a decision. A skipped action retains its reason. The publisher must still have current organisation-wide rule-management authority when actions execute and when their results are shown. Revoking that authority can stop delivery or hide a previously delivered result. Recipient authority and the asset's customer binding are also checked again.
+
+## Inspect the retained source event
+
+Open an asset's **History** tab and find **Retained asset events**. The same section is available in archive and disposal detail. You need current `assets.view` permission and access to the asset's customer scope.
+
+1. Read the event type, recorded time and actor reference.
+2. Expand **Retained source evidence** to inspect its source reference and recorded asset facts.
+3. Use **Refresh history**, **Previous events** and **Next events** to inspect pages of 25 events.
+
+The list shows retained events for the asset's current customer binding. It does not reconstruct activity from before this feature was enabled, so a missing historical event does not prove that an action never happened. Source events retain limited facts for matching and traceability; continue using the restoration or disposal request for its full reviewed evidence.
+
+## Resolve common problems
+
+| What you see | What to check |
+| --- | --- |
+| A rule does not match | Confirm the event and every selected condition. Conditions are combined with AND; a matching category alone is insufficient when a customer or lifecycle condition is also selected. |
+| A recipient receives no notice | Check their current staff status, asset permission and organisation-wide access. Check the publication owner's current rule-management authority and the execution log. A saved draft or disabled rule does not deliver notices. |
+| A selected person sees no review highlight | They must already qualify for the current pending review. Use the approval or correction workflow if its assigned reviewers need to change. |
+| Earlier activity did not produce notices | Rules do not backfill historical events or replay them on publication. |
+| A preview matched but delivery did not occur | Preview uses current hypothetical facts. Actual matching and recipient authority are checked for the real event and delivery. |
+| Saving says the rules changed | Select **Reload saved draft**, compare the current draft and publication, then reapply the intended changes. Another administrator's newer version is not overwritten automatically. |
+| A selected person or condition is refused | Select an active tenant-owned customer, category or lifecycle value, and currently eligible recipients. These are checked even for disabled draft rules. Narrow a directory search if its results are truncated. |
+| The log shows skipped work | Check its reason: the rule may have been disabled, the asset's customer binding changed, the publisher or recipient lost authority, or the original independent review was no longer available. Skipped work is retained rather than silently delivered later. |
+
+Rules do not send email, change asset lifecycle or assignment, release holds, perform disposal, restore credentials or create tickets. They cannot run scripts or call arbitrary external URLs. External integrations remain separate from these in-app outcomes.

@@ -139,7 +139,7 @@ The administrator approving or rejecting the correction must be a different pers
 
 ### Propose and decide
 
-1. Open the pending request through **Assets → Archive → Review** for restoration, or through **Disposals** for a disposal request. The eligible-reviewer inbox is not an administrator's list of blocked work.
+1. Open the pending request through **Assets → Archive → Review** for restoration, or through **Disposals** for a disposal request. An active asset's actions menu also offers **Review corrections**. The eligible-reviewer inbox is not an administrator's list of blocked work.
 2. In **Review corrections**, inspect the current round, retained reviewer rules and clock.
 3. Select **Propose restart** to keep the existing reviewer rules and restart their timing, or **Propose reassignment** and use **Find replacement reviewers** to select 1–50 eligible named reviewers.
 4. Enter a **Correction reason** of 10–2,000 characters and submit the proposal.
@@ -149,7 +149,7 @@ Until approval, the current review remains actionable by its existing eligible r
 
 Approval creates a new review round and supersedes the old round's review authority. A restart preserves its reviewer rules and timing intervals; reassignment uses the approved named people. Both keep the retained review instructions and timing intervals. Escalation remains limited to previously selected escalation recipients who are also in the new named list. The new clock starts at correction approval, so an enabled reminder and deadline run from that point. Old requests, reviewer snapshots, reasons, decisions and disposal execution evidence remain retained. Old-round reminders cannot grant authority in the new round. Reload an already open review before making the actual asset decision.
 
-A restart requires at least one currently eligible independent reviewer from the retained roster. It does not add newly joined role members or bypass a lost role membership. If no retained verifier can act, use reassignment rather than a restart.
+A restart of a named or role-selected roster requires at least one currently eligible independent reviewer from that roster. A retained verifier who recorded the evidence remains listed but cannot verify it or receive review notices; another eligible independent member must remain. Restart does not add newly joined role members or bypass a lost role membership. If no retained verifier can act, use reassignment rather than a restart.
 
 The new reviewers must still make the actual restoration, disposal approval or verification decision. All normal holds, asset-fact and independence checks still apply. A correction cannot change submitted facts, edit disposal evidence, reopen completed work, move history to another customer or add older phases that have no review runtime.
 
@@ -170,4 +170,4 @@ Use **Refresh corrections** after authority changes. Expand **Retained previous 
 | A correction is unavailable or refused | Check current settings and phase permissions, organisation-wide access, independence, customer binding and whether the phase is still pending. Older phases without a review runtime cannot be backfilled through a correction. |
 | The request was decided before its correction | The correction can no longer be approved. Retain a rejection or cancel the proposal as its proposer; completed asset work cannot be restarted. |
 
-These settings cover one independent decision per review phase. They do not provide voting quorums, arbitrary approval stages, customer/category conditions, automatic reassignment, ordinary archive or assignment approvals, or general “when this happens, do that” event rules.
+These settings cover one independent decision per review phase. They do not provide voting quorums, arbitrary approval stages, customer/category conditions, automatic reassignment or ordinary archive or assignment approvals. [Asset event rules](./asset-event-rules) are separate: when available, they can highlight an existing review for an eligible person but cannot assign review authority.
