@@ -1,17 +1,17 @@
 ---
 title: Manage inventory stock
-description: Record stock received, issued, counted and moved, approve stock changes, and understand current inventory limits.
+description: Keep stock in stockrooms, record what is received, issued, counted and written off, move stock with transfer orders, and set which changes need approval.
 ---
 
 import Admonition from '@theme/Admonition';
 
 # Manage inventory stock
 
-Use **Inventory** to keep stock of parts and equipment: what you hold, where it is, what has been received or issued, and what is running low. Each inventory item is a stock-keeping record with a SKU, a quantity, a unit cost and a location.
+Use **Inventory** to keep stock of parts and equipment: what you hold, which stockroom it is in, what has been received, issued, counted or written off, and what is running low. Each inventory item is a stock-keeping record with a SKU and a unit cost. Its stock is held in one or more stockrooms.
 
 <Admonition type="info" title="Awaiting rollout">
 
-The approval, transfer and access behaviour described here requires a future application release. Publishing documentation does not change your workspace.
+The stock ledger, transfer orders and approval settings described here require a future application release. Publishing documentation does not change your workspace.
 
 </Admonition>
 
@@ -19,51 +19,81 @@ The approval, transfer and access behaviour described here requires a future app
 
 Inventory is shared across your whole organisation. You need inventory permissions to use it:
 
-- **View** inventory to browse items, movements and statistics. Staff who can only view movements can open the movement history.
-- **Adjust stock** to record movements and quantity changes.
-- **Manage inventory** to approve or reject movements and change settings.
+- **View** inventory to browse items, stock, transfers and movements. Staff who can only view movements can open the movement history.
+- **Adjust stock** to record stock changes and create, dispatch and receive transfers.
+- **Manage inventory** to approve or reject stock changes and transfers, and to change approval settings.
 
 Customer portal users and staff assigned to a specific client can't use inventory, even if their role includes inventory permissions. This also applies to deploying stock as assets.
 
-## Record a movement
+## Where stock is
 
-1. Open **Inventory → Movements** and choose **Record movement**, or open an item and record a movement from there.
-2. Choose the item and the type:
-   - **Received** adds stock.
-   - **Issued out** removes stock.
-   - **Count adjustment** removes stock to correct a count.
-   - **Transfer** moves the item to another location (see below).
-3. Enter the quantity, an optional reference such as a ticket or purchase order number, and notes.
+Stock is kept in **stockrooms**: organisation-wide locations marked **Holds stock** in the shared location list (see [Locations](./assets#locations)). A bin is a stockroom location inside another stockroom.
 
-The movement applies at once unless it needs approval.
+Open an item to see **Stock by place**: how many units are in each stockroom or bin, how many are on transfer orders in transit, and any changes waiting for approval.
+
+- **On hand** is stock in stockrooms. **Available** is on-hand stock that isn't reserved. Stock in transit counts towards what you hold but isn't available.
+- Each item has a **home stockroom**, the default place for receipts. Changing it doesn't move any stock.
+- **Unplaced** stock is stock that was recorded before stockrooms were tracked, with no location. Move it into a stockroom with **Change stock → Move within stockroom**, or count or write it off. Unplaced stock isn't available until it is put away.
+
+## Change stock
+
+Open an item, or **Inventory → Movements**, and choose **Change stock**. Choose what happened:
+
+| Change | Use it for | What it needs |
+| --- | --- | --- |
+| **Receive** | Stock arriving from a supplier or elsewhere | A stockroom and a delivery or receipt reference |
+| **Issue** | Stock given out | A ticket number when it's for a ticket, otherwise a reason |
+| **Consume** | Stock used up while doing work | A ticket number or a reason |
+| **Return** | Unused stock coming back | A ticket number or a reason |
+| **Count** | Setting a stockroom to what you counted | The counted quantity and a count reference |
+| **Adjust** | Correcting by a number of units | A reason code and a reason |
+| **Write off** | Removing damaged, lost or expired stock | A reason code and a reason |
+| **Move within stockroom** | Moving between bins of one stockroom, or putting away unplaced stock | The destination and a reason |
+
+Every change is recorded as a new entry in the stock ledger with who made it, when, where and why. Entries are never edited: to correct a mistake, record another change. A count that matches the stock records the count date without changing anything.
+
+If the item's stock changed since you opened the page, Enduria asks you to reload rather than applying your change over someone else's. Retrying after a lost connection doesn't record the change twice.
 
 ## Approve stock changes
 
-Mark an item as **Requires approval** to have every stock change for it reviewed. That includes movements, direct quantity changes on the item and bulk quantity changes. Transfers always need approval.
+Your inventory manager decides which changes need **independent approval** in **Settings → Inventory → Approvals**:
 
-- Pending changes appear under **Awaiting approval** on the **Movements** page. Stock doesn't change until a change is approved.
-- **A different person must approve.** The person who requested a change sees **You requested this** and can **Withdraw** it, but cannot approve it.
-- Approvers need inventory management permission. A rejection records its reason.
+- Transfers between stockrooms
+- Write-offs (recommended)
+- Counts and adjustments
+- Moves within a stockroom
+- Receipts
+- Issues, consumption and returns
 
-When an approved quantity change was requested as "set the count to 7", it applies the difference recorded when it was requested. If stock changed in between, review the result and record a further adjustment if needed.
+Until the settings are saved, transfers need approval and everything else follows the item's own setting. An item marked **Requires approval** needs approval for every change, whatever the settings say. Changes to the settings are versioned and recorded in the audit log.
 
-## Move stock between locations
+- A change that needs approval is sent as a **request**. It appears under **Awaiting approval** on the **Movements** page and on the item. Stock doesn't change until it is approved.
+- **A different person must approve.** The person who asked can **Withdraw** the request but can't approve it. Approvers need inventory management permission, and a rejection or withdrawal records its reason.
+- Approving applies the change as a new ledger entry. If a requested count no longer matches the stock because something else changed it, approval is refused: reject it and count again.
 
-Inventory locations are the **stockrooms** of the shared location list: organisation-wide locations marked **Holds stock** (see [Locations](./assets#locations)). Locations you add in inventory settings appear in the shared list too.
+## Transfer stock between stockrooms
 
-Each inventory item currently has **one location**, so a transfer moves **all** of that item's stock:
+Use a **transfer order** to move stock from one stockroom to another, including part of an item's stock. Open **Inventory → Transfers** and choose **New transfer**, or choose **Transfer** on an item.
 
-- The quantity is filled in with the full stock and can't be edited.
-- The item's current location isn't offered as a destination.
-- If the item's stock or location changes before approval, approval is refused. Reject the transfer and request a new one.
+1. Choose the stockroom the stock leaves from and the stockroom it goes to, then the items and quantities. You can't ask for more than the source holds.
+2. The transfer starts as a **draft**. If transfers need approval, choose **Submit for approval**; a different person with inventory management permission approves or rejects it.
+3. Choose **Dispatch** when the stock leaves. It is taken from the source and shown as **in transit**.
+4. Whoever receives it chooses **Receive** and records what arrived, into the destination stockroom or one of its bins. They are recorded as the receiver.
+5. If some stock doesn't arrive, it stays in transit. Receive it later, or choose **Write off remainder** with a reason. That write-off follows your write-off approval setting.
 
-To move several items, select them in the inventory list and choose **Move location**. Each selected item gets a full-stock transfer request, which a different person must approve. Items already at the destination are skipped.
+A transfer can be cancelled until it is dispatched. Moving between bins of the same stockroom doesn't need a transfer order: use **Change stock → Move within stockroom**.
 
-Moving part of an item's stock to another location isn't available yet.
+A stockroom can't be retired while it holds stock or has open transfers.
 
 ## Bulk changes
 
-Select items in the inventory list using the checkbox at the start of each row, then choose **Move location**, **Adjust quantity**, **Raise purchase order** or **Set status**. After a bulk quantity change, a message shows how many changes were applied and how many are waiting for approval.
+Select items in the inventory list using the checkbox at the start of each row, then choose:
+
+- **Set home stockroom** to change where receipts go by default. No stock moves.
+- **Raise purchase order** to draft a purchase order.
+- **Set status**, for example to mark items discontinued.
+
+Bulk quantity changes are no longer available, because each stock change needs its own stockroom and reference.
 
 ## Reorder levels and costs
 
@@ -73,13 +103,24 @@ Select items in the inventory list using the checkbox at the start of each row, 
 
 ## Movement history
 
-The **Movements** page shows movements for the selected range. Only the latest 500 movements are listed; the totals at the top always cover the whole range, and pending changes aren't counted as received or issued until approved. Narrow the range or filters to see older rows.
+The **Movements** page lists the stock ledger for the selected range: each entry with its signed change, the place, and its reference. Ticket and transfer references link to the ticket or transfer. Filter by type or by place.
+
+- Only the latest 500 entries are listed. The totals at the top always cover the whole range; narrow the range or filters to see older rows.
+- Rows marked **Legacy** were recorded before the stock ledger. They are shown as they were recorded, including their old approval state, and aren't counted in the totals.
+
+## Upgrading from an earlier version
+
+When your workspace moves to the stock ledger:
+
+- Each item's current quantity becomes its opening balance at its recorded location, or **Unplaced** if it had none. Nothing else is assumed.
+- Earlier movements stay in the history as **Legacy** rows.
+- Changes that were still waiting for approval are carried forward with their requester and date: quantity changes become requests, and whole-stock transfers between stockrooms become transfer orders waiting for approval. If the stock has changed since, approving is refused and the request can be rejected.
 
 ## Deploy stock as assets
 
-From an inventory item, deploy units as new asset records. Deployment reduces stock and links each new asset to its item. Each new asset takes the item's [catalogue model](./assets#models). To track who holds an asset afterwards, see [Track asset custody](./asset-custody).
+From an inventory item, deploy units as new asset records. Choose the stockroom the units leave from. Deployment reduces that stockroom's stock, records the new assets as the reference, and links each new asset to its item. Each new asset takes the item's [catalogue model](./assets#models). To track who holds an asset afterwards, see [Track asset custody](./asset-custody).
 
-Stock whose model is a **consumable** can't be deployed as assets; record it as issued instead. Stock whose model is retired can't be deployed until the model is reactivated or the item's model is changed.
+Stock whose model is a **consumable** can't be deployed as assets; record it as issued instead. Stock whose model is retired can't be deployed until the model is reactivated or the item's model is changed. Deployment isn't covered by the approval settings yet.
 
 Checking an asset in to a stockroom records where the asset is, but doesn't yet add it back to inventory stock.
 
@@ -87,11 +128,15 @@ Checking an asset in to a stockroom records where the asset is, but doesn't yet 
 
 | What you see | What to do |
 | --- | --- |
-| **A transfer moves all N units of this item** | Transfers move the item's full stock. Enter the full quantity, or record issues and receipts instead. |
-| **A different person must approve this movement** | Ask another inventory manager to approve it, or withdraw it. |
-| **Stock or location changed since this transfer was requested** | Reject the pending transfer and request a new one. |
+| **Only N on hand at …** | The stockroom doesn't hold enough. Choose another stockroom or a smaller quantity. |
+| **Stock for this item changed since the page loaded** | Reload the page and record the change again. |
+| **Link a ticket or give a reason** | Issues, consumption and returns need a ticket number or a reason. |
+| **These places are in different stockrooms** | Use a transfer order to move stock between stockrooms. |
+| **This transfer needs independent approval before dispatch** | Submit it for approval and ask a different inventory manager to approve it. |
+| **A different person must decide this request** | Ask another inventory manager to approve it, or withdraw it. |
+| **Stock at this place changed since the count was requested** | Reject the count and count again. |
 | Inventory says you don't have access | Inventory is organisation-wide. Client-assigned staff and portal users can't use it. |
 | **Showing the latest 500 movements** | Narrow the date range or filters to see older movements. |
 | A location isn't offered for stock | Stock can only be kept in active, organisation-wide stockrooms. Mark the location **Holds stock** and make it available to the whole organisation. |
-| A location can't be removed | Locations are retired, not deleted. Move its stock and stored assets first. |
+| A stockroom can't be retired | Move or transfer its stock, finish or cancel its open transfers, and choose another home stockroom for items that use it. |
 | **Consumable stock is counted by quantity and can't be deployed as assets** | The item's model is a consumable. Record the stock as issued, or change the model if it was set up wrongly. |
