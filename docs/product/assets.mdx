@@ -1,21 +1,95 @@
 ---
 title: Manage assets
-description: Track asset ownership, lifecycle, location, and related service work.
+description: Set up your asset register, maintain ownership and costs, and find the right lifecycle workflow.
 ---
 
 # Manage assets
 
-The asset workspace combines manually maintained inventory with devices imported through configured management connectors.
+Use **Assets** to keep a register of devices, their assigned people and clients, locations, purchase details, and related service work. You can add records manually, import a CSV, or use a supported device-management connector.
+
+## Before you start
+
+Your account needs asset-view permission to browse the register. Creating, editing, importing, archiving and reviewing require additional permissions. In an MSP organisation, staff assigned to a client remain limited to that client even when their role includes broad asset permissions. Customer portal access is separate from the staff workspace.
+
+An administrator's title does not bypass these limits. See [users and permissions](../admin/users-and-permissions).
+
+## Choose a task
+
+| I want to… | Guide |
+| --- | --- |
+| Add or update a record | [Create and maintain assets](#create-an-asset) |
+| Bring in a spreadsheet or recover an interrupted import | [Import assets](./asset-imports) |
+| Remove an asset from active use or bring it back | [Archive and restore assets](./asset-lifecycle) |
+| Record independently reviewed external disposal | [Manage disposal](./asset-lifecycle#dispose-of-an-asset) |
+| Choose reviewers and review timing | [Configure asset approvals](./asset-approvals) |
+| Connect a device-management provider | [Integrations](../admin/integrations) |
+| Integrate through the public API | [Assets API guide](../api/resources/assets) |
+
+## Configure your register
+
+Before adding a large number of assets, agree your organisation's categories, locations, lifecycle stages and asset-tag format.
+
+- Open **Settings → Asset settings** to configure lifecycle values and tag formatting.
+- Use **Categories** and **Locations** in the asset-management navigation for the corresponding reference records.
+- Use your own configured lifecycle labels. Examples from another organisation may not be valid in yours.
+- Keep parent categories and locations within your organisation. A hierarchy cannot contain cycles; resolve active child records before retiring a parent.
+
+Tag previews are examples, not reservations. The saved asset receives its allocated tag. Do not depend on consecutive numbers without gaps.
 
 ## Find an asset
 
-Search by name, asset tag, serial number, user, or other available fields. Filter by the categories, locations, and lifecycle states configured for your organisation.
+1. Open **Assets**.
+2. Enter a search term or select a category.
+3. Choose the available sort order and use **Previous** and **Next** to move through results.
+4. Open the asset to inspect its details, source, assignment and related service information.
 
-## Keep records useful
+Search and category selection apply across the accessible register, rather than only the rows currently shown. The matching count can change while others update records. If loading fails, use **Retry** before relying on the results.
 
-- Assign the correct customer, owner, and location.
-- Use the organisation's lifecycle states instead of free-form alternatives.
-- Link related tickets to preserve service history.
-- Confirm the source before editing connector-managed values; a later synchronisation may update provider-owned fields.
+**Export page** downloads only the displayed page. It is not a complete estate export. The file includes the recorded purchase currency; unknown currency remains explicit.
 
-Enduria does not act as an MDM server. Device data comes from supported vendor connectors and is normalised into the asset inventory.
+## Create an asset
+
+You need asset-create permission.
+
+1. Select **New asset** from **Assets**.
+2. Choose **Manual entry** for a record you will maintain yourself. Use the stock source only when issuing an existing inventory item.
+3. Enter the **Asset name** and select a configured **Category**.
+4. Add the serial number and available manufacturer/model details.
+5. Choose **Assigned to**, **Location**, and, for MSP records, **Client** as appropriate. The assigned person must be compatible with the asset's client.
+6. Select a **Lifecycle stage** and enter purchase and warranty details when known.
+7. Check the purchase currency against the purchase evidence, then select **Create & open** or **Create another**.
+
+Open the saved record and confirm its tag, client and assignment. Stock quantities and connector observations have their own source rules; creating a register record does not prove physical receipt or a device's current condition.
+
+## Update an asset
+
+Open the record and use its edit action. Check the source before changing imported values: a later connector sync may refresh fields owned by the provider. Changing a client or assignee must still satisfy your current client access and the assignee's eligibility.
+
+Clear an optional field only when you intend to remove its value. Clearing purchase cost does not automatically clear purchase currency. A lifecycle label by itself does not perform the [archive, disposal or restoration process](./asset-lifecycle).
+
+Related tickets provide service context. They do not substitute for disposal evidence, approval records or proof of physical custody.
+
+## Record costs and read reports
+
+Purchase cost and purchase currency are separate facts. Confirm currency from the original purchase evidence; do not assume an older asset used today's organisation preference. A known zero cost differs from an unknown cost.
+
+Asset reporting keeps different currencies separate. Mixed or unknown currencies can leave a combined monetary figure unavailable; inspect the per-currency totals and unknown-currency counts. An unavailable total does not mean zero. Enduria does not convert currencies automatically, and these reports are not a substitute for accounting records.
+
+Asset analytics follows your client access. An export additionally needs report-export authority. A report's date range does not reconstruct a historical estate or change an asset's original purchase amount. Assignment rate describes recorded assignments, not measured device utilisation.
+
+## Understand device sources
+
+Enduria uses supported vendor connectors for device management; it does not act as an MDM server. Review [integration setup](../admin/integrations) before enabling a provider. A recorded observation or last-seen time does not prove that a device is currently online or compliant.
+
+Agent enrollment administration is restricted to authorised organisation-wide staff. Enrollment secrets are shown when issued and cannot be recovered from an ordinary list later. Retain them securely at issuance or generate a new enrollment as needed. Archiving revokes the asset's existing agent authority; restoration requires fresh enrollment.
+
+## Resolve common problems
+
+| Problem | What to check |
+| --- | --- |
+| A record or action is missing | Confirm the organisation, client assignment and current permissions. Check the archive if it is no longer active. |
+| An assignee, location or category is rejected | Select a current record from your organisation and check the asset's client. |
+| A tag conflicts | Another record may already use it. Choose a unique tag or use automatic allocation. |
+| A report has no combined cost | Review unknown currencies, mixed currencies and missing purchase costs. |
+| Imported device details change again | Check which fields the connector maintains. |
+| A control described in a guide is absent | Check the guide's availability note and your service version with your administrator. |
