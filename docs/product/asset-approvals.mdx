@@ -1,0 +1,137 @@
+---
+title: Configure asset approvals and review timing
+description: Choose asset reviewers, publish policies for future requests, and use the asset review inbox.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Configure asset approvals and review timing
+
+Use **Settings → Asset approvals** to choose who may review restoration requests and, when available, each disposal phase. Policies retain the selected rules with each request, so later edits do not change work already awaiting review.
+
+<Admonition type="info" title="Availability">
+
+You can configure restoration reviewers as described below. The **Disposal** policy selector, **Asset reviews** inbox, reminders, deadlines and escalation controls described below are awaiting release. They are not available in every deployed workspace.
+
+</Admonition>
+
+## Before you start
+
+Publishing policies requires a staff account with `settings.manage` and access across the organisation, without a customer-specific account binding. Customer portal accounts cannot manage these settings. An administrator role name alone does not override the permission checks.
+
+Open **Settings → Asset approvals**. You can also follow **Configure restoration approvals** from **Assets → Archive** if your account has the required access.
+
+Reviewers need the following current permissions:
+
+| Review phase | Required permissions |
+| --- | --- |
+| Restoration | `assets.view`, `assets.edit`, `assets.manage` |
+| Disposal approval | `assets.view`, `assets.manage` |
+| Disposal verification | `assets.view`, `assets.manage`, `assets.delete` |
+
+Named and role-selected reviewers must be active staff with organisation-wide access. Selecting a person, role or escalation recipient never grants these permissions. Reviewers must also remain independent: a requester cannot review their own request, and the disposal evidence author cannot verify or reject that evidence.
+
+## Configure restoration reviewers
+
+1. Open **Settings → Asset approvals**. If workflow selectors are available, select **Restoration**.
+2. Under **Who may review?**, choose a routing option:
+
+   | Option | Result |
+   | --- | --- |
+   | **Any independent asset manager with current view, edit and manage permissions** | Any currently eligible independent manager may review. |
+   | **One of the selected reviewers** | Choose up to 50 eligible people using **Find reviewers by name**. |
+   | **One eligible member of the selected staff roles** | Choose up to 20 active roles using **Find staff roles**. One eligible member may decide; it is not a vote from every role. |
+
+3. Add **Review instructions** if reviewers need an organisation-specific checklist or reference.
+4. If timing controls are available, optionally [configure reminders and a deadline](#configure-reminders-and-a-deadline).
+5. Enter a **Reason for this policy change** and select **Publish for future requests**.
+
+The page confirms the published version. **Publication history** shows the latest 20 publications, their reasons and publisher references; earlier versions remain retained. Select **Reload saved policy** to load the saved configuration again. This replaces unsaved edits in the editor.
+
+Search results are bounded. If a person or role is missing, narrow the search by name. A role selection that matches more than 100 staff candidates must be narrowed before it can be used.
+
+## Configure disposal approval and verification
+
+When the **Disposal** selector is available:
+
+1. Select **Disposal** on **Settings → Asset approvals**.
+2. Select **Approval reviewers** and choose independent managers, named reviewers or staff roles. Add **Approval instructions** as needed.
+3. Select **Verification reviewers** and configure the separate reviewer selection and **Verification instructions**.
+4. Optionally configure timing for each phase.
+5. Enter the reason and select **Publish for future requests**.
+
+Both phases are published together. New disposal requests retain both sets of rules at submission, including the verification rules used after evidence is recorded. Verification does not pick up a newer policy published between approval and execution.
+
+Choose sufficient independent reviewers before external work takes place. A configured phase without an eligible independent reviewer prevents a new request. If the only retained verifier later records the execution evidence, they cannot verify it and there is no automatic substitute.
+
+## Understand which people can act
+
+Named and role-based policies record eligible people when the request is submitted. The requester is excluded. Role routing recognises both primary and additional role memberships.
+
+For an existing request:
+
+- A new person added to a role cannot review the older request.
+- An assigned reviewer must remain active, retain the required permissions and organisation-wide access, and still hold an originally selected active role where role routing applies.
+- An originally assigned person who regains valid access can become eligible again.
+- New policy versions, reminders and administrator status do not expand the assigned people or bypass independence.
+
+If routing needs to change, the requester can cancel a pending restoration or a disposal request that has no execution evidence, then submit again under the new policy. Disposal evidence remains retained once recorded; there is no supported reassignment or correction override after that point.
+
+## Configure reminders and a deadline
+
+Timing is optional and available only for named or role-based routing. The independent-manager option has no automated timing; switching to that option removes timing from the policy being edited.
+
+1. Select **Enable review reminders and a deadline**.
+2. Set **Remind after (hours)** to a whole number from 1 to 720.
+3. Set **Deadline after (hours)** to a whole number from 1 to 8,760, later than the reminder.
+4. Optionally use **Find escalation reviewers by name** to choose up to 20 people.
+5. Publish the policy for future requests.
+
+Escalation recipients must already qualify under the phase's reviewer selection. In role mode, the directory shows eligible staff; choose people who belong to the selected review roles. Publication validates that membership. Leaving escalation recipients empty still allows the deadline to mark a review overdue.
+
+| Phase | When its clock starts |
+| --- | --- |
+| Restoration | When the restoration request is submitted |
+| Disposal approval | When the disposal request is submitted |
+| Disposal verification | When execution evidence is recorded |
+
+Hours are elapsed time, including weekends and holidays. They are not business hours or service-level targets. Each phase has one reminder and one deadline, rather than a repeating reminder schedule.
+
+At the deadline, the pending review becomes **Overdue**. A currently eligible escalation recipient can see **Escalated to you**. The deadline does not approve, reject, cancel, archive, restore or reassign anything. Settings edits do not restart an existing clock.
+
+<Admonition type="note" title="Where notices appear">
+
+Requested, reminder and deadline notices appear only in **Asset reviews**. They do not send email, notification-bell alerts, browser push or external webhook messages. The review inbox has no unread count or mark-as-read control.
+
+</Admonition>
+
+## Work from the review inbox
+
+When enabled, open **Assets → Reviews**. On smaller screens, use **Reviews** in the Assets toolbar.
+
+1. Check the asset and review phase on each card.
+2. Read the phase start, deadline and any **Review requested**, **Reminder**, **Deadline notice**, **Overdue** or **Escalated to you** label.
+3. Select **Open review** to inspect the retained request, instructions and evidence.
+4. Make the appropriate decision on the archive or disposal screen. See [Archive, restore and dispose of assets](./asset-lifecycle.mdx) for the action steps.
+5. Select **Refresh reviews** when you return to update the list.
+
+The inbox shows only reviews you are currently eligible to act on. It is not a requester's history or an administrator's list of all blocked work. Opening a card does not guarantee that approval is possible: holds, changed asset facts and other safeguards are checked again when you act.
+
+Each page checks a limited set of pending requests. A **Scanned page** can be empty while **Next** remains available; continue to check the next page. There is no total count of eligible work.
+
+Completed or cancelled phases disappear on the next read. Changes to customer ownership, permissions or role membership can also remove a card. The request and its evidence remain retained.
+
+## Resolve common problems
+
+| Problem | What to do |
+| --- | --- |
+| The settings page is unavailable | Check `settings.manage` and whether the staff account is restricted to a customer. |
+| Publication says the policy changed | Select **Reload saved policy**, compare the newer version, then reapply and publish the intended edits. |
+| No suitable reviewers appear | Check active staff status, current permissions and organisation-wide access. Narrow the directory search. In role mode, check the selected roles and current memberships. |
+| An escalation person is rejected | They must already qualify under the phase's selected people or roles. Escalation cannot appoint a new reviewer. |
+| A pending request uses older instructions or timing | This is expected: the request retains its submitted policy. Publishing a newer version does not alter it. |
+| A request is absent from the inbox | Check current eligibility and use **Next** if available. Phases already pending before the inbox was enabled are not added retrospectively; open them through **Archive** or **Disposals**. |
+| A notice is late | Refresh the inbox. Background processing must be running for notices to appear; contact your service administrator if delivery remains delayed. A delayed notice does not change the retained deadline or make a decision. |
+| A retained verifier becomes unavailable | Restore the originally assigned person's valid authority where appropriate. A newly added role member does not replace them. If they are also the evidence author, they remain ineligible. |
+
+These settings cover one independent decision per review phase. They do not provide voting quorums, arbitrary approval stages, customer/category conditions, automatic reassignment, ordinary archive or assignment approvals, or general “when this happens, do that” event rules.

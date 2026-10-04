@@ -1,45 +1,31 @@
 ---
 title: Assets
-description: Query and maintain tenant-scoped asset records through the Enduria API.
+description: Maintain active asset records and understand archiving through the public API.
 ---
 
 # Assets
 
-## Operations
+Use `/api/v1/assets` to maintain your organisation's active asset register. Use `assets:read` for reads, `assets:write` for creation and updates, and `assets:delete` for archiving. The API key determines the organisation; a `clientId` filter does not change that boundary.
 
-| Method | Path | Scope |
-| --- | --- | --- |
-| `GET` | `/assets` | `assets:read` |
-| `POST` | `/assets` | `assets:write` |
-| `GET` | `/assets/{id}` | `assets:read` |
-| `PATCH` | `/assets/{id}` | `assets:write` |
-| `DELETE` | `/assets/{id}` | `assets:delete` |
+Consult your deployment's [OpenAPI reference](../reference) for the complete operations, request fields and response schemas. The workflows below explain how to use that contract without confusing register changes with physical disposal or reviewed restoration.
 
-## List assets
+## Find active records
 
-Filter with `status`, `category`, `assignedTo`, `clientId`, or `search`. The legacy `type` filter is an alias for category. Page size is 1–100. Sort by `createdAt`, `updatedAt`, `name`, `status`, or `type` in ascending or descending order.
+List assets with `GET /api/v1/assets`. Filter by `status`, `category`, `assignedTo`, `clientId` or `search`; the legacy `type` filter refers to category. Use the recorded category value when filtering. Category filters are exact matches, unlike the configured name/code/ID validation used on writes.
 
-## Create an asset
+Pages default to 20 records and support 1–100 records. List and individual-record reads exclude archived assets. A record that disappears from the active register may have been archived rather than erased.
 
-`name` and `category` are required. `category` can be an active configured category name, code, or ID. `status` must be an active tenant lifecycle value and defaults to `active`.
+## Create a record using your configured vocabulary
 
-| Field | Type | Notes |
-| --- | --- | --- |
-| `assetTag` | string | Optional; generated through the asset service when omitted |
-| `manufacturer`, `model`, `serialNumber` | string | Device identity details |
-| `manufacturerLogoUrl`, `devicePhotoUrl` | string | Optional media references |
-| `purchaseDate`, `warrantyExpiry` | ISO timestamp | Optional lifecycle dates |
-| `purchaseCost` | number | Optional cost |
-| `assignedTo`, `clientId` | UUID | Must reference records in the tenant |
-| `location` | string | Configured or descriptive location |
-| `specifications` | object | String, number, or boolean values |
-| `notes` | string | Free-form operational notes |
+Provide a name and an active configured category name, code or ID. Set `status` explicitly to an active lifecycle value configured for your organisation. The API currently defaults an omitted status to `active`, but that value must still pass your organisation's vocabulary validation.
+
+For example, replace the category and lifecycle placeholders before submitting:
 
 ```json
 {
   "name": "Reception laptop",
-  "category": "Laptop",
-  "status": "active",
+  "category": "YOUR_CONFIGURED_CATEGORY",
+  "status": "YOUR_CONFIGURED_LIFECYCLE_VALUE",
   "manufacturer": "Example Manufacturer",
   "model": "ExampleBook 14",
   "serialNumber": "SERIAL-EXAMPLE",
@@ -47,6 +33,32 @@ Filter with `status`, `category`, `assignedTo`, `clientId`, or `search`. The leg
 }
 ```
 
-Updates accept the same operational fields. Nullable update fields include purchase and warranty dates, cost, assignee, location, and notes. There is no separate writable `type` or `department` field.
+Omit `assetTag` to generate one using the organisation's configured format. If supplied, `assignedTo` must identify a user in the same organisation, and `clientId` must identify one of its clients. Dates use ISO timestamps, such as `2026-10-04T00:00:00Z`.
 
-Connector-managed devices may be updated by a later provider synchronisation. Integrations should understand which fields their connector owns before applying manual API changes.
+The public API accepts the field names in its schema. Staff-interface aliases such as `categoryId`, `locationId` and `assignedUserId` are not interchangeable public API fields.
+
+## Update or clear fields
+
+Use `PATCH /api/v1/assets/{id}` with only the fields you intend to change. Omitted fields keep their current values. Send `null` to clear purchase or warranty dates, purchase cost, assignee, location or notes:
+
+```json
+{
+  "assignedTo": null,
+  "warrantyExpiry": null,
+  "notes": "Assignee cleared after reviewing the register entry."
+}
+```
+
+Do not send `null` for every optional field: check which fields are nullable in the live schema. `clientId` is accepted on creation but is not writable through this PATCH contract. There is no writable `type` or `department` field.
+
+`purchaseCost` is a numeric value. The current public write schemas do not accept `purchaseCurrency`, even though an asset response may contain a recorded currency. Do not infer a currency from the API key's organisation or treat an amount with unknown currency as a converted value. Use the staff asset interface when the recorded currency needs editing.
+
+An assignment or lifecycle field update is a register change; it does not record independent custody acceptance, verified sanitisation or disposal approval. Connector-managed devices may also receive later provider updates, so confirm which fields your connector owns before making manual changes.
+
+## Archive an asset
+
+`DELETE /api/v1/assets/{id}` archives the record. It retains the asset and its evidence, revokes active agent credentials and stops commands that have not yet been dispatched. Already dispatched commands may still execute.
+
+The success data contains both `deleted: true`, retained for compatibility, and `archived: true`. **Do not interpret `deleted` as permanent erasure.** Repeating DELETE for an existing archived record succeeds without repeating the archive effect. Subsequent normal GET or PATCH requests for that record return not found, and it is absent from the active list.
+
+Archiving does not establish physical disposal, erase a device, return inventory or release custody. See [Asset lifecycle](../../product/asset-lifecycle) for the staff archive, disposal and restoration journeys, and [Asset approvals](../../product/asset-approvals) for review settings and responsibilities. Those staff governance workflows are separate from the public API; an API key does not expose their internal routes or approve a restoration.

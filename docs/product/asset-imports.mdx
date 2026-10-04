@@ -1,0 +1,66 @@
+---
+title: Import assets from CSV
+description: Preview asset records, import valid rows, and recover an interrupted CSV import without recreating successful rows.
+---
+
+# Import assets from CSV
+
+Use the asset import page to validate a spreadsheet before creating records, inspect each row's outcome, and resume an interrupted import.
+
+## Before you start
+
+You need both asset-create and asset-manage permissions. Client restrictions still apply to imported records. Prepare no more than **1,000 data rows** in a CSV file of **4 MiB or less**.
+
+Have the relevant categories, locations, clients and assignees ready. Imports create assets; they are not a bulk update or a reconciliation tool for existing records.
+
+## Prepare the file
+
+1. Open **Assets → Import**.
+2. Select **Download template**.
+3. Fill in one asset per row, retaining the template headers.
+4. Save as CSV, preserving identifiers as text.
+
+The template includes name, category, tag, serial number, manufacturer, model, location, assignee, client, lifecycle value, purchase/warranty dates, purchase cost/currency, and notes.
+
+Use `categoryId`, `locationId`, `assignedUserId` and `clientId` for references. Obtain these from authorised records or your administrator; display names are not interchangeable with IDs. For one shared category, you can leave the category column blank and select **Default category** on the import page. Legacy category/location text is accepted, but does not establish the same link to a configured reference.
+
+- Leave unknown optional cells blank. Blank cells are treated as unset.
+- Use your organisation's configured lifecycle values; a blank status uses the default.
+- Include `purchaseCurrency` when a cost's currency is known. An omitted currency remains unknown.
+- Use a nonnegative purchase cost with no more than six decimal places, without a currency symbol or thousands separator.
+- Keep the same number of columns in each row. Use CSV quoting for commas, quotes and embedded line breaks.
+
+## Preview and import
+
+1. Select your **CSV file** and, if needed, a **Default category**.
+2. Select **Preview import**.
+3. Review the ready and failed rows. Preview checks references and flags duplicate candidates; it does not create assets.
+4. Select **Import / resume … ready rows** to create the ready records.
+5. Review the final imported, ready and failed counts. Use **View asset** to inspect a successful row.
+6. Select **Download outcomes** to retain the row-by-row result.
+
+An import can partially succeed. A failed row does not undo successful rows. Duplicate checks are a prompt to investigate; they do not automatically merge records.
+
+## Pause or recover an interrupted import
+
+Select **Pause after current batch** to stop after work already in progress finishes. Keep the import page URL, or return through **Recent imports**.
+
+After a connection failure or closed browser, reopen that same import and select **Import / resume … ready rows**. Successful rows in that import are retained and are not created again by resume. Starting a new import is a separate operation and does not provide the same protection.
+
+Resume the import using the original importing account, with its current permissions and the same client scope. Another administrator cannot take over its receipt. Ask an administrator to check access if a previously available receipt can no longer be opened.
+
+## Correct failed rows
+
+If the original data is now valid because you corrected a referenced record or its availability, select **Revalidate and retry failed rows**. This rechecks the retained original row data.
+
+To change the spreadsheet contents, select **New import** and upload a corrected file containing **only the unsuccessful rows**. Do not include rows already imported successfully.
+
+| Message or symptom | Next step |
+| --- | --- |
+| Unknown or duplicate column | Start from the downloaded template and keep one column for each field. |
+| Different number of columns or malformed quoting | Correct CSV delimiters and quoting in the indicated row. |
+| Invalid or unavailable reference | Check organisation, client scope and whether the category, location or person is eligible. |
+| Duplicate candidate or tag conflict | Inspect the existing asset before deciding whether the row represents a different device. |
+| File or row limit exceeded | Split the source into smaller files and keep each import's outcomes. |
+
+Return to [Manage assets](./assets) for record editing, reporting and page export.

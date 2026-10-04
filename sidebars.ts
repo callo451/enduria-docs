@@ -5,7 +5,11 @@ const sidebars: SidebarsConfig = {
     {type: 'doc', id: 'getting-started/welcome', label: 'Welcome'},
     {type: 'doc', id: 'getting-started/first-steps', label: 'First steps'},
     {type: 'category', label: 'Using Enduria', link: {type: 'doc', id: 'product/overview'}, items: [
-      'product/tickets', 'product/assets', 'product/projects', 'product/knowledge-base', 'product/customer-portal',
+      'product/tickets',
+      {type: 'category', label: 'Asset management', link: {type: 'doc', id: 'product/assets'}, items: [
+        'product/asset-imports', 'product/asset-lifecycle', 'product/asset-approvals',
+      ]},
+      'product/projects', 'product/knowledge-base', 'product/customer-portal',
     ]},
     'troubleshooting',
   ],
