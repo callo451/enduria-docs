@@ -11,7 +11,7 @@ Use **Settings → Asset approvals** to choose who may review restoration reques
 
 <Admonition type="info" title="Availability">
 
-You can configure restoration reviewers as described below. The **Disposal** policy selector, **Asset reviews** inbox, reminders, deadlines and escalation controls described below are awaiting release. They are not available in every deployed workspace.
+You can configure restoration reviewers as described below. The **Disposal** policy selector, **Asset reviews** inbox, reminders, deadlines, escalation controls and audited review corrections described below are awaiting release. Publishing this guidance does not deploy these application features.
 
 </Admonition>
 
@@ -75,7 +75,7 @@ For an existing request:
 - An originally assigned person who regains valid access can become eligible again.
 - New policy versions, reminders and administrator status do not expand the assigned people or bypass independence.
 
-If routing needs to change, the requester can cancel a pending restoration or a disposal request that has no execution evidence, then submit again under the new policy. Disposal evidence remains retained once recorded; there is no supported reassignment or correction override after that point.
+If routing needs to change, the requester can cancel a pending restoration or a disposal request that has no execution evidence, then submit again under the new policy. When review corrections are available, an independently approved [restart or reassignment](#restart-or-reassign-a-pending-review) can recover an eligible pending phase, including disposal verification after execution evidence. The original request and evidence remain retained.
 
 ## Configure reminders and a deadline
 
@@ -121,6 +121,40 @@ Each page checks a limited set of pending requests. A **Scanned page** can be em
 
 Completed or cancelled phases disappear on the next read. Changes to customer ownership, permissions or role membership can also remove a card. The request and its evidence remain retained.
 
+## Restart or reassign a pending review
+
+<Admonition type="info" title="Awaiting rollout">
+
+Review corrections require the application release that adds the **Review corrections** panel. Until it is available, changing settings or adding a role member cannot replace a retained reviewer. Publishing this page does not enable the feature in your workspace.
+
+</Admonition>
+
+Use a correction when a pending review needs a fresh clock or its retained people can no longer act. It is a separate, independently reviewed proposal; it does not approve restoration or disposal.
+
+### Check authority and eligibility
+
+The proposer and correction decision-maker need `settings.manage`, current permissions for the affected review phase from the table above, and active staff access across the organisation. Customer-bound staff and portal accounts cannot make these corrections. The asset must still belong to the same customer as the request.
+
+The administrator approving or rejecting the correction must be a different person from the proposer, the original requester and, for verification, the execution-evidence author. They must also be outside the proposed reviewer list, including a retained list on a restart. A named replacement must remain active, have the phase's permissions and organisation-wide access, and be independent of the requester and evidence author where applicable. Assigning them does not grant access.
+
+### Propose and decide
+
+1. Open the pending request through **Assets → Archive → Review** for restoration, or through **Disposals** for a disposal request. The eligible-reviewer inbox is not an administrator's list of blocked work.
+2. In **Review corrections**, inspect the current round, retained reviewer rules and clock.
+3. Select **Propose restart** to keep the existing reviewer rules and restart their timing, or **Propose reassignment** and use **Find replacement reviewers** to select 1–50 eligible named reviewers.
+4. Enter a **Correction reason** of 10–2,000 characters and submit the proposal.
+5. A separate eligible administrator reads the old and proposed review rules and the retained reason. They select **Approve correction** or **Reject correction** and enter a **Decision reason** of 10–2,000 characters. The proposer can instead use **Cancel correction** while it remains pending, also recording a decision reason.
+
+Until approval, the current review remains actionable by its existing eligible reviewers. A proposal does not reserve the request or suspend its clock. If the phase is completed or otherwise changes first, reopen its current state; do not assume the correction can still apply.
+
+Approval creates a new review round and supersedes the old round's review authority. A restart preserves its reviewer rules and timing intervals; reassignment uses the approved named people. Both keep the retained review instructions and timing intervals. Escalation remains limited to previously selected escalation recipients who are also in the new named list. The new clock starts at correction approval, so an enabled reminder and deadline run from that point. Old requests, reviewer snapshots, reasons, decisions and disposal execution evidence remain retained. Old-round reminders cannot grant authority in the new round. Reload an already open review before making the actual asset decision.
+
+A restart requires at least one currently eligible independent reviewer from the retained roster. It does not add newly joined role members or bypass a lost role membership. If no retained verifier can act, use reassignment rather than a restart.
+
+The new reviewers must still make the actual restoration, disposal approval or verification decision. All normal holds, asset-fact and independence checks still apply. A correction cannot change submitted facts, edit disposal evidence, reopen completed work, move history to another customer or add older phases that have no review runtime.
+
+Use **Refresh corrections** after authority changes. Expand **Retained previous reviewer policy** and **Retained proposed reviewer policy** to compare a proposal. The panel shows bounded recent history; earlier rounds and correction evidence remain retained.
+
 ## Resolve common problems
 
 | Problem | What to do |
@@ -132,6 +166,8 @@ Completed or cancelled phases disappear on the next read. Changes to customer ow
 | A pending request uses older instructions or timing | This is expected: the request retains its submitted policy. Publishing a newer version does not alter it. |
 | A request is absent from the inbox | Check current eligibility and use **Next** if available. Phases already pending before the inbox was enabled are not added retrospectively; open them through **Archive** or **Disposals**. |
 | A notice is late | Refresh the inbox. Background processing must be running for notices to appear; contact your service administrator if delivery remains delayed. A delayed notice does not change the retained deadline or make a decision. |
-| A retained verifier becomes unavailable | Restore the originally assigned person's valid authority where appropriate. A newly added role member does not replace them. If they are also the evidence author, they remain ineligible. |
+| A retained verifier becomes unavailable | Restore the originally assigned person's valid authority where appropriate, or use an independently approved reassignment when review corrections are available. A newly added role member does not automatically replace them. The evidence author remains ineligible to verify. |
+| A correction is unavailable or refused | Check current settings and phase permissions, organisation-wide access, independence, customer binding and whether the phase is still pending. Older phases without a review runtime cannot be backfilled through a correction. |
+| The request was decided before its correction | The correction can no longer be approved. Retain a rejection or cancel the proposal as its proposer; completed asset work cannot be restarted. |
 
 These settings cover one independent decision per review phase. They do not provide voting quorums, arbitrary approval stages, customer/category conditions, automatic reassignment, ordinary archive or assignment approvals, or general “when this happens, do that” event rules.

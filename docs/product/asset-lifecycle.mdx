@@ -11,7 +11,7 @@ Use **Archive** to remove an asset from the active register while keeping its re
 
 <Admonition type="info" title="Availability">
 
-Configurable disposal reviewers and the **Asset reviews** inbox are awaiting release. Until those features are enabled in your workspace, open requests through **Archive** or **Disposals**. This guide identifies where the newer reviewer settings apply.
+Configurable disposal reviewers, the **Asset reviews** inbox and audited review corrections are awaiting release. Publishing this guidance does not deploy those application features. Until they are enabled in your workspace, open requests through **Archive** or **Disposals**.
 
 </Admonition>
 
@@ -74,7 +74,7 @@ Restoration does not reactivate old agent credentials. Issue a fresh enrollment 
 
 Restoration cannot proceed while there is an active disposal hold, an open disposal request, completed disposal, or retained disposal execution evidence. Evidence on a rejected disposal still blocks restoration. There is no override for these conditions or a supported process to erase that evidence and restore the asset.
 
-Approval also checks that the submitted asset facts are still current. If the request must use a different reviewer policy, the requester can cancel a pending restoration and submit a new request. Existing requests do not adopt later policy changes automatically.
+Approval also checks that the submitted asset facts are still current. If the request must use a different reviewer policy, the requester can cancel a pending restoration and submit a new request. Existing requests do not adopt later policy changes automatically. When available, [review corrections](./asset-approvals#restart-or-reassign-a-pending-review) provide a separately approved restart or reassignment for eligible pending phases; they do not remove any restoration block.
 
 ## Dispose of an asset
 
@@ -143,7 +143,7 @@ Holds can be placed on active or archived assets, including while restoration is
 | --- | --- |
 | A review action is missing | Confirm your current asset permissions, customer scope, independence and membership in the request's retained reviewer policy. |
 | No independent reviewer is eligible | For a new request, ask a settings manager to correct future routing. For an existing request, changing settings or adding a new role member does not replace its assigned people. |
-| Verification is blocked after a reviewer becomes unavailable | Actual execution evidence can still be retained, but completion waits for an originally assigned, independent reviewer to regain valid access. If the sole verifier recorded the evidence, they cannot verify it; there is no reassignment override. |
+| Verification is blocked after a reviewer becomes unavailable | Actual execution evidence can still be retained. Before review corrections are enabled, completion waits for an originally assigned, independent reviewer to regain valid access. If the sole verifier recorded the evidence, they cannot verify it. When available, an independently approved [reassignment](./asset-approvals#restart-or-reassign-a-pending-review) can select eligible replacement reviewers while retaining that evidence. |
 | Asset facts or the request changed during review | Reopen the current record and reassess. Do not repeat a decision against outdated facts. Before disposal evidence is recorded, the requester can cancel and submit a fresh request if appropriate. |
 | Earlier records disappear after changing the asset's customer | Retained requests and holds are shown only for their original customer binding. An older open request or hold may still block action. Resolve open work before changing customer ownership; there is no history-rebinding tool. |
 | An older request is not listed | Asset detail shows the latest 20 requests; disposal detail also shows up to 50 holds and 100 activity entries. Earlier evidence remains retained, but complete historical browsing and evidence export are not available here. |
