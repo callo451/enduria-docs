@@ -9,7 +9,7 @@ const sidebars: SidebarsConfig = {
       {type: 'category', label: 'Asset management', link: {type: 'doc', id: 'product/assets'}, items: [
         'product/asset-imports', 'product/asset-lifecycle', 'product/asset-approvals',
       ]},
-      'product/projects', 'product/knowledge-base', 'product/customer-portal',
+      'product/projects', 'product/knowledge-base', 'product/customer-portal', 'product/email-notifications',
     ]},
     'troubleshooting',
   ],

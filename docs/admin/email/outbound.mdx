@@ -47,14 +47,14 @@ When a limit is reached, further mail waits or fails until the next hour or day,
 
 ## Turn email off
 
-**Global Notifications** under **Advanced Settings** turns all outbound email for your organisation on or off. When it is off, Enduria sends no email through these settings.
+**Global Notifications** under **Advanced Settings** turns outbound email for your organisation on or off. When it is off, Enduria sends no notifications, documents, reports or surveys. [System email](./overview#system-email) — password resets and invitations — still goes out.
 
 ## What uses these settings
 
 Ticket and incident notifications, the notification digest, replies to inbound email, invoices and quotes, scheduled reports, appointment reminders, satisfaction surveys and booking confirmations all use these settings.
 
-Invitations use them too; if your organisation has not configured outbound email, invitations are sent through platform email where the operator offers it. Password-reset email currently requires outbound email to be configured for your organisation.
+Password resets, invitations and welcome messages are [system email](./overview#system-email): they are sent through platform email where the operator offers it, and through these settings otherwise.
 
 ## Delivery history
 
-**Settings → Email Logs** lists notification emails and their delivery status. A failed email can be resent from its details; Enduria resends through your current provider and allows a limited number of resends.
+**Settings → Email Logs** lists every email Enduria sends for your organisation, with its delivery status. Notification emails can be resent from their details if they failed; Enduria resends through your current provider and allows a limited number of resends. Emails that contain a password-reset link or a temporary password are logged without their content and cannot be resent.

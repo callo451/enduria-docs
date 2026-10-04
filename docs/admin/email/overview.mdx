@@ -26,6 +26,12 @@ The two are configured separately, under **Settings → Email Integration** (out
 
 **Custom SMTP** sends through your own mail server — for example Microsoft 365, Google Workspace or a transactional email service — so mail comes from your own domain.
 
+## System email
+
+Some email has to reach people even if your organisation's email settings are incomplete or switched off: password resets, invitations, and welcome messages for new accounts. Enduria calls this **system email**.
+
+Where the operator offers platform email, system email is always sent through it, under your organisation's name and with your Reply-To address — even if you use custom SMTP, and even if **Global Notifications** is off. That way a broken or disabled SMTP server cannot lock people out. Where platform email is not offered, system email uses your own configured provider.
+
 ## Making replies reach tickets
 
 Set the outbound **Reply-To address** to a mailbox you have connected under **Inbound Email**. When a requester replies to a notification, the reply arrives in that mailbox, and Enduria adds it to the ticket. See [Inbound email](./inbound).

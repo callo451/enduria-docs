@@ -20,10 +20,15 @@ Platform email currently uses Amazon SES. Set all of the following; platform ema
 | `AWS_SES_REGION` | SES region. Defaults to `us-east-1`. |
 | `AWS_SES_FROM_EMAIL` | The address all platform email is sent from, for example `noreply@notify.example.com`. Organisations cannot change it. |
 | `AWS_SES_FROM_NAME` | Display name used only when an organisation has not set its own sender name. Defaults to `Enduria`. |
+| `AWS_SES_CONFIGURATION_SET` | Optional SES configuration set applied to every platform message, for example one that publishes bounce and complaint events. |
 | `EMAIL_PLATFORM_MAX_PER_HOUR` | Most platform emails one organisation may send per hour. Defaults to `100`. |
 | `EMAIL_PLATFORM_MAX_PER_DAY` | Most platform emails one organisation may send per day. Defaults to `1000`. |
 
 Organisations may choose limits lower than yours, never higher. Their sender name appears as the display name and their Reply-To address receives replies; the From address is always yours.
+
+When platform email is configured, Enduria also uses it for **system email** — password resets, invitations and welcome messages — for every organisation, including those on custom SMTP. This keeps sign-in working when an organisation's own mail server is misconfigured. Without platform email, system email uses each organisation's own provider, and an organisation with none cannot receive password-reset email.
+
+Every message Enduria sends is recorded in the organisation's email log with the provider's message ID.
 
 ### Prepare SES
 
