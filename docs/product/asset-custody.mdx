@@ -1,0 +1,88 @@
+---
+title: Track asset custody
+description: Check assets out and in, record loans, losses and condition, and review who has held an asset.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Track asset custody
+
+Custody records who or what physically holds an asset: a staff member, a customer contact, a storage location, nobody, or nobody because it is lost. Every change is kept in the asset's custody history.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Custody tracking requires a future application release. This guide describes the intended behaviour for that release; publishing documentation does not enable it in your workspace.
+
+</Admonition>
+
+Custody is separate from other asset facts:
+
+- **Ownership.** The asset's client stays the same when custody changes.
+- **Lifecycle status.** Checking an asset in or out does not change its status.
+- **The active register.** Checking in never archives, retires or deactivates an asset. Use [archive, restore and dispose](./asset-lifecycle) for those decisions.
+
+## Before you start
+
+You need asset-view permission to see custody and asset-edit permission to change it. Staff assigned to a client can only work with that client's assets.
+
+A custodian must be compatible with the asset's client:
+
+- **Staff members** must be active and either unrestricted or assigned to the same client.
+- **Customer contacts** must be active portal users of the asset's own client. An asset without a client cannot be held by a customer contact.
+- **Storage locations** are your organisation's active asset locations.
+
+The custodian list shows only compatible people, at most 50 at a time. Search to narrow it.
+
+## Check an asset out
+
+1. Open the asset and select the **Custody** tab.
+2. Choose **Check out**. If someone already holds the asset, or it is in storage, the button is **Transfer**.
+3. Choose **Person** or **Storage**, then select the custodian.
+4. For a loan to a person, optionally set **Due back**. Leave it empty for an ongoing assignment.
+5. Optionally record the condition and notes, then confirm.
+
+The **Custody** tab shows the holder, when custody started, any due date, and the last recorded condition. A loan past its due date is marked **Overdue**.
+
+## Check an asset in
+
+1. On the **Custody** tab, choose **Check in**.
+2. Select the storage location the asset is returned to. If you don't select one, the asset becomes unassigned with no recorded location.
+3. Optionally record its condition, such as **Damaged** or **Needs repair**, and notes.
+
+Only an asset held by a person can be checked in.
+
+## Record a loss, recovery or condition
+
+- **Mark lost** records that the asset is missing. Enter a reason of at least 10 characters. The asset stays in the register; archive or dispose of it separately if that is the right outcome.
+- **Record as found** returns a lost asset to a person or storage location.
+- **Record condition** adds a condition note without changing who holds the asset.
+
+## Review custody history
+
+The **Custody history** section lists every change, newest first, with who made it, when, and the before and after custodian. Changes made through an integration or an import are labelled with their source.
+
+Changes are recorded wherever they are made: the **Custody** tab, editing the asset, **Reassign**, CSV import, creating an asset with an assignee, and the public API. History cannot be edited or deleted.
+
+When this feature is first enabled, each asset that already has an assignee gets one entry: **Recorded when custody tracking began**. That entry shows who held the asset at that point. It does not claim when, or by whom, the asset was originally handed over.
+
+Archived assets keep their custody history, which stays readable. Restore an archived asset before changing its custody.
+
+## Resolve common problems
+
+| What you see | What to do |
+| --- | --- |
+| **Custody changed since this page loaded** | Someone else changed custody first. Select **Refresh custody**, review the current holder, then try again. Your change was not applied. |
+| A save fails because the connection dropped | Select the same action again without changing it. If the first attempt was saved, you see **Already recorded** and nothing is repeated. |
+| The person you need is not listed | Check that their account is active and compatible with the asset's client. Customer contacts must belong to the asset's own client. |
+| A client change is refused | A customer contact of the current client holds the asset. Transfer or check it in first, or change the client and a compatible custodian together. |
+| Custody buttons are missing | You may have view-only access, or the asset is archived. |
+
+## Current limits
+
+This release records custody directly. It does not yet provide:
+
+- approval of custody changes or recipient acceptance;
+- due-date reminders or an offboarding recovery list;
+- inventory stock updates when an asset is checked in.
+
+The earlier **Require approval for asset assignment** and **Track assignment history** settings were never enforced and have been retired. Custody history is always recorded.
