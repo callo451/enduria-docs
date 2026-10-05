@@ -10,6 +10,8 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 | Message | Cause | Fix |
 | --- | --- | --- |
 | Platform email is not available on this installation. | The operator has not configured platform email. | Use custom SMTP, or ask the operator. |
+| Platform email is not ready on this installation yet. | The operator's sending service has not passed its readiness check, so it cannot be chosen yet. The settings page lists what is missing. | Use custom SMTP for now, or ask the operator. |
+| Platform email is paused for this organization after high bounce or complaint rates | Too much recent email bounced or was marked as spam. Password resets and invitations still go out. | See [When sending is paused](./deliverability#when-sending-is-paused). |
 | SMTP authentication failed. Check username and password. | The SMTP server rejected the sign-in. | Check the username and password. Some providers require an app password, or SMTP sign-in to be enabled for the account. |
 | Cannot connect to SMTP server. Check host and port. | Enduria could not reach the server. | Check the host and port, and that **Use SSL/TLS** matches the port (on for 465, off for 587). |
 | SMTP Error *code* | The server refused the message with that SMTP status code. | Look the code up in your provider's documentation. A 5xx code usually means the From address is not allowed for the account or a recipient was rejected. |

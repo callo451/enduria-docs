@@ -18,6 +18,12 @@ Sending email to addresses that do not exist, or to people who report it as spam
 
 Bounce and complaint information comes from the platform email service, where the operator has connected it. With custom SMTP, Enduria learns about addresses your server refuses outright; bounces your server receives later arrive in your own mailbox, not in Enduria.
 
+## When sending is paused
+
+With platform email, Enduria also watches your organisation's overall bounce and complaint rates over the last seven days. **Settings → Email Integration → Sending health** shows them against the limits the operator has set.
+
+If either rate goes over its limit, Enduria pauses your notifications, documents and reports sent through platform email, and everyone with the **Manage Settings** permission receives a notice. Password resets and invitations are never paused. The pause protects the shared sending service; it stays until the operator of your installation resumes it, usually after the cause — often an outdated contact list — has been dealt with. Review the suppression list first.
+
 ## What a suppressed address means
 
 Enduria does not send to a suppressed address. If a message had other recipients, they still receive it. If every recipient is suppressed, the message is not sent and appears in **Settings → Email Logs** with the status **suppressed**.

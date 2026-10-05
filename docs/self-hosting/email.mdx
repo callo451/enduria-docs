@@ -41,7 +41,7 @@ Every message Enduria sends is recorded in the organisation's email log with the
 2. **Verify the domain** in SES with Easy DKIM and publish the DKIM records it gives you.
 3. **Configure a custom MAIL FROM domain** (for example `bounce.notify.example.com`) so SPF aligns with your From domain.
 4. **Publish DMARC** for your domain, starting with `p=none` and a reporting address, then tightening once reports are clean.
-5. **Grant least privilege.** The IAM identity needs `ses:SendRawEmail` for your sending identity and configuration set, and `ses:GetIdentityVerificationAttributes` for the connection test — nothing else.
+5. **Grant least privilege.** The IAM identity needs `ses:SendRawEmail` for your sending identity and configuration set; `ses:GetIdentityVerificationAttributes` for the connection test; and, for the readiness check, `ses:GetAccount`, `ses:GetEmailIdentity`, `ses:GetConfigurationSet` and `ses:GetConfigurationSetEventDestinations` — nothing else.
 6. **Connect bounce and complaint events** (next section) before leaving the sandbox.
 7. **Leave the SES sandbox** only when you are ready to send to unverified recipients. AWS reviews how you handle bounces and complaints.
 
@@ -67,9 +67,35 @@ npx tsx scripts/email-suppressions.ts list
 npx tsx scripts/email-suppressions.ts remove --address someone@example.com --apply
 ```
 
-:::caution
-Enduria does not yet pause an organisation automatically when its bounce or complaint rate climbs. Watch the SES reputation dashboard and set CloudWatch alarms on the account's bounce and complaint rates. SES may pause an account whose rates are too high, which stops platform email — including password resets — for every organisation that uses it.
-:::
+### Readiness check
+
+Organisations can choose platform email only when Enduria's readiness check passes: the SES account has production access and is sending normally, the From address or its domain is verified with DKIM, and the configuration set publishes Bounce and Complaint events to `AWS_SES_SNS_TOPIC_ARN`. The result is logged at startup and refreshed every ten minutes. Organisations already using platform email keep it if the check later fails; sending itself is never blocked by the check.
+
+```bash
+npx tsx scripts/email-sender.ts readiness
+```
+
+### Pausing organisations with a poor sending record
+
+Enduria pauses an organisation's platform notifications, documents and reports — never its password resets or invitations — when its bounce or complaint rate over seven days exceeds your limits, and logs `email_tenant_paused`. Alert on that log code.
+
+| Variable | Purpose |
+| --- | --- |
+| `EMAIL_PAUSE_BOUNCE_RATE` | Bounce rate that pauses an organisation. Defaults to `0.04` (4%). |
+| `EMAIL_PAUSE_COMPLAINT_RATE` | Complaint rate that pauses an organisation. Defaults to `0.0008` (0.08%). |
+| `EMAIL_PAUSE_MIN_SENT` | Messages an organisation must have sent in the period before rates count. Defaults to `100`. |
+
+The defaults sit below the rates at which SES reviews an account (5% bounces, 0.1% complaints). Review a paused organisation, then resume it; rates are counted afresh from that point:
+
+```bash
+npx tsx scripts/email-sender.ts status --org <organisation id>
+```
+
+```bash
+npx tsx scripts/email-sender.ts unpause --org <organisation id> --reason "list cleaned" --by "your name" --apply
+```
+
+Also set CloudWatch alarms on the account's own bounce and complaint rates: SES may pause the whole account, which would stop platform email — including password resets — for every organisation.
 
 ## Stored mail credentials
 
@@ -83,6 +109,7 @@ The scheduler checks each organisation's inbound mailboxes once a minute, honour
 
 After changing email variables, restart the application. Then, in an organisation:
 
-1. Open **Settings → Email Integration** and confirm **Platform email** is available and shows your From address.
-2. Select **Test Connection**.
-3. Trigger a notification and confirm it arrives with the organisation's name and your From address.
+1. Run `npx tsx scripts/email-sender.ts readiness` and fix anything it reports.
+2. Open **Settings → Email Integration** and confirm **Platform email** is available and shows your From address.
+3. Select **Test Connection**.
+4. Trigger a notification and confirm it arrives with the organisation's name and your From address.
