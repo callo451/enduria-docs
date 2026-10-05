@@ -32,10 +32,18 @@ If your stockroom always has plenty, or requests are fulfilled the moment they a
 1. You add **stock lines** to a catalogue item: which inventory item, how many, and optionally a preferred stockroom.
 2. When someone raises a request for that item, the lines are **copied onto the request** and each one is reserved at a single stockroom. Later changes to the catalogue item never change requests already raised.
 3. Reserved stock stops counting as **available**. It can't be issued, used or transferred for anything else. Moving it between bins of the same stockroom is fine.
-4. Someone on your team **issues the stock from the request**. That fulfils the reservation.
+4. Once the request is approved (if it needs approval), someone on your team **issues the stock from the request**. That fulfils the reservation.
 5. The reservation ends when it's fully issued, when the request is rejected, cancelled or closed, or when someone releases it by hand with a reason. **A reservation is never released just because time has passed.**
 
 A request shows its reservations in the **Reserved stock** panel on the request. **Inventory → Reservations** lists them all.
+
+## Requests that need approval
+
+Stock is reserved as soon as the request is raised, before anyone approves it, so it can't be taken by another request in the meantime. While the request is **awaiting approval**, its reserved stock can't be issued: **Issue** is unavailable and the panel says why. Once the request is approved you can issue it as usual.
+
+If the request is rejected, or its approval expires or is cancelled, the reservation is released and the stock goes back to free stock.
+
+Whether requests need approval is set in your organisation's approval settings and on each catalogue item. By default, service requests do.
 
 ## Where stock is reserved
 
@@ -49,7 +57,7 @@ For an item tracked by serial number, a reservation holds a number of units at t
 
 ## Add stock to a catalogue item
 
-You need permission to edit the service catalogue.
+You need permission to edit the service catalogue and to view inventory.
 
 1. Open **Settings → Service catalogue** and edit the item.
 2. Under **Stock to reserve**, search for the inventory item by name or SKU and select it.
@@ -101,6 +109,9 @@ To change the number of days (14 by default), open **Settings → Inventory → 
 
 ## Release a reservation
 
+A request that has reserved stock can't be deleted. Close or cancel it instead, which releases anything not yet issued.
+
+
 On the request, select **Release** on the line and give a reason. Unissued stock goes back to free stock and any requisition closes. A released reservation can't be restored. Raise a new request if the stock is needed again.
 
 Reservations are also released automatically, with the reason recorded, when:
@@ -121,11 +132,12 @@ Reservations are also released automatically, with the reason recorded, when:
 
 | Task | Needs |
 | --- | --- |
-| See a request's reserved stock | Access to the request, as a staff member not limited to one client |
+| See whether a request's stock is reserved | Access to the request, as a staff member not limited to one client |
+| See which units and places it can be issued from | The above, plus permission to adjust stock |
 | Issue, release or try again | The above, plus permission to adjust stock |
 | See Inventory → Reservations | Inventory view access |
 | Decide requisitions, change the overdue setting | Inventory management access |
-| Add stock lines to a catalogue item | Catalogue edit access |
+| Add stock lines to a catalogue item | Catalogue edit access and inventory view access |
 
 Customer contacts don't see stock or reservations in the portal. Staff limited to a single client don't see stock, because stock belongs to your whole organisation.
 
@@ -139,6 +151,8 @@ Customer contacts don't see stock or reservations in the portal. Staff limited t
 ## Resolve common problems
 
 **"Reserved for requests at …" when issuing or transferring stock.** That stock is held for requests. Issue it from the request it's reserved for, or release a reservation first. Moving it between bins of the same stockroom is allowed.
+
+**"This request is awaiting approval" when issuing.** The stock stays reserved for the request. Issue it once the request has been approved.
 
 **"This stock is reserved at …" when issuing from a request.** Issue from the stockroom (or one of its bins) shown on the line, or release the reservation and issue elsewhere.
 
