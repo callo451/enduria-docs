@@ -1,0 +1,147 @@
+---
+title: Stock reservations
+description: Reserve stock for service requests when they're raised, issue it from the request, and see what's waiting for stock and what needs buying.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Stock reservations
+
+A stock reservation sets stock aside for a service request as soon as the request is raised, so the dock, laptop or toner the request needs is still there when someone fulfils it. Reserved stock can only be issued against its request. If there isn't enough, the request is flagged as waiting for stock and a requisition records what needs buying.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Stock reservations require a future application release. This guide describes the intended behaviour for that release; publishing documentation does not change your workspace.
+
+</Admonition>
+
+**Nothing is reserved until you add stock to a catalogue item.** Catalogue items without stock lines, and every other kind of ticket, work exactly as before.
+
+## When to use it
+
+Reservations help when the same stock is needed by several requests at once, and when the delay between a request and its fulfilment is long enough for stock to be taken by someone else. Typical cases:
+
+- **New starter kits:** a laptop, a dock and a headset for each new joiner, requested a week or two ahead.
+- **Replacement devices,** where the service desk shouldn't hand the last spare to a walk-up request.
+- **Consumables issued on request,** such as toner, where you want to see demand before stock runs out.
+
+If your stockroom always has plenty, or requests are fulfilled the moment they arrive, you may not need reservations at all.
+
+## How it works
+
+1. You add **stock lines** to a catalogue item: which inventory item, how many, and optionally a preferred stockroom.
+2. When someone raises a request for that item, the lines are **copied onto the request** and each one is reserved at a single stockroom. Later changes to the catalogue item never change requests already raised.
+3. Reserved stock stops counting as **available**. It can't be issued, used or transferred for anything else. Moving it between bins of the same stockroom is fine.
+4. Someone on your team **issues the stock from the request**. That fulfils the reservation.
+5. The reservation ends when it's fully issued, when the request is rejected, cancelled or closed, or when someone releases it by hand with a reason. **A reservation is never released just because time has passed.**
+
+A request shows its reservations in the **Reserved stock** panel on the request. **Inventory → Reservations** lists them all.
+
+## Where stock is reserved
+
+Each line is reserved at one stockroom (bins count towards their stockroom):
+
+- At the line's **preferred stockroom**, if it has enough free stock.
+- Otherwise at the stockroom with the **most free stock** that has enough.
+- If no single stockroom has enough, the line is **waiting for stock**. Enduria doesn't split a line across stockrooms.
+
+For an item tracked by serial number, a reservation holds a number of units at the stockroom. The specific unit is chosen when it's issued.
+
+## Add stock to a catalogue item
+
+You need permission to edit the service catalogue.
+
+1. Open **Settings → Service catalogue** and edit the item.
+2. Under **Stock to reserve**, search for the inventory item by name or SKU and select it.
+3. Set the **quantity** (1 to 100) and, if you want, a **preferred stockroom**.
+4. Add any other lines, then select **Save stock lines**.
+
+An item can appear once per catalogue item. You can't add a discontinued item, and you can't delete an inventory item while a catalogue item reserves it or any request has reserved it.
+
+## Issue reserved stock
+
+You need access to the request and permission to adjust stock.
+
+1. Open the request and find **Reserved stock**.
+2. Select **Issue** on the line.
+3. For an item tracked by serial number, choose the **unit** and who receives it. The requester is selected by default; search to choose someone else. If you use [asset acceptance](./asset-acceptance), the recipient is asked to accept as usual.
+4. For a quantity item, choose **Issue to someone** or **Used for the request**, where the stock comes from (a stockroom or one of its bins) and how many.
+5. Select **Issue**.
+
+If your organisation needs approval for issues, the issue is sent for approval and the stock stays reserved until a different person approves it. See [approve stock changes](./inventory#approve-stock-changes).
+
+You can issue part of a line now and the rest later. The line shows how many have been issued.
+
+## When there isn't enough stock
+
+A line that no stockroom can cover is **waiting for stock**:
+
+- The request shows it in **Reserved stock**.
+- A **requisition** records the quantity to buy, and people with inventory management access are told in Enduria.
+- When stock becomes free (it's received, returned, transferred in, or another reservation is released), it goes to waiting requests **in the order they were raised**, as long as one stockroom can cover the whole line. A smaller, later request can be served first if an earlier one needs more than any stockroom has.
+- Once the line is reserved, its requisition closes as **stock available**.
+
+**Try again** on the request checks for free stock straight away. Enduria also checks every minute.
+
+### Decide requisitions
+
+In **Inventory → Reservations → Requisitions**, a person with inventory management access can **approve** a requisition (with an optional note, such as a supplier or order reference) or **reject** it with a reason. The person who raised the request can never decide their own requisition.
+
+Approving records the decision to buy. **It doesn't create a purchase order**; place the order as you normally do. A rejected requisition leaves the request waiting until stock frees up or someone releases the reservation.
+
+## Write-offs, counts and triage
+
+Recording what really happened to stock is never blocked by reservations. If a write-off, a count, an adjustment, or moving a unit out of **Available** (for example to **Defective**) leaves a stockroom without enough for its reservations, the **newest** reservations there become **waiting for stock**, each with a requisition. They're reserved again when stock frees up.
+
+## Overdue reservations
+
+A reservation that's still open after a number of days is flagged **Overdue**, and the request's assignee and your inventory managers are told once. Flagging never releases it.
+
+To change the number of days (14 by default), open **Settings → Inventory → Reservations**. You need inventory management access.
+
+## Release a reservation
+
+On the request, select **Release** on the line and give a reason. Unissued stock goes back to free stock and any requisition closes. A released reservation can't be restored. Raise a new request if the stock is needed again.
+
+Reservations are also released automatically, with the reason recorded, when:
+
+- the request's approval is **rejected or cancelled**, or
+- the request reaches a **final status** in your organisation's status settings.
+
+## Inventory → Reservations
+
+| View | Shows |
+| --- | --- |
+| **Reserved** | Stock held for requests, by stockroom: a pick list for fulfilment. |
+| **Waiting for stock** | Lines no stockroom can cover yet, with their requisition. |
+| **Overdue** | Reservations open longer than your setting. |
+| **Requisitions** | Stock to buy, awaiting a decision first. |
+
+## Who can do what
+
+| Task | Needs |
+| --- | --- |
+| See a request's reserved stock | Access to the request, as a staff member not limited to one client |
+| Issue, release or try again | The above, plus permission to adjust stock |
+| See Inventory → Reservations | Inventory view access |
+| Decide requisitions, change the overdue setting | Inventory management access |
+| Add stock lines to a catalogue item | Catalogue edit access |
+
+Customer contacts don't see stock or reservations in the portal. Staff limited to a single client don't see stock, because stock belongs to your whole organisation.
+
+## What reservations don't do
+
+- **Purchase orders.** Approved requisitions are a record of what to buy; ordering and receiving against them is not part of this feature.
+- **Client-owned stock and billing.** Reservations use your organisation's stock. Issuing to a client contact is recorded against that client as it is today, without a charge.
+- **Splitting a line** across several stockrooms.
+- **Other ticket types.** Only service requests raised for a catalogue item with stock lines reserve stock.
+
+## Resolve common problems
+
+**"Reserved for requests at …" when issuing or transferring stock.** That stock is held for requests. Issue it from the request it's reserved for, or release a reservation first. Moving it between bins of the same stockroom is allowed.
+
+**"This stock is reserved at …" when issuing from a request.** Issue from the stockroom (or one of its bins) shown on the line, or release the reservation and issue elsewhere.
+
+**A request has stock lines but nothing reserved.** Reservations are made when the request is raised. If that didn't complete, Enduria creates them within a minute.
+
+**A waiting request didn't get stock that just arrived.** Stock goes to waiting requests in the order they were raised, and only when one stockroom can cover the whole line. Check whether an earlier request took it, or whether the stock arrived at a different stockroom from the one with the rest.

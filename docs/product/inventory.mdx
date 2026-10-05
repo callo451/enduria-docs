@@ -40,7 +40,8 @@ Stock is kept in **stockrooms**: organisation-wide locations marked **Holds stoc
 
 Open an item to see **Stock by place**: how many units are in each stockroom or bin, how many are on transfer orders in transit, and any changes waiting for approval. For tracked items, **Units** lists each unit with its asset tag, serial number, state and where it is.
 
-- **On hand** is stock in stockrooms. **Available** is on-hand stock that isn't reserved. Stock in transit counts towards what you hold but isn't available.
+- **On hand** is stock in stockrooms. **Available** is on-hand stock that isn't [reserved for a service request](./stock-reservations). Stock in transit counts towards what you hold but isn't available.
+- **Reserved** stock is held for service requests. It can only be issued against its request; see [stock reservations](./stock-reservations).
 - For tracked items, only units in the **Available** state count as available. Units pending repair, defective, in quarantine or awaiting disposal are on hand but can't be issued.
 - Each item has a **home stockroom**, the default place for receipts. Changing it doesn't move any stock.
 
