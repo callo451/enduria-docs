@@ -18,6 +18,9 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 | The SMTP host name is not valid | The host contains spaces or other characters a host name cannot have. | Enter only the host name, such as `smtp.example.com` — no `smtp://`, path or port. |
 | Cannot connect to SMTP server. Check host and port. | Enduria could not reach the server. | Check the host and port, and that **Use SSL/TLS** matches the port (on for 465, off for 587). |
 | Failed to test email settings, after **Send test email** | The test message could not be sent. | Select **Test connection**, which reports the reason. |
+| That domain is already in use. | Another organisation uses it, or it is set up for the service itself. | Remove it from the other organisation first, or contact support. |
+| That domain belongs to this installation's own sender. | You entered the service's own sending domain, or a domain above or below it. | Use your organisation's own domain. |
+| The From address must be on one of your verified domains | The address's domain is not added, or not verified yet. | Add the domain under **Your domains** and wait for **Verified**. |
 | SMTP Error *code* | The server refused the message with that SMTP status code. | Look the code up in your provider's documentation. A 5xx code usually means the From address is not allowed for the account or a recipient was rejected. |
 | Email rejected by SES. Check sender verification. | Platform email was refused by the sending service. | Contact the operator of your installation. |
 | Rate limit exceeded. Please try again later. | The sending service is throttling. | Wait and retry. |

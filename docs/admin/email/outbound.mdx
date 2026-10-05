@@ -24,6 +24,22 @@ Platform email is your installation's shared sender, run by its operator (see [H
 
 If platform email is unavailable, the option says why: the installation does not offer it, or the operator has not finished setting it up, in which case the reasons are listed. Use your own SMTP server instead. An organisation already using platform email keeps it while the operator fixes a problem.
 
+### Send platform email from your own domain
+
+On **Enduria Cloud**, platform email can be sent from an address on your own domain, such as `support@acme.com`, instead of the service's address. Self-hosted installations do not offer this; use your own SMTP server there.
+
+1. With **Platform email** selected, open **Your domains**, enter your domain (for example `acme.com`) and select **Add domain**. Optionally turn on the bounce subdomain, so bounces use `bounce.acme.com` and SPF aligns with your domain.
+2. Publish the records shown in your domain's DNS:
+   - three **CNAME** records, which prove you own the domain and let the service sign your email with DKIM;
+   - with the bounce subdomain, an **MX** and a **TXT** record for it.
+   Use the copy buttons; most DNS providers want only the part of the name before your domain.
+3. Wait for the domain to show **Verified**. Enduria checks every few minutes and notifies people with the **Manage Settings** permission when it verifies; **Check now** checks straight away. DNS changes can take a while to spread. If the records are not found within 72 hours, remove the domain and add it again.
+4. Under **Sender**, enter a **From address** on the verified domain and select **Save**. An address on a domain that is not verified cannot be saved.
+
+The page also shows the domain's **DMARC** policy. If there is none, publish the suggested monitoring record (`v=DMARC1; p=none;`) at `_dmarc.yourdomain`, review the reports, then tighten it. Gmail and Yahoo expect DMARC from bulk senders.
+
+If the records are later removed or changed, the domain shows **Not verified**, administrators are notified, and email is sent from the service's address until the records are restored and verify again. Removing a domain does the same immediately. A domain can be used by one organisation at a time.
+
 ### Your own SMTP server
 
 1. Select **Your own SMTP server**.
