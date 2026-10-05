@@ -79,7 +79,7 @@ Unit states:
 | **Disposal candidate** | Expected to leave through the disposal process. |
 | **In transit** | On a dispatched transfer order. Set by the transfer order only. |
 
-The lifecycle status given to units entering stock and to issued units is set in **Settings → Inventory → Tracked units**. Until you choose, units use your **In Storage** and **In Use** statuses when your asset settings have them.
+A unit entering stock takes the default status of the **In stock** [state](./asset-statuses), and an issued unit the default of **In use**. Choose those defaults in **Settings → Asset statuses**. Sending a unit for repair takes it out of stock, and returning it to a stockroom brings it back.
 
 Custody changes made elsewhere keep stock in step. Checking out a unit from the **Custody** tab issues it from stock; checking an asset of a tracked model in to an organisation stockroom brings it into stock; recording a unit as lost writes it off with the reason **Lost**. A unit in stock can't be archived or disposed of until it is removed from stock, and a client's own asset is kept outside your stock.
 

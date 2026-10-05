@@ -17,7 +17,7 @@ Pages default to 20 records and support 1–100 records. List and individual-rec
 
 ## Create a record using your configured vocabulary
 
-Provide a name and an active configured category name, code or ID. Set `status` explicitly to an active lifecycle value configured for your organisation. The API currently defaults an omitted status to `active`, but that value must still pass your organisation's vocabulary validation.
+Provide a name and an active configured category name, code or ID. A new asset is in the **In use** state, so `status` must be an active status of that state from [`GET /statuses?type=asset`](./configured-vocabulary#statuses); omit it to use the state's default. When you update an asset, `status` must belong to its current state; a status of another state is refused with `400`. States and the rules above require a future application release.
 
 For example, replace the category and lifecycle placeholders before submitting:
 
@@ -25,7 +25,7 @@ For example, replace the category and lifecycle placeholders before submitting:
 {
   "name": "Reception laptop",
   "category": "YOUR_CONFIGURED_CATEGORY",
-  "status": "YOUR_CONFIGURED_LIFECYCLE_VALUE",
+  "status": "YOUR_IN_USE_STATUS_KEY",
   "manufacturer": "Example Manufacturer",
   "model": "ExampleBook 14",
   "serialNumber": "SERIAL-EXAMPLE",

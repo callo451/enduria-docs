@@ -35,11 +35,12 @@ An administrator's title does not bypass these limits. See [users and permission
 
 ## Configure your register
 
-Before adding a large number of assets, agree your organisation's categories, locations, lifecycle stages and asset-tag format.
+Before adding a large number of assets, agree your organisation's categories, locations, statuses and asset-tag format.
 
-- Open **Settings → Asset settings** to configure lifecycle values and tag formatting.
+- Open **Settings → Asset statuses** to name the [statuses under each state](./asset-statuses) and choose each state's default.
+- Open **Settings → Asset settings** to configure tag formatting.
 - Use **Categories** and **Locations** in the asset-management navigation for the corresponding reference records.
-- Use your own configured lifecycle labels. Examples from another organisation may not be valid in yours.
+- Use your own configured statuses. Examples from another organisation may not be valid in yours.
 - Keep parent categories and locations within your organisation. A hierarchy cannot contain cycles; resolve active child records before retiring a parent.
 
 ## Locations
@@ -105,7 +106,7 @@ A model can name the billing product that sells it, so asset and billing records
 ## Find an asset
 
 1. Open **Assets**.
-2. Enter a search term or select a category.
+2. Enter a search term, select a category, or filter by state, such as **In repair**.
 3. Choose the available sort order and use **Previous** and **Next** to move through results.
 4. Open the asset to inspect its details, source, assignment and related service information.
 
@@ -131,7 +132,7 @@ Open the saved record and confirm its tag, client and assignment. Stock quantiti
 
 Open the record and use its edit action. Check the source before changing imported values: a later connector sync may refresh fields owned by the provider. Changing a client or assignee must still satisfy your current client access and the assignee's eligibility.
 
-Clear an optional field only when you intend to remove its value. Clearing purchase cost does not automatically clear purchase currency. A lifecycle label by itself does not perform the [archive, disposal or restoration process](./asset-lifecycle).
+Clear an optional field only when you intend to remove its value. Clearing purchase cost does not automatically clear purchase currency. A status can be any status of the asset's current state; custody and the [archive, disposal or restoration process](./asset-lifecycle) change the state.
 
 Related tickets provide service context. They do not substitute for disposal evidence, approval records or proof of physical custody.
 

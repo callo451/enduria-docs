@@ -30,7 +30,7 @@ These screens are for staff, not customer portal accounts. You need `assets.view
 
 Where [reviewer policies](./asset-approvals.mdx) apply, the reviewer must also qualify under the policy retained with that request. Configured disposal verification reviewers need `assets.delete` even when rejecting submitted evidence. Selecting a reviewer does not grant permissions, and an administrator cannot approve their own request.
 
-Your organisation's asset lifecycle labels remain unchanged by archive, restoration and verified disposal. A label alone does not establish that a device was returned, sanitised or destroyed.
+Archiving moves an asset to the **Retired** [state](./asset-statuses), and verified disposal to **Disposed**, each with that state's default status. Restoration returns it to the state its custody implies. A status name alone does not establish that a device was returned, sanitised or destroyed.
 
 When enabled, **Retained asset events** in asset history and archive/disposal detail records these governed actions in the current customer scope. [Read the source-event guide](./asset-event-rules#inspect-the-retained-source-event) for its limits. Event notices and review highlights do not replace the decisions below.
 
@@ -42,7 +42,7 @@ When enabled, **Retained asset events** in asset history and archive/disposal de
 
 The asset leaves the active register and remains available under **Assets → Archive**. Existing agent credentials are revoked, and commands that have not been dispatched are stopped. Work already delivered to a device may still execute.
 
-Archiving keeps the recorded customer, custody, location, lifecycle value, costs, inventory membership and related evidence. It does not return stock, release an assignment or verify disposal. Ordinary archiving uses a confirmation; it does not create an independent approval request.
+Archiving keeps the recorded customer, custody, location, costs, inventory membership and related evidence, and moves the asset to **Retired**. It does not return stock, release an assignment or verify disposal. Ordinary archiving uses a confirmation; it does not create an independent approval request.
 
 ## Request restoration
 
@@ -62,7 +62,7 @@ A different eligible reviewer opens the archived asset, reads the request and re
 2. Enters a **Decision reason** and **Independent review reference**.
 3. Confirms the asset identity and current obligations, then selects **Approve and restore**.
 
-The existing record returns to the active register. Select **Open active asset** to continue. Its recorded custody, stock, costs and lifecycle value are preserved; restoration does not establish operational readiness.
+The existing record returns to the active register. Select **Open active asset** to continue. Its recorded custody, stock and costs are preserved, and it returns to the state its custody implies, usually **In use**, with that state's default status; restoration does not establish operational readiness.
 
 To decline, select **Reject request** and supply a decision reason. The submitted request and decision remain recorded.
 
@@ -123,7 +123,7 @@ A verifier must be independent of both the requester and the person who recorded
 3. Enter the **Independent verification reference** and **Verification findings**.
 4. Confirm the obligations, then select **Verify and archive**.
 
-Successful verification records **Verified disposal** and archives the asset. Credentials are revoked and undispatched commands are stopped. The completed request remains available under **Disposals**.
+Successful verification records **Verified disposal** and archives the asset as **Disposed**. Credentials are revoked and undispatched commands are stopped. The completed request remains available under **Disposals**.
 
 ### Cancel or reject a disposal request
 

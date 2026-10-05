@@ -7,7 +7,7 @@ import Admonition from '@theme/Admonition';
 
 # Track asset custody
 
-Custody records who or what physically holds an asset: a staff member, a customer contact, a storage location, nobody, or nobody because it is lost. Every change is kept in the asset's custody history.
+Custody records who or what physically holds an asset: a staff member, a customer contact, a storage location, a supplier repairing it, nobody, or nobody because it is lost. Every change is kept in the asset's custody history.
 
 <Admonition type="info" title="Awaiting rollout">
 
@@ -18,7 +18,7 @@ Custody tracking requires a future application release. This guide describes the
 Custody is separate from other asset facts:
 
 - **Ownership.** The asset's client stays the same when custody changes.
-- **Lifecycle status.** Checking an asset in or out does not change its status.
+- **State and status.** A custody change can move the asset to another [state](./asset-statuses): checking it out puts it **In use**, checking it in to a stockroom puts it **In stock**, marking it lost puts it **Missing** and sending it for repair puts it **In repair**. The asset then takes that state's default status.
 - **The active register.** Checking in never archives, retires or deactivates an asset. Use [archive, restore and dispose](./asset-lifecycle) for those decisions.
 
 ## Before you start
@@ -59,6 +59,10 @@ An asset of a tracked catalogue model that belongs to your organisation joins [i
 - **Record as found** returns a lost asset to a person or storage location.
 - **Record condition** adds a condition note without changing who holds the asset.
 
+## Send an asset for repair
+
+Choose **Send for repair** to hand the asset to a supplier or your own repair bench, and **Return from repair** when it comes back. See [Send an asset for repair](./asset-statuses#send-an-asset-for-repair). While an asset is in repair it can't be checked out or transferred.
+
 ## Review custody history
 
 The **Custody history** section lists every change, newest first, with who made it, when, and the before and after custodian. Changes made through an integration or an import are labelled with their source.
@@ -77,7 +81,7 @@ Archived assets keep their custody history, which stays readable. Restore an arc
 | A save fails because the connection dropped | Select the same action again without changing it. If the first attempt was saved, you see **Already recorded** and nothing is repeated. |
 | The person you need is not listed | Check that their account is active and compatible with the asset's client. Customer contacts must belong to the asset's own client. |
 | A client change is refused | A customer contact of the current client holds the asset. Transfer or check it in first, or change the client and a compatible custodian together. |
-| Custody buttons are missing | You may have view-only access, or the asset is archived. |
+| Custody buttons are missing | You may have view-only access, or the asset is archived. While an asset is in repair, only **Return from repair** and the loss and condition actions are offered. |
 | A stockroom is not listed | Only active locations marked **Holds stock** that are organisation-wide or belong to the asset's client appear. |
 | You can't change a stored asset's location | Check the asset in to another stockroom, or check it out to a person. |
 
@@ -87,6 +91,6 @@ This release records custody directly. It does not yet provide:
 
 - approval of custody changes or recipient acceptance;
 - due-date reminders or an offboarding recovery list;
-- inventory stock updates when an asset is checked in.
+- repair records with costs, RMA numbers or loaner devices.
 
 The earlier **Require approval for asset assignment** and **Track assignment history** settings were never enforced and have been retired. Custody history is always recorded.
