@@ -30,6 +30,10 @@ Use `categoryId`, `locationId`, `assignedUserId` and `clientId` for references. 
 - Use a nonnegative purchase cost with no more than six decimal places, without a currency symbol or thousands separator.
 - Keep the same number of columns in each row. Use CSV quoting for commas, quotes and embedded line breaks.
 
+### Import existing stock
+
+To record laptops and other tracked hardware you already hold in a stockroom, give the row a `modelId` of a tracked catalogue model and the `stockroomId` of an organisation stockroom. The asset is created unassigned and joins [inventory stock](./inventory#record-stock-you-already-hold) as opening stock, **Available** unless you give a `stockState` (`pending_repair`, `defective`, `quarantine` or `disposal_candidate`). These rows need inventory stock access as well as asset creation, and can't have an assignee or a client: a client's own asset is kept outside your stock.
+
 ## Preview and import
 
 1. Select your **CSV file** and, if needed, a **Default category**.

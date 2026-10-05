@@ -71,15 +71,17 @@ The model catalogue requires a future application release. Publishing documentat
 
 A **model** describes one product once, for example *Dell Latitude 5440*, so assets and inventory items can refer to the same thing. Manage models in **Settings → Models**. Each model has a manufacturer, a model name, an optional part number and asset category, and a **tracking** type:
 
-- **Tracked asset**: each unit is its own asset record, such as a laptop or phone.
+- **Tracked asset**: each unit is its own asset record, such as a laptop or phone. In inventory, a tracked model's stock is its units, each received and issued by serial number (see [Manage inventory stock](./inventory#two-kinds-of-stock)).
 - **Component**: a part that can be held as an asset record when it is worth tracking, such as a drive.
-- **Consumable**: counted by quantity and used up, such as cables or toner. A consumable is never an asset record, so assets can't use consumable models and consumable stock can't be deployed as assets.
+- **Consumable**: counted by quantity and used up, such as cables or toner. A consumable is never an asset record, so assets can't use consumable models.
 
 Manufacturer and model names are matched ignoring case and extra spaces, so you can't create *Dell Latitude 5440* twice under different spellings.
 
+When you add a model and choose its asset category, its tracking starts from the category's **Track new models by serial number** setting in **Settings → Asset categories**. You can still choose any tracking type. A model's tracking can't change while stock of it is held.
+
 ### Link a model to assets and stock
 
-Choose a **Catalogue model** when you create or edit an asset or an inventory item. The record keeps the manufacturer and model text it was recorded or discovered with; choosing a model only fills those fields when they are blank. Assets deployed from stock take the stock item's model.
+Choose a **Catalogue model** when you create or edit an asset or an inventory item. The record keeps the manufacturer and model text it was recorded or discovered with; choosing a model only fills those fields when they are blank. Units received into stock take the stock item's model.
 
 ### Link existing records
 
@@ -90,7 +92,7 @@ Existing assets and stock items are never linked automatically. **Settings → M
 
 If records in the group changed after the list loaded, the link is refused and nothing is linked. Refresh the page and review the group again. Every link is recorded in the audit log with the records it changed.
 
-The suggested tracking type is only a starting point: groups that include assets or serial-tracked stock are suggested as tracked assets, and other stock as consumables.
+The suggested tracking type is only a starting point: groups that include assets are suggested as tracked assets, and other stock as consumables.
 
 ### Billing products
 
@@ -98,7 +100,7 @@ A model can name the billing product that sells it, so asset and billing records
 
 ### Retire a model
 
-**Retire** a model you no longer use. Records already linked keep their link and show the model as retired, but no new asset or stock item can be linked to it, and stock linked to it can't be deployed as assets until you reactivate the model or change the item's model. Models are retired rather than deleted.
+**Retire** a model you no longer use. Records already linked keep their link and show the model as retired, but no new asset or stock item can be linked to it, and no new units of it can be received until you reactivate the model. Models are retired rather than deleted.
 
 ## Find an asset
 
@@ -116,7 +118,7 @@ Search and category selection apply across the accessible register, rather than 
 You need asset-create permission.
 
 1. Select **New asset** from **Assets**.
-2. Choose **Manual entry** for a record you will maintain yourself. Use the stock source only when issuing an existing inventory item.
+2. Choose **Manual entry** for a record you will maintain yourself. Units already in stock are assets: open one and issue it from its **Stock** card instead of creating a new record.
 3. Enter the **Asset name** and select a configured **Category**.
 4. Add the serial number. For manual entry, optionally choose a **Catalogue model**; its category is used if you haven't chosen one.
 5. Choose **Assigned to**, **Location**, and, for MSP records, **Client** as appropriate. The assigned person must be compatible with the asset's client.
