@@ -1,0 +1,136 @@
+---
+title: Purchase orders
+description: Raise purchase orders for stock, get them approved under your organisation's policy, and receive deliveries into stock with exact costs.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Purchase orders
+
+A purchase order records what you're buying from a supplier, at what price, and who approved it. When the goods arrive you receive them against the order: quantities go straight into stock, and items tracked by serial number arrive as assets. Every change to an order is recorded, and once an order is submitted its terms can only change through an amendment that is approved again.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Purchase orders require a future application release. This guide describes the intended behaviour for that release; publishing documentation does not change your workspace.
+
+</Admonition>
+
+You don't need purchase orders to use inventory. Stock you already hold can be recorded as opening stock, and stock can still be received by hand. Purchase orders add approval and an evidence trail from order to stock.
+
+## How an order moves
+
+| Status | What it means |
+| --- | --- |
+| **Draft** | Being prepared. Lines, supplier, tax and shipping can still change. |
+| **Awaiting approval** | Submitted. Its total and terms are frozen while someone decides. |
+| **Approved** | Approved under your organisation's policy, not yet sent. |
+| **Ordered** | Sent to the supplier. Deliveries can be received against it. |
+| **Partly received** | Some, but not all, of the order has arrived. |
+| **Received** | Everything has arrived. |
+| **Closed** | Nothing more will arrive. What was received is kept. |
+| **Cancelled** | Ended before anything was received. |
+
+Enduria doesn't send orders to your supplier. Send it as you normally do, then select **Mark as ordered** and, optionally, enter the supplier's order reference.
+
+## Raise an order
+
+1. Go to **Inventory → Purchase orders** and select **New purchase order**.
+2. Choose the **supplier** and, optionally, the stockroom it will be **delivered to**.
+3. Add lines: search for each stock item, then enter the quantity and the unit price. Prices are exact to six decimal places.
+4. Enter any **tax** and **shipping**, an expected delivery date and notes.
+5. Select **Create draft**, check it, then **Submit for approval**.
+
+Before you submit, the order shows what approval it will need, based on its total and your organisation's current settings.
+
+You can also start an order from the inventory list: select items and choose **Raise purchase order**, or use **Order** next to out-of-stock and low-stock items. The new order starts with those items at their reorder quantities.
+
+### Ordering for requests that are waiting for stock
+
+When a service request can't reserve stock, a requisition records what needs buying (see [Stock reservations](./stock-reservations)). Once a requisition is approved it appears under **Purchase orders → To order**. Select one or more and choose **Raise order** to start an order with those items. Each line must order at least what its requisitions need; you can order more for stock.
+
+While the order is open, the requisition shows as **On purchase order**. If the order is cancelled or closed before that stock arrives, the requisition goes back to **To order**.
+
+## Approval
+
+The person who raised an order, and the person who submitted it, can never approve it. Approvers need inventory management access; at or above your organisation's threshold they must also be a **procurement approver**.
+
+Who can approve is decided when the order is submitted, from its total (including tax and shipping) and the settings in force at that moment. Changing the settings later doesn't change orders already submitted.
+
+An approver can **Approve** or **Reject** with a reason. A rejected order goes back to its requester as a draft.
+
+### Set your approval policy (administrators)
+
+Organisation administrators choose the policy in **Settings → Inventory → Purchasing**. There are two modes, and both use one threshold in your organisation's currency.
+
+**Tiered approval** (the default)
+
+- Every order needs someone other than the requester, with inventory management access, to approve it.
+- At or above the threshold, that person must also be a procurement approver.
+- With the default threshold of **0**, every order needs a procurement approver.
+
+**Automatic below the threshold**
+
+- An order whose total is **below** the threshold is approved as soon as it's submitted. Its history shows it was approved by the approval policy, with the mode and threshold that applied.
+- At or above the threshold, a procurement approver other than the requester must approve it.
+
+For example, with a threshold of AUD 500: an order of AUD 499.99 is approved automatically, and orders of exactly AUD 500 or more wait for a procurement approver.
+
+Every change to these settings is recorded in the audit log with who made it and the old and new values.
+
+**Procurement approvers** hold the `procurement.approve` permission. The System Administrator role has it. To let other people approve orders at or above the threshold, add it to their role in **Settings → Roles**.
+
+## Receive a delivery
+
+1. Open the order and select **Receive**.
+2. Choose the **stockroom** it arrived at and enter the **delivery reference** from the supplier's delivery note.
+3. For each line, enter how many arrived. For items tracked by serial number, enter **one serial number per unit**; each unit becomes an asset in stock.
+4. Select **Record receipt**. You're recorded as the receiver.
+
+A delivery can arrive in several parts. Each receipt line is capped at what is still outstanding, so **an order can't be over-received**. If the supplier sent extra, record the surplus as a separate stock receipt, or amend the order.
+
+Stock received against an order:
+
+- Is added to stock straight away. Any request waiting for that item takes it, oldest first, and its requisition closes as **received**.
+- Is valued at the order's price. Tracked units keep the order price as their purchase cost.
+
+Receiving against an order doesn't wait for your stock *receipts* approval setting, because the order itself was approved. If you submit the same receipt twice (for example after a lost connection), it's recorded once.
+
+## Change an approved order
+
+Select **Amend** to change the lines, tax or shipping of an order that is approved, ordered or partly received. You can raise or lower quantities (never below what has arrived), change prices on lines with nothing received, and add lines. The supplier and currency can't change; cancel or close the order and raise a new one instead.
+
+An amendment goes back through approval on the new total, using the settings in force when it's submitted. Until it's decided, nothing can be received. If it's rejected, the order returns to its previous terms.
+
+## Cancel or close
+
+- **Cancel** an order that hasn't received anything. Give a reason.
+- **Close** a partly received order when nothing more will arrive. What was received is kept. Give a reason.
+
+Orders are never deleted. An inventory item that appears on any order can't be deleted either.
+
+## Costs and currency
+
+- Purchase orders, their lines, receipts and inventory costs are recorded in your **organisation's currency**, exactly to six decimal places. A supplier whose recorded currency is different can't be used for orders yet.
+- Inventory uses **weighted average cost**. Each receipt re-averages an item's cost: (stock held × current average + quantity received × order price) ÷ new quantity. Each stock movement keeps the cost it was valued at.
+- Costs in different currencies are never combined. If an item's stock is valued in another currency, update its cost before receiving it on an order.
+
+## Permissions
+
+| To | You need |
+| --- | --- |
+| Raise, edit, submit, mark as ordered, amend, cancel or close orders | Create inventory items (or inventory management) |
+| Approve or reject orders below the threshold | Inventory management |
+| Approve or reject orders at or above the threshold | Inventory management and procurement approver |
+| Receive deliveries | Adjust stock (receiving tracked units also needs permission to create assets) |
+| Change the approval policy | Manage settings (organisation administrators) |
+
+Customer portal users and staff assigned to a specific client can't see or change purchase orders, even if their role includes inventory permissions.
+
+## Not available yet
+
+- Sending orders to suppliers from Enduria, or notifying approvers when an order is waiting.
+- Matching supplier invoices to receipts.
+- Recording rejected or damaged quantities at receipt.
+- Linking an order to a client or project.
+- Returning goods to a supplier.
+- A guard against splitting one purchase into several orders below the threshold.

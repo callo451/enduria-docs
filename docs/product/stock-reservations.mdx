@@ -95,7 +95,7 @@ A line that no stockroom can cover is **waiting for stock**:
 
 In **Inventory → Reservations → Requisitions**, a person with inventory management access can **approve** a requisition (with an optional note, such as a supplier or order reference) or **reject** it with a reason. The person who raised the request can never decide their own requisition.
 
-Approving records the decision to buy. **It doesn't create a purchase order**; place the order as you normally do. A rejected requisition leaves the request waiting until stock frees up or someone releases the reservation.
+Approving records the decision to buy. **It doesn't create a purchase order**; place the order as you normally do. With the [purchase orders](./purchase-orders) release (awaiting rollout), approved requisitions appear under **Purchase orders → To order**, and receiving the order closes them as **received**. A rejected requisition leaves the request waiting until stock frees up or someone releases the reservation.
 
 ## Write-offs, counts and triage
 
@@ -143,7 +143,7 @@ Customer contacts don't see stock or reservations in the portal. Staff limited t
 
 ## What reservations don't do
 
-- **Purchase orders.** Approved requisitions are a record of what to buy; ordering and receiving against them is not part of this feature.
+- **Purchase orders.** Approved requisitions are a record of what to buy; ordering and receiving against them is part of [purchase orders](./purchase-orders), which awaits its own release.
 - **Client-owned stock and billing.** Reservations use your organisation's stock. Issuing to a client contact is recorded against that client as it is today, without a charge.
 - **Splitting a line** across several stockrooms.
 - **Other ticket types.** Only service requests raised for a catalogue item with stock lines reserve stock.

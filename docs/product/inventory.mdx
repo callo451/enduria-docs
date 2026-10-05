@@ -151,7 +151,7 @@ A stockroom can't be retired while it holds stock or has open transfers.
 Select items in the inventory list using the checkbox at the start of each row, then choose:
 
 - **Set home stockroom** to change where receipts go by default. No stock moves.
-- **Raise purchase order** to draft a purchase order.
+- **Raise purchase order** to draft a purchase order. With the [purchase orders](./purchase-orders) release (awaiting rollout), this opens a new order with those items at their reorder quantities.
 - **Set status**, for example to mark items discontinued.
 
 Bulk quantity changes aren't available, because each stock change needs its own stockroom and reference. To load stock you already hold, use **Import opening stock**.
@@ -160,6 +160,7 @@ Bulk quantity changes aren't available, because each stock change needs its own 
 
 - When available stock falls to or below an item's reorder level, Enduria raises a low-stock alert and sends the `inventory.low_stock` or `inventory.out_of_stock` webhook. **Automatic purchase orders are not available**; raise purchase orders yourself. Older items may show an auto-reorder setting that has no effect.
 - Inventory keeps **one unit cost per item**. Stock value is quantity × unit cost. FIFO and LIFO costing aren't available. Costs have no currency recorded, so don't treat totals as converted amounts. A tracked unit's own purchase cost is recorded on its asset.
+- With the [purchase orders](./purchase-orders) release (awaiting rollout), inventory costs become exact to six decimal places and record your organisation's currency, and each item's unit cost is its **weighted average cost**: receiving an order re-averages it at the order price. FIFO and LIFO remain unavailable.
 - **Stock cover** on the inventory list estimates how many days current stock would last at the last 30 days' issue rate.
 
 ## Movement history
