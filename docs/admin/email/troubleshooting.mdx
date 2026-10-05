@@ -17,8 +17,9 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 | Rate limit exceeded. Please try again later. | The sending service is throttling. | Wait and retry. |
 | The hourly sending limit has been reached / The daily sending limit has been reached | Your organisation's limit for the current UTC hour or day is used up, or one address has received the maximum number of system emails this hour. | Wait for the next hour or day, or raise your limit within what is allowed. |
 | Enter the SMTP password | No password is stored yet for this SMTP configuration. | Type the password and save. |
+| Every recipient is on the suppression list | Each address bounced, complained or was refused before. | See [Bounces, complaints and suppression](./deliverability); remove an address from the suppression list if it should receive email again. |
 
-**Recipients do not get email, but no error is shown.** Check that **Global Notifications** is on, check **Settings → Email Logs**, and ask recipients to check their spam folder. With custom SMTP, make sure your domain's SPF, DKIM and DMARC records allow your SMTP provider to send for it.
+**Recipients do not get email, but no error is shown.** Check that **Global Notifications** is on, check **Settings → Email Logs** for a *suppressed* or *bounced* status, check the [suppression list](./deliverability#the-suppression-list), and ask recipients to check their spam folder. With custom SMTP, make sure your domain's SPF, DKIM and DMARC records allow your SMTP provider to send for it.
 
 **Replies to notifications do not reach tickets.** Set the outbound Reply-To address to a mailbox connected under **Inbound Email**, and check that the reply's subject still contains the ticket number.
 

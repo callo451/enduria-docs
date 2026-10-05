@@ -17,7 +17,7 @@ const sidebars: SidebarsConfig = {
     {type: 'doc', id: 'admin/overview', label: 'Administration overview'},
     'admin/users-and-permissions', 'admin/branding',
     {type: 'category', label: 'Email', link: {type: 'doc', id: 'admin/email/overview'}, items: [
-      'admin/email/outbound', 'admin/email/inbound', 'admin/email/troubleshooting',
+      'admin/email/outbound', 'admin/email/inbound', 'admin/email/deliverability', 'admin/email/troubleshooting',
     ]},
     'admin/integrations', 'admin/storage',
   ],

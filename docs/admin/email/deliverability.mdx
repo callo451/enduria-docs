@@ -1,0 +1,47 @@
+---
+title: Bounces, complaints and suppression
+description: How Enduria reacts when email bounces or is marked as spam, the suppression list, and how to keep your email reaching inboxes.
+---
+
+# Bounces, complaints and suppression
+
+Sending email to addresses that do not exist, or to people who report it as spam, damages the reputation of the server that sent it. Mail providers then start filtering everything from that server. Enduria protects your sending reputation — and, with platform email, everyone's — by not sending to addresses that have bounced or complained.
+
+## What Enduria does
+
+| Event | What happens |
+| --- | --- |
+| **The mailbox does not exist** (a permanent bounce) | With platform email, the address is suppressed for platform email from every organisation, because the mailbox does not exist. |
+| **The mailbox is temporarily unavailable** (a temporary bounce) | Counted. After three in three days, the address is suppressed for your organisation for 24 hours. |
+| **The recipient marks your email as spam** (a complaint) | The address is suppressed for your organisation, permanently, until you remove it. |
+| **Your SMTP server refuses an address** | The address is suppressed for your organisation. |
+
+Bounce and complaint information comes from the platform email service, where the operator has connected it. With custom SMTP, Enduria learns about addresses your server refuses outright; bounces your server receives later arrive in your own mailbox, not in Enduria.
+
+## What a suppressed address means
+
+Enduria does not send to a suppressed address. If a message had other recipients, they still receive it. If every recipient is suppressed, the message is not sent and appears in **Settings → Email Logs** with the status **suppressed**.
+
+## The suppression list
+
+**Settings → Email Integration → Suppression list** shows the addresses suppressed for your organisation, why, and when it last happened. A temporary suppression shows when it ends.
+
+To email an address again — for example after a customer fixes their mailbox or asks to receive email again — select **Remove** and confirm. Enduria records who removed it and when. If the address bounces or complains again, it is suppressed again.
+
+Addresses suppressed platform-wide because the mailbox does not exist are not listed, because they reflect email from every organisation. If one needs to be cleared, ask the operator of your installation.
+
+## Delivery status in the email log
+
+With platform email and the operator's event connection in place, **Settings → Email Logs** shows what happened after sending:
+
+- **delivered** — the recipient's mail server accepted the message.
+- **bounced** — the mailbox does not exist.
+- **complained** — the recipient marked the message as spam.
+- **suppressed** — not sent, because every recipient was suppressed.
+
+## Keeping email out of spam folders
+
+- Send only to people who expect email from you, and keep requester and contact addresses up to date.
+- With custom SMTP, publish SPF, DKIM and DMARC records for your domain that cover your SMTP provider.
+- Use a Reply-To address that people can actually reply to.
+- Look at the suppression list now and then: many complaints usually mean notifications are going to people who did not want them.

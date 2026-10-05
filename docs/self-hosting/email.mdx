@@ -41,11 +41,34 @@ Every message Enduria sends is recorded in the organisation's email log with the
 2. **Verify the domain** in SES with Easy DKIM and publish the DKIM records it gives you.
 3. **Configure a custom MAIL FROM domain** (for example `bounce.notify.example.com`) so SPF aligns with your From domain.
 4. **Publish DMARC** for your domain, starting with `p=none` and a reporting address, then tightening once reports are clean.
-5. **Grant least privilege.** The IAM identity needs `ses:SendEmail`, `ses:SendRawEmail` and `ses:GetIdentityVerificationAttributes` for your sending identity, and nothing else.
-6. **Leave the SES sandbox** only when you are ready to send to unverified recipients. AWS reviews how you handle bounces and complaints.
+5. **Grant least privilege.** The IAM identity needs `ses:SendRawEmail` for your sending identity and configuration set, and `ses:GetIdentityVerificationAttributes` for the connection test — nothing else.
+6. **Connect bounce and complaint events** (next section) before leaving the sandbox.
+7. **Leave the SES sandbox** only when you are ready to send to unverified recipients. AWS reviews how you handle bounces and complaints.
+
+### Receive bounce and complaint events
+
+Enduria suppresses addresses that bounce or complain (see [Bounces, complaints and suppression](../admin/email/deliverability)). It learns about them from SES through Amazon SNS:
+
+1. Create an SNS topic, for example `enduria-ses-events`, in the same region.
+2. Create an SES **configuration set** with an event destination that publishes **Bounce**, **Complaint** and **Delivery** events to that topic.
+3. Set `AWS_SES_CONFIGURATION_SET` to the configuration set's name and `AWS_SES_SNS_TOPIC_ARN` to the topic's ARN, and restart Enduria.
+4. Add an **HTTPS** subscription to the topic for `https://<your Enduria host>/api/webhooks/ses`. Enduria confirms the subscription automatically.
+5. In the SNS console, check that the subscription shows **Confirmed**.
+
+Enduria accepts only messages signed by SNS for that topic. If `AWS_SES_SNS_TOPIC_ARN` is not set, the endpoint refuses every request.
+
+Addresses that hard-bounce are suppressed for platform email from every organisation and are not shown to organisations. List or clear them with:
+
+```bash
+npx tsx scripts/email-suppressions.ts list
+```
+
+```bash
+npx tsx scripts/email-suppressions.ts remove --address someone@example.com --apply
+```
 
 :::caution
-Enduria does not yet process SES bounce and complaint notifications or keep a suppression list. Until it does, monitor bounce and complaint rates in the SES console, and consider offering platform email only to organisations you trust. SES may pause an account whose bounce or complaint rate is too high, which stops platform email — including invitations — for every organisation that uses it.
+Enduria does not yet pause an organisation automatically when its bounce or complaint rate climbs. Watch the SES reputation dashboard and set CloudWatch alarms on the account's bounce and complaint rates. SES may pause an account whose rates are too high, which stops platform email — including password resets — for every organisation that uses it.
 :::
 
 ## Stored mail credentials
