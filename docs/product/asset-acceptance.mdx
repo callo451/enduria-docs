@@ -1,0 +1,125 @@
+---
+title: Asset acceptance
+description: Optionally ask the people you issue assets to — staff or customer contacts — to confirm they received them, and to agree to your terms. Off by default.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Asset acceptance
+
+Asset acceptance asks the person you issue an asset to — a staff member or a customer contact — to confirm they received it. If you add terms, it also asks them to agree to those terms by typing their full name. Their answer is recorded against the hand-over in the asset's custody history.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Asset acceptance requires a future application release. This guide describes the intended behaviour for that release; publishing documentation does not change your workspace.
+
+</Admonition>
+
+**Acceptance is off for everything until an administrator turns it on.** Nothing changes for your team or your customers until you publish settings that ask for it.
+
+## Should you use it?
+
+Acceptance is an optional control. Many IT teams never use it and rely on the [custody record](./asset-custody) of who issued what to whom. It's worth turning on when you need the recipient's own confirmation, for example:
+
+- **Devices issued to people,** such as laptops, phones and tablets, where you want each person to confirm receipt and agree to an acceptable-use or equipment agreement.
+- **Loans and high-value items,** so it's clear who signed for an item if it goes missing or comes back damaged.
+- **Audits and regulated environments.** Standards such as ISO/IEC 27001 expect you to keep an asset inventory, make people aware of acceptable use and get assets back when people leave. A recorded acceptance is one common way to show that. No standard requires it, and acceptance alone doesn't make you compliant.
+- **Managed service providers handing equipment to clients,** as evidence that the client's contact received the device.
+
+It's usually not worth asking for low-value or shared items such as monitors, docks or cables. Turn it on only for the categories where the confirmation matters, and start small.
+
+## How it works
+
+1. You choose which asset categories need acceptance, separately for staff and for customer contacts, and optionally add terms.
+2. Someone issues an asset of one of those categories to a person: from the **Custody** tab, from stock, by editing the asset, through an import, or through the public API.
+3. **Custody moves straight away.** The asset is recorded with that person, as it would be without acceptance. Alongside it, an acceptance is created and shown as **Awaiting acceptance**.
+4. The person is told. Staff get an in-app notification. Both staff and customer contacts get an email if your organisation's email is set up and their own email preferences allow it.
+5. The person accepts or declines:
+   - **Accepting** records the condition they report, optional notes, the time and, if you added terms, the name they typed and exactly which version of the terms they agreed to.
+   - **Declining** records their reason and tells the person who issued the asset. **Nothing else changes.** Custody stays where it is until someone on your team follows up.
+6. If the asset moves to someone else before they answer (it's transferred, checked in or reissued), their acceptance is closed as no longer needed. If the asset goes to another person who must accept, that person is asked instead.
+
+Acceptance never changes custody, the asset's state or status, or its owner.
+
+## Turn it on
+
+You need settings-management and asset-view permissions, without a client restriction.
+
+1. Open **Settings → Asset acceptance**.
+2. Under **Who must accept**, turn on **Staff**, **Customer contacts** or both for each category that needs it. Categories you leave off never ask.
+3. Optionally, under **Terms**, turn on **Ask recipients to agree to terms** and enter a title and the terms text. Recipients see the text exactly as written.
+4. Under **Publish**, say why you're making the change, then choose **Publish**.
+
+Each publish creates a new version, listed under **Version history**. A new version applies to assets issued from then on. Acceptances already requested keep the version, and the terms, they were requested under. To turn acceptance off, switch every category off and publish.
+
+Assets whose category was recorded as free text, rather than chosen from your categories, never ask for acceptance.
+
+### Write good terms
+
+- Keep them short and specific: how the device may be used, what to do if it's lost or damaged, and when it must be returned.
+- Say who to contact with questions.
+- Agree the wording with whoever owns your acceptable-use or equipment policy, such as HR, legal or security.
+- When the policy changes, publish new terms. Earlier acceptances keep a record of the version each person agreed to.
+
+## Accept or decline (recipients)
+
+**Staff** accept at **Assets → Acceptances** under **Waiting for you**, or from the link in their notification or email. Staff don't need asset permissions to answer for assets issued to them.
+
+**Customer contacts** accept in the portal under **Accept devices**, which appears in the portal navigation while something is waiting for them. The email link takes them there after they sign in.
+
+For each asset, the recipient:
+
+1. Checks the asset details: name, tag, serial number and model.
+2. Reads the terms, if any.
+3. Chooses the condition it arrived in and adds any notes.
+4. If there are terms, types their full name, then chooses **Accept and agree**. Otherwise they choose **Accept**.
+
+To decline, they choose **Decline** and say why, for example "This laptop never arrived".
+
+Only the person it was issued to can answer, and only while they still hold the asset. An answer can't be changed afterwards.
+
+## Follow up (your team)
+
+**Assets → Acceptances → Open across the organization** lists every pending acceptance and every decline that hasn't been resolved, within your client restriction. The asset's **Custody** tab shows the same for that asset, and each issue in the custody history shows its outcome.
+
+When something is declined:
+
+1. Find out what happened, for example from the recipient's reason.
+2. Fix it through custody as usual: check the asset back in, transfer it to the right person, or leave it where it is if the decline was a mistake.
+3. Choose **Resolve** and record what you did. Resolving only closes the decline with your note; it doesn't change custody.
+
+You need asset-edit permission to resolve declines and resend emails.
+
+## Email notices
+
+Notices are sent through your organisation's email. Each acceptance shows its email state:
+
+| State | What it means |
+| --- | --- |
+| Email queued | It will be sent within a minute or so. |
+| Email sent | Your mail server accepted it. That doesn't mean the person accepted the asset. |
+| Email failed | The mail server refused it. Check your email settings, then choose **Resend email**. |
+| Email may not have been sent | The send was interrupted, so it may or may not have arrived. It's never sent again automatically, to avoid duplicates. Choose **Resend email** if needed. |
+| Email not sent (recipient preference) | The person has switched off asset emails, or their address is unsubscribed or suppressed. They can still answer in the app or portal. |
+| Email not sent (mail unavailable) | Your organisation's email isn't set up or is turned off. |
+
+Emails follow each person's **Assets — assigned** email preference. During their quiet hours, the email waits until quiet hours end.
+
+## Webhooks
+
+Three events are available to webhook subscribers: `asset.acceptance_requested`, `asset.accepted` and `asset.acceptance_declined`. Use them to update another system, such as an HR or onboarding tool, when someone accepts or declines.
+
+## Resolve common problems
+
+| What you see | What to do |
+| --- | --- |
+| Nobody is asked to accept | Check **Settings → Asset acceptance**: the asset's category needs **Staff** or **Customer contacts** on, and a version must be published. Assets issued before you published aren't asked. |
+| **Type your full name to accept the terms** | The terms need the recipient's full name typed before **Accept and agree**. |
+| **You have already answered this request** | Answers can't be changed. Ask your IT team if something needs correcting. |
+| **This asset has since been reassigned** | The asset moved to someone else, so there's nothing to accept. |
+| **Your account can no longer accept this asset** | The person's account is inactive, or they're no longer allowed to hold this client's asset. |
+| A customer contact can't see **Accept devices** | It appears only while something is waiting for them. Check that the asset is with them and its category asks customer contacts. |
+
+## Current limits
+
+This release doesn't send reminders for unanswered acceptances, set acceptance deadlines, require approval before an issue, or capture drawn signatures. A typed name is recorded as the recipient's agreement. An acceptance can't be completed while its asset is archived.

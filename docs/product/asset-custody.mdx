@@ -19,6 +19,7 @@ Custody is separate from other asset facts:
 
 - **Ownership.** The asset's client stays the same when custody changes.
 - **State and status.** A custody change can move the asset to another [state](./asset-statuses): checking it out puts it **In use**, checking it in to a stockroom puts it **In stock**, marking it lost puts it **Missing** and sending it for repair puts it **In repair**. The asset then takes that state's default status.
+- **Acceptance.** Your organisation can ask the person you issue an asset to — a staff member or a customer contact — to confirm they received it. Custody still moves at issue; the acceptance is recorded alongside it. This is off by default; see [Asset acceptance](./asset-acceptance).
 - **The active register.** Checking in never archives, retires or deactivates an asset. Use [archive, restore and dispose](./asset-lifecycle) for those decisions.
 
 ## Before you start
@@ -89,7 +90,7 @@ Archived assets keep their custody history, which stays readable. Restore an arc
 
 This release records custody directly. It does not yet provide:
 
-- approval of custody changes or recipient acceptance;
+- approval of custody changes, or reminders for unanswered [acceptances](./asset-acceptance);
 - due-date reminders or an offboarding recovery list;
 - repair records with costs, RMA numbers or loaner devices.
 
