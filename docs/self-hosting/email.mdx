@@ -101,6 +101,18 @@ Also set CloudWatch alarms on the account's own bounce and complaint rates: SES 
 
 `EMAIL_ENCRYPTION_SECRET` encrypts the SMTP and IMAP passwords organisations save. Keep it stable and back it up with your other secrets: if it changes, stored mail passwords can no longer be decrypted and every organisation must re-enter them.
 
+## Mail servers on private networks
+
+Organisations enter their own SMTP and IMAP host names. Enduria connects only to public addresses, so that a host name cannot be used to reach services inside your network, such as `127.0.0.1`, an internal relay or a cloud metadata address. It checks every address a name resolves to, connects to the address it checked, and verifies the server's certificate against the name, so a DNS answer that changes afterwards cannot redirect the connection.
+
+If an organisation's mail server is deliberately on your network, list it:
+
+| Variable | Purpose |
+| --- | --- |
+| `MAIL_ALLOWED_PRIVATE_HOSTS` | Comma-separated host names (or addresses) that may resolve to private addresses, as organisations enter them. `relay.internal` allows any port; `relay.internal:2525` allows only that port. |
+
+A host that is refused shows *The mail server address is on a private or reserved network* in the connection test, the email log and the inbound mailbox status.
+
 ## Inbound mailbox checks
 
 The scheduler checks each organisation's inbound mailboxes once a minute, honouring each mailbox's own polling interval. Inbound processing needs the scheduler service running with a valid `CRON_SECRET`; see [Configuration](./configuration).

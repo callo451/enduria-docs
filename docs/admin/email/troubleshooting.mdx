@@ -13,6 +13,8 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 | Platform email is not ready on this installation yet. | The operator's sending service has not passed its readiness check, so it cannot be chosen yet. The settings page lists what is missing. | Use custom SMTP for now, or ask the operator. |
 | Platform email is paused for this organization after high bounce or complaint rates | Too much recent email bounced or was marked as spam. Password resets and invitations still go out. | See [When sending is paused](./deliverability#when-sending-is-paused). |
 | SMTP authentication failed. Check username and password. | The SMTP server rejected the sign-in. | Check the username and password. Some providers require an app password, or SMTP sign-in to be enabled for the account. |
+| The mail server address is on a private or reserved network | The SMTP host is, or resolves to, a private address such as `10.0.0.5` or `127.0.0.1`. | Use your provider's public host name. If the server is deliberately on your own network, ask the operator of your installation to allow it. |
+| The SMTP host name is not valid | The host contains spaces or other characters a host name cannot have. | Enter only the host name, such as `smtp.example.com` — no `smtp://`, path or port. |
 | Cannot connect to SMTP server. Check host and port. | Enduria could not reach the server. | Check the host and port, and that **Use SSL/TLS** matches the port (on for 465, off for 587). |
 | SMTP Error *code* | The server refused the message with that SMTP status code. | Look the code up in your provider's documentation. A 5xx code usually means the From address is not allowed for the account or a recipient was rejected. |
 | Email rejected by SES. Check sender verification. | Platform email was refused by the sending service. | Contact the operator of your installation. |
@@ -43,6 +45,7 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 | The mail server rejected the sign-in. Check the username and password, or whether the provider requires an app password. | Credentials; whether IMAP access is enabled for the account. |
 | A secure connection could not be established or the server certificate could not be verified. | The host name matches the server's certificate; the TLS setting matches the port. |
 | The mail server host name could not be found. Check the IMAP host. | Spelling of the host. |
+| The mail server address is not allowed: it is invalid or on a private network. | Use the provider's public IMAP host. A server on your own network must be allowed by the operator of your installation. |
 | The mail server could not be reached or closed the connection. Check the host, port and firewall. | Host, port, and that the server accepts connections from Enduria. |
 | The mail server did not respond in time. | Server availability; try again later. |
 | The mail server is rate-limiting this account. | Reduce how often the mailbox is checked. |

@@ -23,7 +23,7 @@ If **Platform email** is unavailable, the operator of your installation has not 
 ### Custom SMTP
 
 1. Select **Custom SMTP Server**.
-2. Enter the **SMTP Host** and **SMTP Port** your provider gives you. Port 587 normally uses STARTTLS; port 465 uses SSL/TLS.
+2. Enter the **SMTP Host** and **SMTP Port** your provider gives you. Port 587 normally uses STARTTLS; port 465 uses SSL/TLS. The server must have a public address. A mail server on a private network — such as `10.0.0.5` or a name that resolves to one — is refused unless the operator of your installation allows it.
 3. Turn **Use SSL/TLS** on for port 465 and off for STARTTLS ports. Enduria requires an encrypted connection by default.
 4. Enter the **SMTP Username** and **SMTP Password**. Some providers require an app password rather than your normal password.
 5. Enter the **Sender name** and a **From address** your SMTP account is allowed to send as.
@@ -35,6 +35,16 @@ The password is stored encrypted and shown masked afterwards. Leave the masked v
 ## Test the connection
 
 Select **Test Connection**. Enduria checks the configured provider without sending a message: for SMTP it connects and signs in; for platform email it checks the platform sender. Fix any reported problem before relying on email; see [Troubleshooting](./troubleshooting).
+
+The page header shows where your settings stand:
+
+| Status | Meaning |
+| --- | --- |
+| **Not configured** | No provider is set up, or the SMTP settings are incomplete. |
+| **Saved, not verified** | The settings are saved, but no connection test or test email has succeeded with them yet. Changing the provider, From address or any SMTP connection setting returns to this state, and so does a failed test. |
+| **Verified** | The last connection test or test email with the current settings succeeded. |
+
+Saving settings does not verify them; only a successful test does.
 
 ## Sending limits
 
