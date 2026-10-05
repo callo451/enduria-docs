@@ -11,11 +11,13 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 | --- | --- | --- |
 | Platform email is not available on this installation. | The operator has not configured platform email. | Use custom SMTP, or ask the operator. |
 | Platform email is not ready on this installation yet. | The operator's sending service has not passed its readiness check, so it cannot be chosen yet. The settings page lists what is missing. | Use custom SMTP for now, or ask the operator. |
+| The platform sender could not be reached. Contact the operator of your installation. | The operator's mail server or sending service is down or misconfigured. Your settings are not at fault. | Ask the operator; they can run the readiness check described in the self-hosting guide. |
 | Platform email is paused for this organization after high bounce or complaint rates | Too much recent email bounced or was marked as spam. Password resets and invitations still go out. | See [When sending is paused](./deliverability#when-sending-is-paused). |
 | SMTP authentication failed. Check username and password. | The SMTP server rejected the sign-in. | Check the username and password. Some providers require an app password, or SMTP sign-in to be enabled for the account. |
 | The mail server address is on a private or reserved network | The SMTP host is, or resolves to, a private address such as `10.0.0.5` or `127.0.0.1`. | Use your provider's public host name. If the server is deliberately on your own network, ask the operator of your installation to allow it. |
 | The SMTP host name is not valid | The host contains spaces or other characters a host name cannot have. | Enter only the host name, such as `smtp.example.com` — no `smtp://`, path or port. |
 | Cannot connect to SMTP server. Check host and port. | Enduria could not reach the server. | Check the host and port, and that **Use SSL/TLS** matches the port (on for 465, off for 587). |
+| Failed to test email settings, after **Send test email** | The test message could not be sent. | Select **Test connection**, which reports the reason. |
 | SMTP Error *code* | The server refused the message with that SMTP status code. | Look the code up in your provider's documentation. A 5xx code usually means the From address is not allowed for the account or a recipient was rejected. |
 | Email rejected by SES. Check sender verification. | Platform email was refused by the sending service. | Contact the operator of your installation. |
 | Rate limit exceeded. Please try again later. | The sending service is throttling. | Wait and retry. |
@@ -23,7 +25,7 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 | Enter the SMTP password | No password is stored yet for this SMTP configuration. | Type the password and save. |
 | Every recipient is on the suppression list | Each address bounced, complained or was refused before. | See [Bounces, complaints and suppression](./deliverability); remove an address from the suppression list if it should receive email again. |
 
-**Recipients do not get email, but no error is shown.** Check that **Global Notifications** is on, check **Settings → Email Logs** for a *suppressed* or *bounced* status, check the [suppression list](./deliverability#the-suppression-list), and ask recipients to check their spam folder. With custom SMTP, make sure your domain's SPF, DKIM and DMARC records allow your SMTP provider to send for it.
+**Recipients do not get email, but no error is shown.** Check that **Send email** is on, that the person has not switched email off or chosen a digest under **Settings → Notifications**, check **Settings → Email Logs** for a *suppressed* or *bounced* status, check the [suppression list](./deliverability#the-suppression-list), and ask recipients to check their spam folder. With custom SMTP, make sure your domain's SPF, DKIM and DMARC records allow your SMTP provider to send for it.
 
 **Replies to notifications do not reach tickets.** Set the outbound Reply-To address to a mailbox connected under **Inbound Email**, and check that the reply's subject still contains the ticket number.
 

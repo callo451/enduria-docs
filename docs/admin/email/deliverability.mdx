@@ -14,9 +14,10 @@ Sending email to addresses that do not exist, or to people who report it as spam
 | **The mailbox does not exist** (a permanent bounce) | With platform email, the address is suppressed for platform email from every organisation, because the mailbox does not exist. |
 | **The mailbox is temporarily unavailable** (a temporary bounce) | Counted. After three in three days, the address is suppressed for your organisation for 24 hours. |
 | **The recipient marks your email as spam** (a complaint) | The address is suppressed for your organisation, permanently, until you remove it. |
-| **Your SMTP server refuses an address** | The address is suppressed for your organisation. |
+| **A mail server refuses an address** (yours, or the operator's SMTP server for platform email) | The address is suppressed for your organisation. |
+| **The recipient unsubscribes** | Only the list they left stops: notification emails, or one scheduled report. See [Unsubscribes](#unsubscribes). |
 
-Bounce and complaint information comes from the platform email service, where the operator has connected it. With custom SMTP, Enduria learns about addresses your server refuses outright; bounces your server receives later arrive in your own mailbox, not in Enduria.
+Bounce and complaint information comes from the platform email service when the operator uses Amazon SES and has connected its events. With an SMTP server — yours, or an operator's SMTP platform sender — Enduria learns only about addresses the server refuses outright; bounces the server receives later arrive in that server's mailbox, not in Enduria. **Sending health** says when bounces and complaints are not reported.
 
 ## When sending is paused
 
@@ -36,6 +37,18 @@ To email an address again — for example after a customer fixes their mailbox o
 
 Addresses suppressed platform-wide because the mailbox does not exist are not listed, because they reflect email from every organisation. If one needs to be cleared, ask the operator of your installation.
 
+## Unsubscribes
+
+Notification email, the notification digest and scheduled reports carry a one-click unsubscribe link (the standard `List-Unsubscribe` header, which mail apps show as an **Unsubscribe** button). Invoices, quotes, password resets and invitations never do: they are not mail anyone subscribes to.
+
+When someone unsubscribes:
+
+- **A person with an account in your organisation** has their notification email switched off. They can switch it back on under **Settings → Notifications**. In-app notifications continue.
+- **Any other address**, for example one a notification rule sends to, appears in the suppression list as **Unsubscribed** with the list it left — *Notification emails* or *Scheduled report: (name)*. Only that list stops; the same address still receives invoices, other reports and system email.
+- **From a scheduled report**, the address stops receiving that report only. The report's delivery history shows the recipient as skipped.
+
+Opening the link in a browser shows a page that asks before unsubscribing, so link scanners in email security products cannot unsubscribe anyone. Remove an unsubscribe from the suppression list only when the person asked to receive that email again.
+
 ## Delivery status in the email log
 
 With platform email and the operator's event connection in place, **Settings → Email Logs** shows what happened after sending:
@@ -43,7 +56,7 @@ With platform email and the operator's event connection in place, **Settings →
 - **delivered** — the recipient's mail server accepted the message.
 - **bounced** — the mailbox does not exist.
 - **complained** — the recipient marked the message as spam.
-- **suppressed** — not sent, because every recipient was suppressed.
+- **suppressed** — not sent, because every recipient was suppressed or had unsubscribed from that list.
 
 ## Keeping email out of spam folders
 
