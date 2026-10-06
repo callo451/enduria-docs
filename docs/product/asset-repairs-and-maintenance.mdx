@@ -1,0 +1,261 @@
+---
+title: Repairs, coverage and maintenance
+description: Record faults and repairs from report to closure, keep warranty and support records with where their dates came from, and plan recurring maintenance with reminders.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Repairs, coverage and maintenance
+
+Each asset's **Service** tab brings together three records:
+
+- **Repair cases**: one fault on one asset, from report to closure, including where it went, the supplier's reference, any loaner, the parts changed, the outcome, the cost and any warranty claim.
+- **Coverage**: warranties and support contracts, where their dates came from, and whether someone checked them.
+- **Maintenance**: recurring plans and one-off work, with reminders before work is due and when it is overdue.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Repair cases, coverage records and maintenance plans require a future application release. This guide describes the intended behaviour for that release; publishing documentation does not change your workspace.
+
+</Admonition>
+
+**Custody is still the only way an asset moves.** A repair case records the custody changes that send an asset for repair and bring it back; it never moves the asset by itself. See [Track asset custody](./asset-custody).
+
+## Repair cases
+
+A repair case has a number such as `RMA-0001` and moves through these states:
+
+| State | Meaning |
+| --- | --- |
+| **Open** | The fault is recorded. The asset hasn't moved yet. |
+| **In repair** | The asset was sent to a supplier or your repair bench. |
+| **Back from repair** | The asset was returned from repair. Close the case with the outcome, or cancel it. |
+| **Closed** | The outcome is recorded. |
+| **Cancelled** | The case was cancelled with a reason. |
+
+An asset has at most one case being worked on at a time. **Assets → Repairs** lists every case, with **Being worked on**, **In repair**, **Back**, **Closed** and **All** views and a search by number, asset, serial number or reference.
+
+### Report a fault
+
+1. Open the asset and select the **Service** tab.
+2. Under **Repair**, select **Report a fault**.
+3. Describe the fault: what is wrong, and when it started.
+4. Optionally choose a **Ticket** (one of the asset's client's tickets, or any ticket when the asset has no client), the **Expected repairer** (**A supplier**, **Our repair bench** or **Not yet known**) and **Expected back** date.
+5. Select **Open case**.
+
+The case opens and the asset stays where it is. Use **Edit details** on the case to change the fault, the supplier reference, the expected return date or the ticket later.
+
+Sending an asset for repair from its **Custody** tab also opens a case, using the custody reason as the fault, or attaches the send to the asset's open case. Every asset in repair has a case.
+
+### Send it for repair
+
+1. On the case, select **Send for repair**.
+2. Choose **A supplier** or **Our repair bench**, and pick the supplier or the stockroom used as the bench. Repairers are the active suppliers in **Settings → Inventory → Suppliers**.
+3. Enter the **Supplier reference** (the supplier's RMA or job number) and **Expected back** date. The expected date becomes the custody due date, at the end of that day.
+4. Optionally record the asset's **Condition** and notes, then select **Send**.
+
+This records the same custody change as **Send for repair** on the Custody tab: whoever holds the asset hands it over to the repairer. The case shows the downtime from the custody records, from the time it was sent to the time it came back.
+
+### Lend a loaner
+
+While the case is open, someone can borrow a replacement.
+
+- **Issue a loaner** takes an available unit of any tracked model from stock and lends it to a staff member or one of the asset's client's people, as an ordinary loan with a **Due back** date (5 pm that day). It defaults to the case's expected return date. You need stock access to issue a loaner.
+- **Link a loan** records a loan that was already issued, for example one that needed approval, as this case's loaner.
+
+**A loaner isn't a sale.** Nothing is recorded for billing when it goes out or when it comes back to stock. If issuing from stock needs approval in your organisation, issue the unit from its stock item so it can be approved, then link the loan to the case.
+
+**Nothing comes back automatically.** Check the loaner in from its own page when it is returned. If it is still out when you close or cancel the case, Enduria asks you to check it in first or record why it is kept. When it is kept, you can choose **Record as a sale to the client**, for example after a unit replacement.
+
+### Record parts
+
+Select **Record a part** and choose **Removed**, **Fitted** or **Replaced**. Describe the part and, where you have them, the removed and fitted serial numbers.
+
+This is a record only. To use parts from stock, issue them from the stock item against the case's ticket.
+
+### Return it to service
+
+When the asset comes back, return it from repair on the asset's **Custody** tab, to a person or to storage. For a stock unit, check it in to stock from the asset's page instead. The case moves to **Back from repair** whichever way the asset was returned.
+
+You can require a second person to approve returning a repaired asset to service:
+
+1. Open **Settings → Asset custody**.
+2. Under **Approval**, turn on **Return to service**. Like the other rules, it can be limited to chosen categories.
+3. Publish the policy.
+
+The return is then sent for approval and appears in **Assets → Reviews** for the custody approvers; the case shows that the return is waiting. A stock unit's check-in from repair goes through your stock approval instead. See [Custody approval, loans and leavers](./asset-loans-and-leavers). Sending for repair never needs approval.
+
+### Close the case
+
+1. On the case, select **Close case**. It is offered once the asset is back from repair.
+2. Choose the **Outcome**: **Repaired**, **Parts replaced**, **Unit replaced**, **No fault found** or **Beyond repair**.
+3. Describe **What was done**.
+4. Optionally enter the **Repair cost** and its currency. Once an amount is recorded on a case, its currency is fixed.
+5. Select **Close case**.
+
+**Beyond repair** leaves the asset where it was returned. To dispose of it, use [disposal](./asset-lifecycle#dispose-of-an-asset).
+
+To cancel instead, select **Cancel case** and give a reason. You can cancel a case before the asset is sent, or after it is back, but not while it is in repair.
+
+### Record a warranty claim
+
+Select **Warranty claim** on the case (**Update claim** once one exists) and record:
+
+- the **Claim state**: **Submitted**, **Accepted**, **Partially accepted**, **Rejected** or **Withdrawn**;
+- what it was **Claimed under**, one of the asset's coverage records;
+- the **Claim reference**;
+- for an accepted or partially accepted claim, the amount **Recovered**, in the case's currency.
+
+The claim is recorded separately from the outcome. A repair can be done with its claim rejected, or a unit replaced with its claim accepted. You can keep updating the claim after the case is closed.
+
+## Coverage
+
+The **Coverage** section of the Service tab lists the asset's warranty and support records.
+
+| Field | What it holds |
+| --- | --- |
+| **Kind** | **Manufacturer warranty**, **Extended warranty**, **Support contract** or **Other cover** |
+| **Provider** | One of your suppliers, a name, or **Unknown** |
+| **Reference** | The contract, warranty or certificate number |
+| **Starts** and **Ends** | Calendar dates. The asset is covered through the end date. |
+| **Source** | Where the dates came from: **Entered** on the Service tab, **Asset record** (the asset form's warranty field), **Import**, **API** or **Stock receipt** |
+| Verification | **Verified by** a person on a date, or **Unverified** |
+
+Each record shows whether it is **Covered**, **Starts later**, **Expired** or **Ended**.
+
+**Unknown means nobody recorded it.** An asset with no record covering today shows **Unknown**, never "Expired" or "Not covered". The asset's **Warranty ends** field shows **Unknown** too.
+
+### Add, change and verify coverage
+
+1. On the **Service** tab, select **Add coverage**.
+2. Choose the kind, the provider if known, the reference, and the end date (the start date is optional).
+3. If you checked it against the provider or a document, turn on **I checked this against the provider or a document**.
+4. Select **Add coverage**.
+
+On a record, **Change** edits it and **Verify** records that you checked it, with a note of what you checked it against. A changed record is unverified again unless you verify it in the same change.
+
+### How the asset's warranty date follows
+
+The asset's **Warranty ends** date is the latest end date among its active **manufacturer** and **extended warranty** records. You can't type it directly; it follows the records.
+
+Entering a warranty date on the asset form, through the public API, in an import or on a stock receipt creates or updates one record for that asset, with that source. Clearing the date there ends that record. Support contracts and other cover don't change the warranty date.
+
+### End a record
+
+Select **End** and give a reason. The record is kept, no longer counts as cover, and can't be changed afterwards. Coverage records are never deleted.
+
+## Maintenance
+
+### Schedule maintenance
+
+1. On the asset's **Service** tab, under **Maintenance**, select **Schedule maintenance**.
+2. Enter a **Title**, choose the **Kind** (**Preventive**, **Inspection**, **Calibration** or **Other**) and add any instructions.
+3. Under **Repeats**, set the interval: every so many days, weeks, months or years.
+4. Choose what the **Next date follows**: **From the due date** or **From completion** (see below).
+5. Choose the **First due on** date.
+6. Set **Remind** to the number of days before the due date. It starts from your organisation's default.
+7. Optionally choose who is **Responsible**: a staff member or a supplier.
+8. Select **Schedule**.
+
+A plan always has exactly one piece of work scheduled, its next occurrence, with a number such as `MW-0001`.
+
+**From the due date** keeps a steady calendar. **From completion** counts from the day the work was done. For a plan every 3 months, first due on 10 January, completed late on 25 January:
+
+| Basis | Next due |
+| --- | --- |
+| **From the due date** | 10 April |
+| **From completion** | 25 April |
+
+**Month and year intervals keep the day of the month.** In a short month the work falls on the last day. A monthly plan from the due date, first due on 31 January, is next due on 28 February (29 in a leap year), then 31 March.
+
+To change a plan, select **Change**. Changes apply from the next occurrence; the work already scheduled keeps its due date and responsible person. **Pause** keeps the scheduled work but stops its reminders; **Resume** starts them again. **End** cancels the scheduled work and can't be undone; schedule a new plan if you need one.
+
+### Record one-off work
+
+Select **Record work** for reactive maintenance that isn't part of a plan. Give it a title, a kind (including **Corrective**), a due date and optionally a responsible person or supplier and a ticket.
+
+### Complete, skip or cancel work
+
+Work can be done from the asset's Service tab or from **Assets → Maintenance**.
+
+- **Start** marks it **In progress** (optional).
+- **Complete** records the day it was done (not after today), who did it (a staff member or a supplier), **What was done** as the evidence kept with the record, and optionally a cost, currency and ticket. For planned work, the next occurrence is scheduled at the same time.
+- **Skip** (planned work only) needs a reason. The next occurrence is scheduled from this one's due date.
+- **Cancel** (one-off work only) needs a reason. Nothing new is scheduled.
+
+Completed, skipped and cancelled work is never overdue. The asset's maintenance section shows the date of the last completed work.
+
+### Assets → Maintenance
+
+**Assets → Maintenance** lists work across all the assets you can see:
+
+| View | Shows |
+| --- | --- |
+| **Overdue** | Open work whose due date has passed, in your organisation's time zone |
+| **Due soon** | Work whose reminder lead has started, up to and including today |
+| **Upcoming** | Work due later |
+| **Finished** | Completed, skipped and cancelled work |
+| **Plans** | Active and paused plans, or ended plans |
+
+Select a work number to see its details, evidence and history.
+
+## Reminders
+
+Open **Settings → Asset service** to set:
+
+- **Coverage reminders**: up to three reminders, in days before a record's end date (90 and 30 by default), plus one shortly after it ends. Changing a record's dates, or verifying it, starts its reminders again.
+- **Notices**: whether asset managers who may see the asset's client get in-app notices for coverage reminders and overdue maintenance. The person responsible for a piece of maintenance is always told when it is coming up, due and overdue.
+- **Maintenance**: the default reminder lead for new plans and one-off work. Each plan keeps its own lead.
+
+Enter a reason if you like and select **Publish**. Each publication is a new version in **Version history** and applies from the next reminder run. Reminders already sent are not repeated. Reminders run every 15 minutes, and each is sent once.
+
+Reminders are in-app notices and webhooks. They never change anything. These events are available to webhook subscribers:
+
+| Event | Sent when |
+| --- | --- |
+| `asset.warranty_expiring` | A coverage reminder is due, before or after the end date |
+| `asset.maintenance_scheduled` | A piece of maintenance work is created |
+| `asset.maintenance_overdue` | Maintenance work becomes overdue |
+| `asset.maintenance_completed` | Maintenance work is completed |
+| `asset.repair_opened` | A repair case opens |
+| `asset.repair_closed` | A repair case closes |
+
+## Permissions
+
+| To | You need |
+| --- | --- |
+| See repair cases, coverage and maintenance | Asset view permission |
+| Report a fault, send for repair, record parts and claims, close or cancel a case | Asset edit permission |
+| Issue a loaner from stock | Asset edit permission and stock access (stock adjustment or inventory management), without a client restriction |
+| Add, change, verify and end coverage | Asset edit permission |
+| Schedule and change plans, record and complete work | Asset edit permission |
+| Publish **Settings → Asset service** | Settings management and asset view permissions, without a client restriction |
+| Approve a return to service | Being one of the custody approvers, and not the person who asked |
+
+Staff limited to one client see and act on that client's assets only. Customers don't see repairs, coverage or maintenance in the portal.
+
+## Resolve common problems
+
+| Problem | What to check |
+| --- | --- |
+| "This asset is in repair. Return it from repair first." | The asset must come back from repair on its **Custody** tab before it can be checked out, transferred or recorded as lost. |
+| "Close or cancel it before sending the asset again" | The asset's last case is back from repair but still open. Close it with the outcome, or cancel it, then send the asset again. |
+| **Close case** is refused because the asset is still in repair | Return it from repair on its **Custody** tab (or check a stock unit in to stock) first. |
+| **Cancel case** is refused | The asset is in repair. Cancel before it is sent, or once it is back. |
+| Issuing a loaner is refused because it needs approval | Your stock approval settings cover issues. Issue the unit from its stock item so it can be approved, then use **Link a loan**. |
+| Issuing a loaner needs stock access | Ask someone with stock access to issue the unit from the stock item, then link the loan to the case. |
+| Closing asks about the loaner | The loaner is still with the person. Check it in from its page, or record why it is kept. |
+| A fault can't be reported on an archived asset | Restore the asset first. |
+| The return to service is waiting | **Return to service** approval is on. Another custody approver decides it in **Assets → Reviews**. |
+| The asset's warranty date can't be edited directly | It follows the coverage records. Add or change a manufacturer or extended warranty record on the **Service** tab. |
+| **Warranty ends** shows Unknown | No active warranty record covers the asset. Add one if you know the dates. |
+| No maintenance reminders arrive | Check the plan isn't paused, and that someone is responsible or that **Tell asset managers** is on for overdue work. |
+
+## Current limits
+
+- Enduria doesn't look up warranties from manufacturers. Coverage dates are what people, imports, the API or stock receipts record.
+- Recording a part on a case doesn't take it from stock. Issue stock parts separately, against the case's ticket.
+- Reminders are in-app notices and webhooks only. There are no email reminders.
+- Maintenance follows the calendar. There is no maintenance based on meters or usage.
+- Customers don't see repairs or coverage in the portal.
+- There are no supplier portals, shipping labels or repair SLAs.

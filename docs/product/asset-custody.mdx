@@ -64,6 +64,8 @@ An asset of a tracked catalogue model that belongs to your organisation joins [i
 
 Choose **Send for repair** to hand the asset to a supplier or your own repair bench, and **Return from repair** when it comes back. See [Send an asset for repair](./asset-statuses#send-an-asset-for-repair). While an asset is in repair it can't be checked out or transferred.
 
+To record the fault, the supplier's RMA reference, a loaner, the parts changed, the outcome and cost, and any warranty claim, use a [repair case](./asset-repairs-and-maintenance#repair-cases) (awaiting rollout). Sending for repair here opens one automatically.
+
 ## Review custody history
 
 The **Custody history** section lists every change, newest first, with who made it, when, and the before and after custodian. Changes made through an integration or an import are labelled with their source.
@@ -90,7 +92,8 @@ Archived assets keep their custody history, which stays readable. Restore an arc
 
 Approval of custody changes, loan reminders and recovery lists for leavers are described in [Custody approval, loans and leavers](./asset-loans-and-leavers) (awaiting rollout). This release does not yet provide:
 
-- reminders for unanswered [acceptances](./asset-acceptance);
-- repair records with costs, RMA numbers or loaner devices.
+- reminders for unanswered [acceptances](./asset-acceptance).
+
+Repair records with costs, RMA numbers and loaner devices are described in [Repairs, coverage and maintenance](./asset-repairs-and-maintenance) (awaiting rollout).
 
 The earlier **Require approval for asset assignment** and **Track assignment history** settings were never enforced and have been retired. Custody history is always recorded.
