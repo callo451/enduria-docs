@@ -1,0 +1,89 @@
+---
+title: Client stock and hardware billing
+description: Hold stock for clients at their sites, and bill hardware that moves between your stock and a client through a finance review queue. For managed service providers.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Client stock and hardware billing
+
+For managed service providers, stock that leaves your organisation for a client is a commercial event. Enduria records it as a **sale** (or, when stock comes back, a **return**) and puts it in a review queue for finance. **Nothing is invoiced automatically.**
+
+<Admonition type="info" title="Awaiting rollout">
+
+Client stock and hardware billing require a future application release. This guide describes the intended behaviour for that release; publishing documentation does not change your workspace.
+
+</Admonition>
+
+Internal IT organisations don't see any of this: their stock always belongs to the organisation.
+
+## Who owns stock
+
+Ownership follows the stockroom:
+
+- Stock in **your stockrooms** is yours.
+- Stock at a **client's site** that holds stock is that client's. To set one up, open **Settings → Locations**, edit (or add) a location, choose the client under **Client site**, and turn on **Holds stock**.
+
+Your inventory totals (on hand, available, reorder alerts, reservations and purchasing) count **only your own stock**. Stock you hold for clients appears on each item under **Stock by place**, labelled with the client, and on the client's **Stock** tab.
+
+## What records a sale or a return
+
+| What happens | Records |
+| --- | --- |
+| A unit is issued from your stock to a client's contact, or to staff working for that client | A sale |
+| Stock from your stockroom is issued or consumed for a client's ticket | A sale |
+| A transfer order from your stockroom is received at a client's site | A sale |
+| A client's unit is checked back in to your stockroom from its **Stock** card | A return; the unit becomes yours again |
+| Stock is returned to your stockroom for a client's ticket | A return |
+| A transfer order from a client's site is received at your stockroom | A return |
+
+Moves between one client's own sites, stock used at a client's site for that client's tickets, and anything that stays inside your organisation record nothing. Stock moves between two different clients only through your own stockroom.
+
+The dialogs say when a sale or return will be recorded, before you confirm.
+
+## Prices
+
+A sale takes the price of the **billing product linked to the item's model** (Settings → Models), fixed at the moment the stock moved. A later price change doesn't affect it. A returned unit takes the price of the sale it reverses.
+
+If no billing product is linked, the item arrives **without a price**. Finance sets it once in the queue, and that is recorded with their name. To price a model automatically from then on, link a billing product to it.
+
+## Review hardware to bill
+
+Open **Billing & invoices** and select **Hardware to bill**. Items to review are grouped by client. Select one or more and choose:
+
+- **Add to invoice** (sales of one client, all priced, in one currency): put them on a **new draft invoice** for the client, or on one of the client's existing drafts in the same currency. Each item becomes a product line with what was supplied, including the asset tag and serial number. Review and send the invoice as usual.
+- **Covered by agreement** (sales of one client): choose one of the client's active agreements, with an optional note.
+- **Waive**: give a reason.
+- **Record credit** (returns): credits are issued in your accounting system; record the credit note or reference here. A return also shows the state of the sale it reverses, so a sale that was never billed and its return can both be waived.
+
+If an invoice line that bills an item is removed, its draft is deleted, or the invoice is voided, the item goes back to **To review** automatically, so nothing is lost or billed twice.
+
+**Done** lists what was decided, by whom and when, with links to invoices.
+
+### Permissions
+
+| To | You need |
+| --- | --- |
+| See the queue | Invoice view permission |
+| Price, invoice, cover, waive or credit | Invoice edit permission |
+| Start a new draft invoice from the queue | Invoice create permission too |
+
+Billing staff limited to one client see and act on that client's items only. Portal users never see the queue. Setting up client sites and moving stock use the usual inventory permissions.
+
+## Resolve common problems
+
+| Problem | What to check |
+| --- | --- |
+| **Add to invoice** isn't offered | Select sales of a single client. Returns can't go on an invoice. |
+| "Set a price on every item" | Some selected items have no price. Use **Set price**, or link a billing product to the model. |
+| A draft isn't listed | Only the client's drafts in the items' currency are offered, and drafts created from quotes aren't. |
+| "Only this client's own units are kept in stock at its site" | Send your stock to a client's site with a transfer order, which records the sale. |
+| "Use it only for that client's tickets" | Stock at a client's site belongs to that client. |
+| "Stock moves between two clients only through organization stock" | Transfer it back to your stockroom first (a return), then on to the other client (a sale). |
+
+## Current limits
+
+- Credits are recorded against their accounting reference; Enduria doesn't create credit notes.
+- Agreement billing doesn't pick up hardware automatically; mark covered items yourself.
+- There is no consignment stock, client-owned stock in the portal, or purchase order raised for a client.
+- Staff limited to one client still can't use inventory.
