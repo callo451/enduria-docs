@@ -1,0 +1,113 @@
+---
+title: Custody approval, loans and leavers
+description: Optionally require a second person to approve custody changes, remind people to return loaned assets, and recover assets from people who leave. Approval is off by default.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Custody approval, loans and leavers
+
+These settings build on the [custody record](./asset-custody). They let you:
+
+- require a **second person's approval** for chosen custody changes, such as handing a laptop to someone;
+- set a **default loan period** and **remind** people before, on and after an asset is due back;
+- open a **recovery list** of everything a person still holds when they leave.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Custody approval, loan reminders and recovery lists require a future application release. This guide describes the intended behaviour for that release; publishing documentation does not change your workspace.
+
+</Admonition>
+
+**Nothing needs approval until an administrator turns a rule on.** Loan reminders use a sensible default schedule, and only apply to assets checked out with a due date.
+
+## Set the policy
+
+You need settings-management and asset-view permissions, without a client restriction.
+
+1. Open **Settings → Asset custody**.
+2. Under **Approval**, turn on the changes that need a second person:
+   - **Hand-overs to a person**: checking out, transferring, recording as found, or returning from repair to a staff member or customer contact.
+   - **Transfers between people**: only when an asset moves straight from one person to another.
+   - **Long loans**: a hand-over, or a loan extension, due back more than the number of days you enter.
+   - **Recording as lost**.
+3. Optionally, under **Categories**, choose the asset categories the rules apply to. With none chosen, the rules apply to every asset.
+4. If any rule is on, choose **Who approves**: any asset manager, named people, or members of chosen staff roles. Approvers need asset view, edit and manage permissions. You can add review reminders and a deadline, as for [asset approvals](./asset-approvals).
+5. Under **Loans and reminders**, set the default loan, the reminder schedule and whether asset managers are told about overdue loans.
+6. Under **Leavers**, choose whether a recovery list opens automatically when someone holding assets is deactivated.
+7. Enter why you are making the change (at least 10 characters) and select **Publish**.
+
+Each publication is a new version kept in **Version history**. It applies to custody changes from then on; requests already waiting keep the approvers they were sent with.
+
+Checking in, moving between stockrooms, sending for repair and recording condition never need approval, so an asset can always come back.
+
+## Approve a custody change
+
+When someone makes a change that a rule covers, **nothing moves yet**. The change is sent for approval and shown on the asset's **Custody** tab as **Awaiting approval**, with what was asked, who asked and why approval is needed. It also appears in **Assets → Reviews** as **Custody change approval**.
+
+- An eligible approver **other than the person who asked** selects **Approve** or **Reject**. Rejecting needs a reason.
+- The person who asked can **Withdraw** it, with a reason.
+- An approved change happens once, exactly as it was asked, recorded as the requester's change with the approver noted.
+- If the asset's custody changed after the request was made, or the requester has lost permission to change assets, approving it doesn't apply it: the request is marked **No longer applies**, and someone asks again.
+
+An asset can have one change waiting at a time; its other custody actions are hidden until that request is decided.
+
+Approval applies to every way custody can change. Editing an asset's assignee, the public API, creating an asset with an assignee and imports refuse a change that needs approval, with a message to request it from the **Custody** tab. Issuing a unit from [inventory stock](./inventory) to a person goes through your stock approval instead, and an approved custody request counts as that approval.
+
+## Loans
+
+A loan is a check-out to a person with a **Due back** date. When a default loan is set, the date is filled in for you when you check out to a person; you can change or clear it.
+
+To change the date, open the asset's **Custody** tab and select **Extend loan**, choose the new date and give a reason. An extension longer than your **Long loans** limit needs approval. Checking the asset in ends the loan.
+
+**Assets → Loans** lists every asset on loan, soonest due first, with an **Overdue** view. Staff with a client restriction see only that client's loans.
+
+### Reminders
+
+Reminders follow the policy in force:
+
+| When | Who is told |
+| --- | --- |
+| The chosen number of days before the due date (default 3) | The holder |
+| On the due date (default on) | The holder |
+| From the day after the due date, repeated at the chosen interval (default every 7 days) | The holder, and asset managers in the app if you turned that on |
+
+Staff holders get an in-app notification. Staff and customer contacts get an email when your organisation's email is set up and their own email preferences for assigned assets allow it, outside their quiet hours. Each reminder is sent at most once; if an email send is interrupted it is recorded as uncertain and not repeated. Reminders never return or move anything.
+
+## Leavers
+
+When a person who holds assets is deactivated, a **recovery list** opens in **Assets → Offboarding** within a minute (if your policy says so), and asset managers are told in the app. You can also select **Open a list** for anyone, for example before their last day.
+
+A recovery list shows:
+
+- **Still held**: what the person holds now, with loans and anything handed to them since the list opened;
+- **Held when the list opened**, each marked **Recovered** or **Still held**.
+
+Record each return on the asset's **Custody** tab as usual. **Nothing is returned automatically.** To track the work, select **Open a recovery ticket**: an ordinary ticket in your default ticket priority, linked to the assets still held (you need permission to create tickets, and a default ticket priority must be set).
+
+A list closes itself when the person no longer holds anything. You can close it earlier with a note, for example when an item is written off; closing a list doesn't change custody.
+
+Recovery lists are managed by staff with asset access and no client restriction; opening and closing them needs asset-edit permission.
+
+## Webhooks and event rules
+
+Three events are available to webhook subscribers: `asset.returned`, `asset.lost` and `asset.loan_overdue` (sent once per loan when it becomes overdue). `asset.assigned` is unchanged.
+
+Custody changes are also sources for [asset event rules](./asset-event-rules) and [follow-up tickets](./asset-follow-up-tickets): issued to a person, returned, lost, found and overdue.
+
+## Resolve common problems
+
+| Problem | What to check |
+| --- | --- |
+| "… need approval in this organization. Ask for it on the asset's Custody tab" when editing an asset or importing | A rule covers the change. Make it from the asset's **Custody** tab, which sends it for approval. |
+| You can't approve a request | You asked for it, you don't have asset view, edit and manage permissions, or you aren't one of the chosen approvers. |
+| A request shows **No longer applies** | Custody changed after it was requested. Ask again from the **Custody** tab. |
+| Holders don't get reminder emails | Your organisation's email isn't set up, or the person turned off email for assigned assets. In-app reminders still appear for staff. |
+| **Open a recovery ticket** is missing | You need permission to create tickets, the list must be open, and the person must still hold something. |
+| A recovery ticket can't be opened | Set a default ticket priority in ticket settings. |
+
+## Current limits
+
+- Asset managers are told about overdue loans and new recovery lists in the app only, not by email.
+- Editing an asset, the public API and imports refuse a change that needs approval; they don't queue it for approval.
+- There are no loaner pools, borrower agreements beyond [acceptance](./asset-acceptance), or automatic returns when someone leaves.
