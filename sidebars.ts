@@ -7,7 +7,7 @@ const sidebars: SidebarsConfig = {
     {type: 'category', label: 'Using Enduria', link: {type: 'doc', id: 'product/overview'}, items: [
       'product/tickets',
       {type: 'category', label: 'Asset management', link: {type: 'doc', id: 'product/assets'}, items: [
-        'product/asset-imports', 'product/asset-custody', 'product/asset-acceptance', 'product/asset-loans-and-leavers', 'product/asset-statuses', 'product/asset-lifecycle', 'product/asset-approvals', 'product/asset-event-rules', 'product/asset-follow-up-tickets', 'product/inventory', 'product/stock-reservations', 'product/purchase-orders', 'product/supplier-invoices', 'product/client-stock-and-billing', 'product/counts-and-audits', 'product/asset-repairs-and-maintenance',
+        'product/asset-imports', 'product/asset-data-quality', 'product/asset-custody', 'product/asset-acceptance', 'product/asset-loans-and-leavers', 'product/asset-statuses', 'product/asset-lifecycle', 'product/asset-approvals', 'product/asset-event-rules', 'product/asset-follow-up-tickets', 'product/inventory', 'product/stock-reservations', 'product/purchase-orders', 'product/supplier-invoices', 'product/client-stock-and-billing', 'product/counts-and-audits', 'product/asset-repairs-and-maintenance',
       ]},
       'product/projects', 'product/knowledge-base', 'product/customer-portal', 'product/email-notifications',
     ]},

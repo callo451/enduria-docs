@@ -1,0 +1,142 @@
+---
+title: Data quality and duplicates
+description: Review devices that look like assets you already have, merge duplicate records, keep the facts you typed, and find assets whose devices stopped reporting.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Data quality and duplicates
+
+**Assets → Data quality** lists the records that need a person's decision: devices waiting to be matched, assets that look like duplicates, sources that stopped reporting, facts that disagree, and incomplete records. Nothing on this page changes an asset until you act.
+
+<Admonition type="info" title="Awaiting rollout">
+
+The data-quality inbox, held devices, merging and asset sources require a future application release. This guide describes the intended behaviour for that release; publishing documentation does not change your workspace.
+
+</Admonition>
+
+## Where an asset's facts come from
+
+An asset can be recorded by hand, imported, created by a device-management connection (such as Fleet or Microsoft Intune), or reported by the Enduria agent. Each connection device and each agent that reports an asset is a **source**. The **Sources** card on the asset's page lists them with their state:
+
+| State | Meaning |
+| --- | --- |
+| **Reporting** | The source has reported recently. |
+| **Missing** | The device was not in its connection's last complete sync. |
+| **Silent** | The agent hasn't reported within your organisation's threshold. |
+| **Unenrolled** | The agent's credential was revoked while the asset is still in use. |
+| **Detached** | Someone detached the source. It no longer updates the asset. |
+
+One source is the asset's **identity** source: the one that created the asset, the first one linked to it, or the one whose value you chose. Only that source updates the serial number, manufacturer and model. Other details, such as hardware, operating system and network facts, are updated by every source.
+
+### Facts you type are kept
+
+When you change an asset's **serial number**, **manufacturer** or **model**, your value is kept: no connection or agent overwrites it. The asset's edit page says so beside those fields, and the Sources card lists the facts set by a person.
+
+If a source later reports a different value, the inbox shows a **Fact conflict**. You can:
+
+- **Use this value**: the asset takes the source's value, and that source keeps it up to date from then on.
+- **Keep the recorded value**: your value stays. The conflict is dismissed until the source reports something different again.
+
+## Devices waiting to be matched
+
+When a connection finds a new device that looks like an asset you already have, it doesn't create an asset. The device waits in the inbox as a **Possible match**, with what it reported and the assets it resembles. A device looks like an asset when they share:
+
+- the same serial number (ignoring case, spaces and placeholder values such as `To be filled by O.E.M.`);
+- the same hardware ID;
+- or the same network adapter address (ignoring virtual and randomised addresses).
+
+Devices are only ever compared with assets of the **same client** as the connection. A connection without a client is compared with your organisation's own assets.
+
+For each waiting device, either:
+
+- **Link to** an asset: the device's connection updates that asset from now on. Empty facts on the asset take the device's values; facts that differ are kept as yours and shown as a conflict.
+- **Create a new asset**: the device becomes its own asset, as if the connection had created it.
+
+A waiting device that disappears from its connection's next complete sync is removed from the inbox. If it comes back, it waits again.
+
+New devices that match nothing are created as usual.
+
+## Duplicate assets
+
+The inbox shows a **Possible duplicate** when two active assets of the same client share a serial number, hardware ID or network adapter address. Assets of different clients are never shown as duplicates and are never merged.
+
+If they are the same device, merge them:
+
+1. Select **Merge…** on the item.
+2. Choose the asset to keep.
+3. Where the two records differ on serial number, manufacturer or model, choose which value to keep.
+4. Select **Merge into** the asset you kept.
+
+The other asset's sources move to the asset you kept, and the other asset is archived as **Merged into** it. Its history, custody records and tickets stay on it.
+
+A merge is refused while the asset being merged away:
+
+- is held by a person (check it in first);
+- is a stock unit;
+- is in repair or has an open repair case;
+- has an open disposal request or a disposal hold;
+- is in an open audit;
+- or has a pending custody request.
+
+If they are different devices, select **Not the same device** and give a reason. The pair stays dismissed until its evidence changes.
+
+### Undo a merge
+
+Restore the merged asset through **Disposal and holds → Restoration**, which needs its own independent approval (see [Asset lifecycle](./asset-lifecycle)). Then select **Unmerge** on its Sources card. The sources that moved in the merge, and are still on the asset you kept, move back.
+
+## Sources that stopped reporting
+
+| Item | Raised when |
+| --- | --- |
+| **Source missing** | A device was absent from its connection's last complete sync. A sync that failed or stopped part-way never marks anything missing. |
+| **Agent silent** | The agent hasn't reported for longer than your threshold. |
+| **Agent unenrolled** | The agent's credential was revoked while the asset is still active. |
+
+Nothing happens to the asset by itself. Decide what the silence means:
+
+- **Detach source** when the device was re-imaged, replaced or removed from the connection. Give a reason. A detached connection device is never linked again or recreated. Detaching an agent also revokes its credential.
+- **Open custody** to mark the asset lost.
+- **Start disposal** if the device is gone for good.
+- **Dismiss** with a reason if it's expected, such as a laptop on long leave.
+
+An item clears itself when the source reports again.
+
+### Set the agent threshold
+
+1. Go to **Settings → Asset settings**.
+2. Under **Data quality**, set **Agent silent after** to a number of days from 1 to 365. The default is 14.
+3. Select **Save**.
+
+Only administrators can change it, and each change is recorded in the audit log. Connection devices go missing after one complete sync without them; that has no setting.
+
+## Incomplete records
+
+| Item | Raised when | What to do |
+| --- | --- | --- |
+| **Missing client** | In an MSP organisation, an asset reported by a connection or agent has no client. | Edit the asset and choose its client, or dismiss. |
+| **Missing custodian or location** | An asset in use has neither a custodian nor a location. | Open custody, or dismiss. |
+| **Default category** | An imported asset is still in the category the import gives every new device. | Edit the asset and choose its category, or dismiss. |
+
+A dismissed item stays dismissed until its evidence changes. Use the **State** filter to see dismissed and resolved items.
+
+## Enrolling agents for a client
+
+An enrollment token can name a client. An agent enrolled with it creates its asset in that client. A token issued for an existing asset uses that asset's client.
+
+Enrollment records only what the agent reports. If the agent doesn't report a manufacturer or model, those stay empty rather than being guessed.
+
+## Who can do what
+
+| Action | Permission |
+| --- | --- |
+| Read the inbox and an asset's sources | **View assets** |
+| Link, create, detach, keep or use a value, dismiss | **Edit assets** |
+| Merge and unmerge | **Manage assets** |
+| Change the agent threshold | **Manage settings** |
+
+Staff bound to a client see and act on that client's items only. Every decision records who made it and appears in the asset's **History**, under **Sources and merges**.
+
+## When the inbox is updated
+
+The inbox is checked after every connection sync, agent enrollment and inbox decision, and every 15 minutes for everything else, such as edits, custody changes and silent agents. Select **Check now** to check immediately.

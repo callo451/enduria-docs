@@ -31,6 +31,7 @@ An administrator's title does not bypass these limits. See [users and permission
 | Notify staff about retained asset events | [Configure asset event rules](./asset-event-rules) (awaiting rollout) |
 | Create independently reviewed follow-up work from an event | [Create asset follow-up tickets](./asset-follow-up-tickets) (awaiting rollout) |
 | Recover a pending review when its reviewers cannot act | [Restart or reassign a review](./asset-approvals#restart-or-reassign-a-pending-review) (awaiting rollout) |
+| Review devices that match existing assets, merge duplicates and find devices that stopped reporting | [Data quality and duplicates](./asset-data-quality) (awaiting rollout) |
 | Connect a device-management provider | [Integrations](../admin/integrations) |
 | Integrate through the public API | [Assets API guide](../api/resources/assets) |
 
@@ -156,7 +157,7 @@ A half-finished form is kept in your browser as a draft, so you can return to it
 You need asset-edit permission. Open the asset and select **Edit**. Only the fields you change are saved.
 
 - **Who holds the asset is not on this form.** To check an asset out, in or to someone else, use the asset's **Custody** tab (see [Track asset custody](./asset-custody)). For an asset in storage, the location shows its stockroom; move it with a custody check-in.
-- **Facts the device reports are read-only.** When the agent or a connector reports the manufacturer, model or serial number, the form shows it but doesn't change it, because the next report would replace your edit.
+- **Facts the device reports.** In the current release, when the agent or a connector reports the manufacturer, model or serial number, the form shows it but doesn't change it. With [data quality](./asset-data-quality) (awaiting rollout), you can edit them and your value is kept: no connector or agent overwrites it, and a differing report appears in the inbox as a conflict.
 - **If someone else changed the same field while you were editing,** nothing is saved. The form names the fields they changed. Select **Load their changes** to take their values for those fields; your other changes stay. Then check and save again.
 
 Clear an optional field only when you intend to remove its value. Clearing purchase cost does not automatically clear purchase currency. A status can be any status of the asset's current state; custody and the [archive, disposal or restoration process](./asset-lifecycle) change the state.
@@ -230,5 +231,6 @@ Agent enrollment administration is restricted to authorised organisation-wide st
 | **These records changed since you reviewed them** | Refresh **Unlinked records** and review the group again. Nothing was linked. |
 | A tag conflicts | Another record may already use it. Choose a unique tag or use automatic allocation. |
 | A report has no combined cost | Review unknown currencies, mixed currencies and missing purchase costs. |
-| Imported device details change again | Check which fields the connector maintains. |
+| Imported device details change again | Check which fields the connector maintains. With [data quality](./asset-data-quality), a serial number, manufacturer or model you typed is kept. |
+| A connected device didn't create an asset | It may match an asset you already have. Check **Assets → Data quality** (awaiting rollout). |
 | A control described in a guide is absent | Check the guide's availability note and your service version with your administrator. |
