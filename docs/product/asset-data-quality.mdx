@@ -33,7 +33,7 @@ One source is the asset's **identity** source: the one that created the asset, t
 
 When you change an asset's **serial number**, **manufacturer** or **model**, your value is kept: no connection or agent overwrites it. The asset's edit page says so beside those fields, and the Sources card lists the facts set by a person.
 
-If a source later reports a different value, the inbox shows a **Fact conflict**. You can:
+If a source later reports a different value, the inbox lists **Conflicting facts**. You can:
 
 - **Use this value**: the asset takes the source's value, and that source keeps it up to date from then on.
 - **Keep the recorded value**: your value stays. The conflict is dismissed until the source reports something different again.
@@ -83,14 +83,14 @@ If they are different devices, select **Not the same device** and give a reason.
 
 ### Undo a merge
 
-Restore the merged asset through **Disposal and holds → Restoration**, which needs its own independent approval (see [Asset lifecycle](./asset-lifecycle)). Then select **Unmerge** on its Sources card. The sources that moved in the merge, and are still on the asset you kept, move back.
+In **Archive**, the merged asset is marked **Merged into** the asset you kept. Restore it; restoration needs its own independent approval (see [Archive, restore and dispose of assets](./asset-lifecycle)). Then open the restored asset and select **Unmerge** on its Sources card. The sources that moved in the merge, and are still on the asset you kept, move back.
 
 ## Sources that stopped reporting
 
 | Item | Raised when |
 | --- | --- |
 | **Source missing** | A device was absent from its connection's last complete sync. A sync that failed or stopped part-way never marks anything missing. |
-| **Agent silent** | The agent hasn't reported for longer than your threshold. |
+| **Agent not reporting** | The agent hasn't reported for longer than your threshold. |
 | **Agent unenrolled** | The agent's credential was revoked while the asset is still active. |
 
 Nothing happens to the asset by itself. Decide what the silence means:
@@ -115,7 +115,7 @@ Only administrators can change it, and each change is recorded in the audit log.
 | Item | Raised when | What to do |
 | --- | --- | --- |
 | **Missing client** | In an MSP organisation, an asset reported by a connection or agent has no client. | Edit the asset and choose its client, or dismiss. |
-| **Missing custodian or location** | An asset in use has neither a custodian nor a location. | Open custody, or dismiss. |
+| **No custodian or location** | An asset in use has neither a custodian nor a location. | Open custody, or dismiss. |
 | **Default category** | An imported asset is still in the category the import gives every new device. | Edit the asset and choose its category, or dismiss. |
 
 A dismissed item stays dismissed until its evidence changes. Use the **State** filter to see dismissed and resolved items.
