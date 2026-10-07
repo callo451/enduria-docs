@@ -19,16 +19,16 @@ Configurable disposal reviewers, the **Asset reviews** inbox and audited review 
 
 These screens are for staff, not customer portal accounts. You need `assets.view` and access to the asset's current customer scope. The following permissions are additional:
 
-| Task | Required permission |
-| --- | --- |
-| Archive an asset | `assets.delete` |
-| Request restoration or disposal; record disposal evidence | `assets.edit` |
-| Approve or reject restoration | `assets.edit` and `assets.manage` |
-| Approve or reject disposal | `assets.manage` |
-| Verify disposal and archive | `assets.manage` and `assets.delete` |
-| Place or release a hold | `assets.manage` |
+| Task | Current release | With approval routing (awaiting rollout) |
+| --- | --- | --- |
+| Archive an asset, or request it when archive approval is on | `assets.delete` | `assets.archive` |
+| Request restoration | `assets.edit` | `assets.restore` |
+| Request disposal; record disposal evidence | `assets.edit` | `assets.dispose` |
+| Approve or reject restoration | `assets.edit` and `assets.manage` | `assets.manage` and `assets.review` |
+| Approve, verify or reject disposal | `assets.manage` (verification also `assets.delete`) | `assets.manage` and `assets.review` |
+| Place or release a hold | `assets.manage` | `assets.manage` |
 
-Where [reviewer policies](./asset-approvals.mdx) apply, the reviewer must also qualify under the policy retained with that request. Configured disposal verification reviewers need `assets.delete` even when rejecting submitted evidence. Selecting a reviewer does not grant permissions, and an administrator cannot approve their own request.
+With approval routing, everyone who can do a task today receives its new key once, so nobody loses access. Where [approval routing](./asset-approvals.mdx) applies, a reviewer must also be on the stage retained with that request. Selecting a reviewer does not grant permissions, and nobody approves their own request.
 
 Archiving moves an asset to the **Retired** [state](./asset-statuses), and verified disposal to **Disposed**, each with that state's default status. Restoration returns it to the state its custody implies. A status name alone does not establish that a device was returned, sanitised or destroyed.
 
@@ -42,7 +42,7 @@ When enabled, **Retained asset events** in asset history and archive/disposal de
 
 The asset leaves the active register and remains available under **Assets → Archive**. Existing agent credentials are revoked, and commands that have not been dispatched are stopped. Work already delivered to a device may still execute.
 
-Archiving keeps the recorded customer, custody, location, costs, inventory membership and related evidence, and moves the asset to **Retired**. It does not return stock, release an assignment or verify disposal. Ordinary archiving uses a confirmation; it does not create an independent approval request.
+Archiving keeps the recorded customer, custody, location, costs, inventory membership and related evidence, and moves the asset to **Retired**. It does not return stock, release an assignment or verify disposal. Ordinary archiving uses a confirmation. With [archive approval](./asset-approvals.mdx#decide-whether-archiving-needs-approval) on (awaiting rollout), **Archive asset** instead asks for a reason and submits a request; the asset's **Archive requests** card shows its stages, and the last approval archives it.
 
 ## Request restoration
 

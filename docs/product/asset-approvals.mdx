@@ -1,101 +1,123 @@
 ---
 title: Configure asset approvals and review timing
-description: Choose asset reviewers, publish policies for future requests, and use the asset review inbox.
+description: Route archive, restoration and disposal approvals by client, category and state, through up to three stages with several approvals, and use the asset review inbox.
 ---
 
 import Admonition from '@theme/Admonition';
 
 # Configure asset approvals and review timing
 
-Use **Settings → Asset approvals** to choose who may review restoration requests and, when available, each disposal phase. Policies retain the selected rules with each request, so later edits do not change work already awaiting review.
+Use **Settings → Asset approvals** to decide who approves archiving, restoration, disposal approval and disposal verification. Each request keeps the route it was given when it was submitted, so later edits never change work already waiting for review.
 
-<Admonition type="info" title="Availability">
+<Admonition type="info" title="Awaiting rollout">
 
-You can configure restoration reviewers as described below. The **Disposal** policy selector, **Asset reviews** inbox, reminders, deadlines, escalation controls and audited review corrections described below are awaiting release. Publishing this guidance does not deploy these application features.
+Routing rules, stages with several approvals, archive approval and the asset permission keys below (`assets.archive`, `assets.restore`, `assets.dispose`, `assets.review`) require a future application release. Until then, restoration and disposal each have one reviewer selection and one independent decision. Publishing this guidance does not deploy these application features.
 
 </Admonition>
 
 ## Before you start
 
-Publishing policies requires a staff account with `settings.manage` and access across the organisation, without a customer-specific account binding. Customer portal accounts cannot manage these settings. An administrator role name alone does not override the permission checks.
+Publishing requires a staff account with `settings.manage` and access across the organisation, without a customer-specific account binding. Customer portal accounts cannot manage these settings. An administrator role name alone does not override the permission checks.
 
-Open **Settings → Asset approvals**. You can also follow **Configure restoration approvals** from **Assets → Archive** if your account has the required access.
+Open **Settings → Asset approvals**, then choose **Archive**, **Restoration**, **Disposal approval** or **Disposal verification** at the top. You can also follow **Configure restoration approvals** from **Assets → Archive**.
 
-Reviewers need the following current permissions:
+People need these current permissions:
 
-| Review phase | Required permissions |
+| To | Permissions |
 | --- | --- |
-| Restoration | `assets.view`, `assets.edit`, `assets.manage` |
-| Disposal approval | `assets.view`, `assets.manage` |
-| Disposal verification | `assets.view`, `assets.manage`, `assets.delete` |
+| Archive an asset, or request it when archive approval is on | `assets.archive` |
+| Request a restoration | `assets.restore` |
+| Request a disposal, record its evidence or cancel it | `assets.dispose` |
+| Decide any approval stage | `assets.view`, `assets.manage` and `assets.review` |
 
-Named and role-selected reviewers must be active staff with organisation-wide access. Selecting a person, role or escalation recipient never grants these permissions. Reviewers must also remain independent: a requester cannot review their own request, and the disposal evidence author cannot verify or reject that evidence.
+When these keys arrive, every role and account that can do the action today receives the matching key once, so nobody loses access. `assets.delete` becomes `assets.archive`; `assets.edit` gives `assets.restore` and `assets.dispose`; `assets.manage` gives `assets.review`. Remove a key from a role afterwards to separate who requests from who reviews.
 
-## Configure restoration reviewers
+Named and role-selected reviewers must be active staff with organisation-wide access. Choosing a person, role or escalation recipient never grants these permissions. The requester never reviews their own request, and the disposal evidence author cannot verify or reject that evidence.
 
-1. Open **Settings → Asset approvals**. If workflow selectors are available, select **Restoration**.
-2. Under **Who may review?**, choose a routing option:
+## Decide whether archiving needs approval
 
-   | Option | Result |
-   | --- | --- |
-   | **Any independent asset manager with current view, edit and manage permissions** | Any currently eligible independent manager may review. |
-   | **One of the selected reviewers** | Choose up to 50 eligible people using **Find reviewers by name**. |
-   | **One eligible member of the selected staff roles** | Choose up to 20 active roles using **Find staff roles**. One eligible member may decide; it is not a vote from every role. |
+Archive approval is off by default: people with `assets.archive` archive straight away.
 
-3. Add **Review instructions** if reviewers need an organisation-specific checklist or reference.
-4. If timing controls are available, optionally [configure reminders and a deadline](#configure-reminders-and-a-deadline).
-5. Enter a **Reason for this policy change** and select **Publish for future requests**.
+1. Select **Archive**.
+2. Turn on **Require approval to archive**.
+3. Set up the route, enter a reason and select **Publish version**.
 
-The page confirms the published version. **Publication history** shows the latest 20 publications, their reasons and publisher references; earlier versions remain retained. Select **Reload saved policy** to load the saved configuration again. This replaces unsaved edits in the editor.
+With archive approval on, **Archive asset** on an asset opens **Request archive**. The asset stays in the register until every stage approves; the last approval archives it, revokes its agent credentials and stops pending commands. Archiving through the API is refused with `409 Conflict`, and a person submits the request in Enduria. Two things still archive without this review: completing a verified disposal (already independently approved), and merging a duplicate record into the asset you keep (see [Data quality and duplicates](./asset-data-quality)). If an asset leaves the register one of those ways while its archive request is open, the request closes as **Archived another way**.
 
-Search results are bounded. If a person or role is missing, narrow the search by name. A role selection that matches more than 100 staff candidates must be narrowed before it can be used.
+## Route requests with rules
 
-## Configure disposal approval and verification
+Each action has an ordered list of rules and a default route.
 
-When the **Disposal** selector is available:
+1. Select **Add rule** and give it a name.
+2. Choose its conditions. Leave a condition empty to match anything:
+   - **Clients**: one or more clients, or **Organisation assets (no client)**.
+   - **Categories**: one or more asset categories. An asset with no category matches only rules without a category condition.
+   - **States**: one or more operational states, such as **In use** or **Retired**.
+3. Set up the rule's route (see below). Use the arrows to change the order.
 
-1. Select **Disposal** on **Settings → Asset approvals**.
-2. Select **Approval reviewers** and choose independent managers, named reviewers or staff roles. Add **Approval instructions** as needed.
-3. Select **Verification reviewers** and configure the separate reviewer selection and **Verification instructions**.
-4. Optionally configure timing for each phase.
-5. Enter the reason and select **Publish for future requests**.
+A request takes the first rule whose conditions all match. If none matches, it takes the **default route**. Turn off **Use a default route** to refuse any request that matches no rule; the requester sees that no route applies, and an administrator adds one. Conditions refer to the client or category itself, so renaming one never changes routing.
 
-Both phases are published together. New disposal requests retain both sets of rules at submission, including the verification rules used after evidence is recorded. Verification does not pick up a newer policy published between approval and execution.
+## Set up a route's stages
 
-Choose sufficient independent reviewers before external work takes place. A configured phase without an eligible independent reviewer prevents a new request. If the only retained verifier later records the execution evidence, they cannot verify it and there is no automatic substitute.
+A route has one to three stages, decided in order: the next stage opens when the previous one has enough approvals.
+
+For each stage, choose who decides:
+
+| Option | Who decides |
+| --- | --- |
+| **Any eligible manager** | Any independent staff member with the review permissions. One approval completes the stage. |
+| **Named reviewers** | Up to 50 people you choose with **Find reviewers**. |
+| **Staff roles** | Members of up to 20 active staff roles, fixed when each request is submitted (at most 100 people). |
+
+For named reviewers and roles, choose **Approvals needed**:
+
+- **Any one reviewer**
+- **Every reviewer**: everyone on the stage's list who can decide, not counting the requester, the evidence author or anyone who decided an earlier stage.
+- **At least a number**: enter how many.
+
+Then:
+
+- **Any rejection rejects the request**, at any stage.
+- **Each person decides once per request**, even if they appear in more than one stage.
+- **Nothing passes by default.** If too few reviewers remain able to decide, the stage shows why and waits. Use a [restart or reassignment](#restart-or-reassign-a-pending-review).
+
+Add **Instructions for reviewers** to give each stage its own checklist. Publishing is refused when a stage could never reach its approvals with the people eligible today.
+
+Enter a **Reason for this change** and select **Publish version**. Each action keeps its own versions; **Publication history** shows the latest 20. **Discard** drops unsaved edits to the selected action.
+
+Disposal approval and disposal verification are published separately. A disposal request keeps both routes from its submission, so verification does not pick up a newer policy published while the work is carried out. The same person may approve and later verify a disposal, unless they recorded its evidence.
 
 ## Understand which people can act
 
-Named and role-based policies record eligible people when the request is submitted. The requester is excluded. Role routing recognises both primary and additional role memberships.
+Named and role-based stages record eligible people when the request is submitted, without the requester. Role routing recognises both primary and additional role memberships.
 
 For an existing request:
 
 - A new person added to a role cannot review the older request.
-- An assigned reviewer must remain active, retain the required permissions and organisation-wide access, and still hold an originally selected active role where role routing applies.
+- An assigned reviewer must remain active, keep the review permissions and organisation-wide access, and still hold a selected active role where role routing applies.
 - An originally assigned person who regains valid access can become eligible again.
-- New policy versions, reminders and administrator status do not expand the assigned people or bypass independence.
+- New policy versions, reminders and administrator status do not add people or bypass independence.
 
-If routing needs to change, the requester can cancel a pending restoration or a disposal request that has no execution evidence, then submit again under the new policy. When review corrections are available, an independently approved [restart or reassignment](#restart-or-reassign-a-pending-review) can recover an eligible pending phase, including disposal verification after execution evidence. The original request and evidence remain retained.
+Each request shows its route: the rule it matched (or the default), each stage, the approvals it has and needs, and who decided with their notes. If routing needs to change, the requester can cancel a pending request (a disposal only before execution evidence) and submit again under the new policy, or an independently approved [restart or reassignment](#restart-or-reassign-a-pending-review) can recover a stage. The original request and evidence are kept.
 
 ## Configure reminders and a deadline
 
-Timing is optional and available only for named or role-based routing. The independent-manager option has no automated timing; switching to that option removes timing from the policy being edited.
+Timing is optional and set per stage, for named or role-based stages only. The any-eligible-manager option has no automated timing; switching a stage to it removes that stage's timing.
 
-1. Select **Enable review reminders and a deadline**.
+1. In the stage, select **Enable review reminders and a deadline**.
 2. Set **Remind after (hours)** to a whole number from 1 to 720.
 3. Set **Deadline after (hours)** to a whole number from 1 to 8,760, later than the reminder.
 4. Optionally use **Find escalation reviewers by name** to choose up to 20 people.
-5. Publish the policy for future requests.
+5. Publish the policy. It applies to new requests.
 
-Escalation recipients must already qualify under the phase's reviewer selection. In role mode, the directory shows eligible staff; choose people who belong to the selected review roles. Publication validates that membership. Leaving escalation recipients empty still allows the deadline to mark a review overdue.
+Escalation recipients must already qualify under the stage's reviewer selection. In role mode, the directory shows eligible staff; choose people who belong to the selected review roles. Publication validates that membership. Leaving escalation recipients empty still allows the deadline to mark a review overdue.
 
 | Phase | When its clock starts |
 | --- | --- |
-| Restoration | When the restoration request is submitted |
-| Disposal approval | When the disposal request is submitted |
-| Disposal verification | When execution evidence is recorded |
+| The first stage | When the request is submitted (for disposal verification, when execution evidence is recorded) |
+| A later stage | When the previous stage reaches its approvals |
 
-Hours are elapsed time, including weekends and holidays. They are not business hours or service-level targets. Each phase has one reminder and one deadline, rather than a repeating reminder schedule.
+Hours are elapsed time, including weekends and holidays. They are not business hours or service-level targets. Each stage has one reminder and one deadline, rather than a repeating reminder schedule.
 
 At the deadline, the pending review becomes **Overdue**. A currently eligible escalation recipient can see **Escalated to you**. The deadline does not approve, reject, cancel, archive, restore or reassign anything. Settings edits do not restart an existing clock.
 
@@ -109,13 +131,13 @@ Requested, reminder and deadline notices appear only in **Asset reviews**. They 
 
 When enabled, open **Assets → Reviews**. On smaller screens, use **Reviews** in the Assets toolbar.
 
-1. Check the asset and review phase on each card.
+1. Check the asset and review on each card: **Archive approval**, **Restoration review**, **Disposal approval** or **Disposal verification**, with the stage when it is not the first.
 2. Read the phase start, deadline and any **Review requested**, **Reminder**, **Deadline notice**, **Overdue** or **Escalated to you** label.
 3. Select **Open review** to inspect the retained request, instructions and evidence.
-4. Make the appropriate decision on the archive or disposal screen. See [Archive, restore and dispose of assets](./asset-lifecycle.mdx) for the action steps.
+4. Make the decision where the card leads: the asset's **Archive requests** card, **Assets → Archive** for restoration, or **Disposals**. See [Archive, restore and dispose of assets](./asset-lifecycle.mdx) for the action steps.
 5. Select **Refresh reviews** when you return to update the list.
 
-The inbox shows only reviews you are currently eligible to act on. It is not a requester's history or an administrator's list of all blocked work. Opening a card does not guarantee that approval is possible: holds, changed asset facts and other safeguards are checked again when you act.
+The inbox shows only reviews you are currently eligible to act on. Once you have decided on a request, its later stages no longer appear for you. It is not a requester's history or an administrator's list of all blocked work. Opening a card does not guarantee that approval is possible: holds, changed asset facts and other safeguards are checked again when you act.
 
 Each page checks a limited set of pending requests. A **Scanned page** can be empty while **Next** remains available; continue to check the next page. There is no total count of eligible work.
 
@@ -160,7 +182,10 @@ Use **Refresh corrections** after authority changes. Expand **Retained previous 
 | Problem | What to do |
 | --- | --- |
 | The settings page is unavailable | Check `settings.manage` and whether the staff account is restricted to a customer. |
-| Publication says the policy changed | Select **Reload saved policy**, compare the newer version, then reapply and publish the intended edits. |
+| Publication says the policy changed | Reload the page, compare the newer version, then reapply and publish your edits. |
+| Publication is refused because a stage needs more approvals than it has reviewers | Add reviewers, choose roles with more eligible members, or lower **Approvals needed**. |
+| A request says no route applies | No rule matches the asset and the action has no default route. Add a rule or turn on **Use a default route**. |
+| **Archive asset** asks for a reason instead of archiving | Archive approval is on. Submit the request; it archives when its stages approve. |
 | No suitable reviewers appear | Check active staff status, current permissions and organisation-wide access. Narrow the directory search. In role mode, check the selected roles and current memberships. |
 | An escalation person is rejected | They must already qualify under the phase's selected people or roles. Escalation cannot appoint a new reviewer. |
 | A pending request uses older instructions or timing | This is expected: the request retains its submitted policy. Publishing a newer version does not alter it. |
@@ -170,4 +195,4 @@ Use **Refresh corrections** after authority changes. Expand **Retained previous 
 | A correction is unavailable or refused | Check current settings and phase permissions, organisation-wide access, independence, customer binding and whether the phase is still pending. Older phases without a review runtime cannot be backfilled through a correction. |
 | The request was decided before its correction | The correction can no longer be approved. Retain a rejection or cancel the proposal as its proposer; completed asset work cannot be restarted. |
 
-These settings cover one independent decision per review phase. They do not provide voting quorums, arbitrary approval stages, customer/category conditions, automatic reassignment or ordinary archive or assignment approvals. [Asset event rules](./asset-event-rules) are separate: when available, they can highlight an existing review for an eligible person but cannot assign review authority.
+These settings route archive, restoration and disposal. Custody hand-overs, transfers, long loans and marking assets lost have their own approval settings (see [Track asset custody](./asset-custody)). There is no automatic approval on a deadline, no email voting and no automatic reassignment. [Asset event rules](./asset-event-rules) are separate: when available, they can highlight an existing review for an eligible person but cannot assign review authority.
