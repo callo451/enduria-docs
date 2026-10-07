@@ -114,6 +114,10 @@ Orders are never deleted. An inventory item that appears on any order can't be d
 - Inventory uses **weighted average cost**. Each receipt re-averages an item's cost: (stock held × current average + quantity received × order price) ÷ new quantity. Each stock movement keeps the cost it was valued at.
 - Costs in different currencies are never combined. If an item's stock is valued in another currency, update its cost before receiving it on an order.
 
+## Supplier invoices
+
+When the supplier bills you, record the invoice against the order lines you received. Enduria matches each line with what was ordered and received, and a different person approves it for payment. Ordered and received orders show a **Supplier billing** card with what has been billed so far. See [Supplier invoices and three-way matching](./supplier-invoices).
+
 ## Permissions
 
 | To | You need |
@@ -129,7 +133,6 @@ Customer portal users and staff assigned to a specific client can't see or chang
 ## Not available yet
 
 - Sending orders to suppliers from Enduria, or notifying approvers when an order is waiting.
-- Matching supplier invoices to receipts.
 - Recording rejected or damaged quantities at receipt.
 - Linking an order to a client or project.
 - Returning goods to a supplier.

@@ -1,0 +1,246 @@
+---
+title: Supplier invoices and three-way matching
+description: Record what suppliers bill against your purchase orders, match each line with what was ordered and received, resolve differences, approve invoices for payment independently and export them for accounts payable.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Supplier invoices and three-way matching
+
+A supplier invoice records what a supplier billed you for goods you ordered on a [purchase order](./purchase-orders). Enduria checks each invoice line against the order and its receipts, so you pay only for what you ordered and what arrived, at the price you agreed. Differences need a decision, and a different person approves the invoice for payment.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Supplier invoices require a future application release. This guide describes the intended behaviour for that release; publishing documentation does not change your workspace.
+
+</Admonition>
+
+**Enduria doesn't pay invoices.** An approved invoice is exported to your accounts payable system, which pays it.
+
+## What three-way matching checks
+
+Each invoice line names one purchase order line. When the invoice is submitted, Enduria compares three things for that line:
+
+| Check | Compares | Passes when |
+| --- | --- | --- |
+| **Quantity** | Units billed here, plus units already billed for that order line on approved or exported invoices, with the units **received** | The total billed is no more than was received, plus your quantity tolerance |
+| **Price** | The unit price billed with the order line's unit price | The difference is within your price tolerance |
+
+What was ordered sets the price; what was received sets how many units can be paid for. A line that passes both checks matches. A line that fails either becomes an **exception**.
+
+**Example.** A purchase order has a line for 10 docking stations at AUD 100.00 each. 8 have arrived. Your price tolerance is 2% and your quantity tolerance is 0.
+
+| The supplier bills | Result |
+| --- | --- |
+| 8 at AUD 101.50 | Matches. The price is AUD 1.50 above the order, within the AUD 2.00 allowed (2% of AUD 100.00). |
+| 8 at AUD 103.00 | **Billed above the order price**: AUD 3.00 more than the order, AUD 1.00 beyond the allowance. |
+| 10 at AUD 100.00 | **Billed more than was received**: 10 billed, 8 received. |
+
+The supplier can bill the last 2 units on a later invoice once they arrive. A line can be billed over several invoices.
+
+**Freight and tax** on the invoice are compared with the order's shipping and tax only when the invoice completes every order it bills, so that each of its order lines is then fully billed. On earlier, partial invoices they are shown but not matched.
+
+## Set matching tolerances
+
+Organisation administrators set the tolerances in **Settings → Inventory → Purchasing**, under **Supplier invoice matching**.
+
+| Setting | What it allows |
+| --- | --- |
+| **Price, percentage** | A difference of up to this percentage of the order's unit price, above or below. Up to four decimal places. |
+| **Price, amount per unit** | A difference of up to this amount per unit, in your organisation's currency. It is also the allowance for freight and tax. |
+| **Quantity, units** | Units billed beyond what was received that still match. A whole number. |
+
+When both price tolerances are set, **the larger of the two applies**. A tolerance of 0 isn't used, and everything at 0 (the default) means exact matching: any difference is an exception. For freight and tax, the percentage is of the order's amount and the amount is a fixed allowance.
+
+1. Open **Settings → Inventory → Purchasing**.
+2. Under **Supplier invoice matching**, enter the tolerances.
+3. Select **Save**.
+
+Each save is a new version, recorded in the audit log. An invoice keeps the tolerances it was matched with; changing them affects only invoices matched afterwards.
+
+## Enter an invoice
+
+1. Go to **Inventory → Supplier invoices** and select **Enter invoice**. From a purchase order, you can also select **Enter an invoice** on its **Supplier billing** card.
+2. Choose the **Supplier**, and enter the supplier's **invoice number**, the **Invoice date** and, optionally, the **Due date** (on or after the invoice date).
+3. Under **Lines**, Enduria lists this supplier's received purchase order lines that aren't fully billed, across all its orders. For each line on the supplier's invoice, enter the **quantity** and **unit price** billed. Prices are exact to six decimal places.
+4. Enter any **tax** and **freight** on the invoice, and notes.
+5. Select **Save as draft**.
+
+The invoice gets a number such as `SI-0001`. A supplier's invoice number can be recorded only once per supplier; a second entry is refused. You can edit a draft with **Edit draft** until it is submitted.
+
+One invoice can bill lines from several orders of the same supplier, and bills each order line once. An order line appears only once goods have been received on a placed order.
+
+## Submit and read the match
+
+On a draft, select **Submit for matching**. Enduria matches every line straight away, using the tolerances in force at that moment, and the invoice becomes:
+
+- **Matched**, when every line and the header pass, or
+- **Exceptions**, when anything is outside tolerance.
+
+The **Lines** card shows, for each line, what was **Ordered**, **Received**, **Billed elsewhere** (on other approved or exported invoices), **Billed here**, the **Order price**, the **Invoiced** price, the **Difference** and the result. The **Match** card records when it was matched and the tolerances used.
+
+Select **Match again** on an invoice with exceptions, or a matched one, to match it with the current facts, for example after missing goods have arrived or an order was amended. Matching again replaces the earlier exceptions, including resolved ones, with new ones where differences remain.
+
+## Exceptions
+
+| Exception | Meaning | Can be accepted? |
+| --- | --- | --- |
+| **Billed above the order price** | The unit price is higher than the order's, beyond the tolerance | Yes |
+| **Billed below the order price** | The unit price is lower than the order's, beyond the tolerance | Yes |
+| **Billed more than was received** | More units are billed than arrived, beyond the quantity tolerance | No |
+| **Not a billable order line** | The line's order isn't placed: it is a draft, awaiting approval or cancelled | No |
+| **Freight above the order** or **Freight below the order** | The freight differs from the order's shipping, beyond the allowance | Yes |
+| **Tax above the order** or **Tax below the order** | The tax differs from the order's tax, beyond the allowance | Yes |
+
+Each exception shows what was **Expected**, what was **Billed**, the **Difference** and the **Allowance** that applied.
+
+For each open exception, choose:
+
+- **Accept difference**: the invoice can be approved at the billed amount. Give a reason. Only someone who could approve the invoice can accept a difference (see [Approve for payment](#approve-for-payment)).
+- **Dispute**: the invoice waits for the supplier to send a credit note or a corrected invoice. Give a reason. Anyone who can enter invoices can dispute. A disputed difference can still be accepted later, for example once the supplier agrees a credit.
+
+**You pay only for what arrived.** A quantity billed beyond what was received, or a line that isn't billable, can't be accepted. Select **Match again** once the goods arrive, or dispute it and void the invoice.
+
+An invoice can't be approved while any exception is open or disputed.
+
+## Approve for payment
+
+1. Open a **Matched** invoice and select **Approve for payment**.
+2. Check the supplier, their invoice number and the total. Optionally add a note.
+3. Select **Approve for payment**.
+
+**A different person must approve.** The approver needs the supplier invoice approval permission and must not be:
+
+- the person who entered the invoice, edited the draft or submitted it, or
+- anyone who requested, submitted, amended or approved a purchase order the invoice bills.
+
+The same rule applies to accepting an exception. When you can't approve, the invoice shows why. Your organisation therefore needs at least one person with approval permission who isn't involved in your purchasing; plan for that before you start.
+
+**Approval is final.** An approved invoice can't be edited or voided. A mistake is corrected with a credit note.
+
+## What approval does to stock cost
+
+Every difference between the billed price and the order price, whether within tolerance or accepted, is a price variance. Stock was received at the order price; when an invoice is approved, Enduria brings the cost of stock still on hand into line with what you actually paid:
+
+- **Stock still on hand** is revalued. The item's weighted average cost changes, and the stock ledger records a cost revaluation (no change in quantity).
+- **The rest**, for units already issued or used, is recorded as **purchase price variance** on the invoice line. It doesn't change stock.
+- **Tracked units** of that order line that are still in stock take the billed price as their purchase cost. Units already issued keep theirs.
+
+The **Cost effect** card on an approved invoice shows the units revalued, the revaluation and the price variance for each line, with a link to the ledger.
+
+**Example.** You received 10 docking stations at AUD 100.00 and have issued 4, so 6 are in stock at an average cost of AUD 100.00. The supplier bills all 10 at AUD 105.00, and the difference is accepted. On approval:
+
+| | Calculation | Amount |
+| --- | --- | --- |
+| Price variance in total | 10 units × AUD 5.00 | AUD 50.00 |
+| Revaluation of stock on hand | 6 units × AUD 5.00 | AUD 30.00 |
+| New average cost | (6 × 100.00 + 30.00) ÷ 6 | AUD 105.00 |
+| Purchase price variance | 50.00 − 30.00 | AUD 20.00 |
+
+For items counted by quantity, weighted average costing can't tell which receipt a unit came from, so the revaluation applies across all the item's stock, up to the units billed. For tracked items it applies only to that order line's units still in stock. A cost never falls below zero; anything that would take it there, and any rounding, is recorded as price variance. The revaluation and the variance always add up to the total difference.
+
+Costs in different currencies are never combined. If the item's stock is valued in another currency, approval is refused; update its cost first.
+
+## Credit notes
+
+A supplier credit note reduces what you owe on an **approved or exported** invoice. To correct an invoice that isn't approved yet, void it instead.
+
+1. Open the approved invoice and select **Credit note**, or select **Credit note** on the Supplier invoices list and choose the supplier and the invoice it **Credits**.
+2. Enter the supplier's credit note number and date.
+3. For each line being credited, choose one or both:
+   - **Units credited at the billed price**: units returned or never delivered. The units billed for the order line fall, and those units' price variance is reversed.
+   - **Price reduction per unit**: a lower price for some or all of the line's units. Enter the units and the amount **Less per unit**.
+4. Save it as a draft, then submit it for matching.
+
+A credit note is matched and approved like an invoice, with the same independence rule, and its approval adjusts stock cost in the same way. A credit can't take back more units or value than the line billed, and a price reduction can't take a unit below zero. A reduction that takes the price below the order price beyond your tolerance is a **Billed below the order price** exception.
+
+Credit notes share the `SI-` numbering with invoices and show as negative amounts.
+
+## Void an invoice
+
+Select **Void** on an invoice that isn't approved yet (a draft, or one that is matched or has exceptions) and give a reason, for example that it was entered in error or won't be paid. It stays on record, no longer counts as billed, and the supplier's number can be entered again.
+
+## Export for accounts payable
+
+Approved invoices and credit notes wait under **Approved** until they are exported.
+
+- To export everything waiting, select **Export for payment** on the **Accounts payable exports** card.
+- To export only some, choose them in the **Approved** view and select **Export *n* selected**.
+
+Enduria downloads a CSV file and records the export with a number such as `AP-0001`. The invoices move to **Exported**. Earlier exports stay listed under **Accounts payable exports**; select **Download** to get the same file again.
+
+The file has one row per invoice line, with these columns:
+
+| Column | Holds |
+| --- | --- |
+| **Supplier**, **Supplier invoice number** | Who billed you, and their number |
+| **Invoice**, **Kind**, **Credits invoice** | Enduria's number, **Invoice** or **Credit note**, and for a credit note the invoice it credits |
+| **Invoice date**, **Due date**, **Currency** | The invoice's dates and currency |
+| **Purchase order**, **PO line**, **Line**, **SKU**, **Item** | The order line billed |
+| **Credit kind**, **Quantity**, **Unit price**, **Line total** | What was billed or credited |
+| **Order unit price**, **Revaluation**, **Price variance** | The match and its cost effect |
+| **Net**, **Tax**, **Freight**, **Total** | The invoice's totals, repeated on each of its rows |
+| **Amount owed** | The total, negative for a credit note |
+| **Approved at** | When it was approved |
+
+Import the file into your accounts payable system once per invoice, not once per row.
+
+**Exporting again is explicit.** If your accounts payable import failed, open the **Exported** view, choose the invoices and select **Export *n* again**. They go into a new export, marked as exported again. They are never included in a later **Export for payment** by accident.
+
+## The purchase order's billing card
+
+Ordered, partly received, received and closed purchase orders show a **Supplier billing** card. For each line it shows what was **Ordered**, **Received**, **Billed** (net units on approved or exported invoices) and **On open invoices** (units on invoices not yet approved). A billed quantity above what was received is highlighted. Below, it lists the invoices and credit notes that bill the order, with their state. Select **Enter an invoice** to start an invoice for the order's supplier.
+
+## Permissions
+
+| To | You need |
+| --- | --- |
+| See supplier invoices, exports and the billing card | **View supplier invoices** (`procurement.invoices.view`) |
+| Enter, edit, submit and match invoices and credit notes, dispute exceptions, void and export | **Manage supplier invoices** (`procurement.invoices.manage`) |
+| Accept exceptions and approve for payment | **Approve supplier invoices** (`procurement.invoices.approve`), and the independence rule above |
+| Change matching tolerances | Manage settings (organisation administrators) |
+
+Inventory management doesn't include supplier invoice access; payables are finance data. Customer portal users and staff assigned to a specific client can't see or change supplier invoices, even if their role includes these permissions.
+
+The default roles grant:
+
+| Role | View | Manage | Approve |
+| --- | --- | --- | --- |
+| System Administrator | Yes | Yes | Yes |
+| Asset Manager | Yes | Yes | No |
+| Portfolio Manager | Yes | No | Yes |
+
+No other default role has them. Add them to other roles in **Settings → Roles**. Because of the independence rule, make sure at least two people can work with invoices: one to enter them and another, not involved in your purchase orders, to approve them.
+
+## Resolve common problems
+
+| Problem | What to check |
+| --- | --- |
+| "Nothing from this supplier is waiting to be billed" | Order lines appear once goods have been received on a placed order. Receive the delivery first, or check that the order isn't fully billed. |
+| "This supplier's invoice … is already recorded as SI-…" | The supplier's number is already entered. Open that invoice, or void it if it was entered in error. |
+| "This supplier trades in …; supplier invoices are in the organization's currency" | Supplier invoices are in your organisation's currency only. |
+| "Add at least one line before submitting" | Enter a quantity and price on at least one line. |
+| "Resolve the exceptions before approving" | Accept or dispute each exception, or match again. Disputed exceptions also block approval. |
+| "A quantity billed beyond what was received, or a line that isn't billable, can't be accepted" | Select **Match again** once the goods arrive, or dispute the exception and void the invoice. |
+| "You entered or submitted this invoice, so a different person must approve it" | Ask another person with approval permission. |
+| "You requested, submitted or approved a purchase order this invoice bills, so a different person must approve it" | Ask someone not involved in the order. |
+| "Approving supplier invoices needs the supplier invoice approval permission" | Ask an administrator to grant **Approve supplier invoices** to a suitable role. |
+| "PO-… is no longer a placed order. Match the invoice again." | The order changed after matching. Select **Match again**. |
+| "…its stock is valued in … and this invoice is in …" | Update the item's cost in your organisation's currency before approving. |
+| "Only an invoice not yet approved can be voided; correct an approved one with a credit note" | Enter a credit note against the approved invoice. |
+| "A credit note credits an approved invoice; correct an unapproved one by voiding it" | Void the unapproved invoice and enter it again. |
+| "This credit would take back more than the line billed" | Reduce the credited units or amount. Earlier credit notes count. |
+| "… was exported before; choose to export it again explicitly" | Choose it in the **Exported** view and select **Export *n* again**. |
+| "There are no approved supplier invoices waiting to be exported" | Nothing is approved and unexported. |
+| "This supplier invoice changed since the page loaded. Reload and try again." | Someone else changed it. Reload the page. |
+| "Matching tolerances changed since you opened them. Reload and try again." | Another administrator saved them. Reload and check before saving. |
+
+## Current limits
+
+- Enduria doesn't pay invoices or run payment batches. Export approved invoices to your accounts payable system.
+- Invoices aren't sent to QuickBooks or other accounting software. The CSV export is the hand-over.
+- Invoices are entered by hand. There is no scanning, OCR or capture from email.
+- Invoices are in your organisation's currency only.
+- Every invoice line bills a purchase order line. Invoices without a purchase order, such as services or expenses, can't be recorded here.
+- Freight isn't allocated into stock cost. It is compared with the order's shipping and recorded on the invoice only.
+- Returning goods to a supplier isn't recorded. A credit note records the money only.
