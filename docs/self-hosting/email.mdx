@@ -1,29 +1,52 @@
 ---
 title: Email
-description: Configure the platform email sender, sending limits and stored mail credentials for a self-hosted Enduria installation.
+description: Configure your installation's platform email sender over any SMTP server or Amazon SES, sending limits and stored mail credentials.
 ---
 
 # Email
 
-Each organisation configures its own outbound and inbound email in the application; see [How email works](../admin/email/overview). As the operator you decide whether to offer **platform email** — a sender you manage that organisations can use without their own SMTP server — and you provide the key that protects stored mail credentials.
+Each organisation configures its own outbound and inbound email in the application; see [How email works](../admin/email/overview). As the operator you decide whether to offer **platform email** — your installation's shared sender, which organisations can use without their own SMTP server — and you provide the key that protects stored mail credentials.
 
-Platform email is optional. Without it, organisations use custom SMTP, and the platform option is shown as unavailable.
+Platform email is optional and is **yours**: a self-hosted installation never sends through Enduria's sending account. Point it at any SMTP server you already have, or at your own Amazon SES account. Without it, organisations use their own SMTP servers, and password resets go through each organisation's own server.
+
+## The sender
+
+| Variable | Purpose |
+| --- | --- |
+| `PLATFORM_EMAIL_FROM` | The address all platform email is sent from, for example `noreply@notify.example.com`. Organisations cannot change it. |
+| `PLATFORM_EMAIL_FROM_NAME` | Display name used only when an organisation has not set its own sender name. Defaults to `Enduria`. |
+| `PLATFORM_EMAIL_TRANSPORT` | `smtp` or `ses`. Needed only when both are configured; otherwise Enduria uses the one that is. When both are configured and this is not set, SES is used. |
+
+`AWS_SES_FROM_EMAIL` and `AWS_SES_FROM_NAME`, the names used before, are still accepted.
+
+## Platform email with any SMTP server
+
+Set `PLATFORM_SMTP_URL` and `PLATFORM_EMAIL_FROM`:
+
+```bash
+PLATFORM_EMAIL_FROM=noreply@notify.example.com
+PLATFORM_SMTP_URL=smtps://user:password@smtp.example.com:465
+```
+
+- `smtps://` connects with TLS from the start (port 465 by default).
+- `smtp://` requires STARTTLS (port 587 by default). Append `?requireTLS=false` only for an unencrypted relay on a network you trust, such as a local Postfix: `smtp://127.0.0.1:25?requireTLS=false`.
+- Leave out `user:password@` for a relay that needs no sign-in. Percent-encode special characters, for example `@` as `%40`.
+- The server's certificate is always verified.
+
+Your SMTP server is trusted as configured: unlike the servers organisations enter, it may be on a private network.
+
+An SMTP server tells Enduria only about addresses it refuses while sending. Bounces and spam complaints it receives later go to its own mailbox, so Enduria cannot suppress those addresses or pause an organisation for them. Organisations see this noted under **Sending health**. Use Amazon SES if you need that protection.
+
+Publish SPF, DKIM and DMARC for the From domain that cover your SMTP server, as your mail provider describes.
 
 ## Platform email with Amazon SES
-
-Platform email currently uses Amazon SES. Set all of the following; platform email is offered only when the access key, secret and From address are all present.
 
 | Variable | Purpose |
 | --- | --- |
 | `AWS_SES_ACCESS_KEY_ID` | Access key for an IAM identity allowed to send through SES. |
 | `AWS_SES_SECRET_ACCESS_KEY` | Secret for that key. |
 | `AWS_SES_REGION` | SES region. Defaults to `us-east-1`. |
-| `AWS_SES_FROM_EMAIL` | The address all platform email is sent from, for example `noreply@notify.example.com`. Organisations cannot change it. |
-| `AWS_SES_FROM_NAME` | Display name used only when an organisation has not set its own sender name. Defaults to `Enduria`. |
-| `EMAIL_PLATFORM_MAX_PER_HOUR` | Most platform emails one organisation may send per hour. Defaults to `100`. |
-| `EMAIL_PLATFORM_MAX_PER_DAY` | Most platform emails one organisation may send per day. Defaults to `1000`. |
-
-Organisations may choose limits lower than yours, never higher. Their sender name appears as the display name and their Reply-To address receives replies; the From address is always yours.
+| `AWS_SES_CONFIGURATION_SET` | Optional SES configuration set applied to every platform message, for example one that publishes bounce and complaint events. |
 
 ### Prepare SES
 
@@ -31,16 +54,100 @@ Organisations may choose limits lower than yours, never higher. Their sender nam
 2. **Verify the domain** in SES with Easy DKIM and publish the DKIM records it gives you.
 3. **Configure a custom MAIL FROM domain** (for example `bounce.notify.example.com`) so SPF aligns with your From domain.
 4. **Publish DMARC** for your domain, starting with `p=none` and a reporting address, then tightening once reports are clean.
-5. **Grant least privilege.** The IAM identity needs `ses:SendEmail`, `ses:SendRawEmail` and `ses:GetIdentityVerificationAttributes` for your sending identity, and nothing else.
-6. **Leave the SES sandbox** only when you are ready to send to unverified recipients. AWS reviews how you handle bounces and complaints.
+5. **Grant least privilege.** The IAM identity needs `ses:SendRawEmail` for your sending identity and configuration set; `ses:GetIdentityVerificationAttributes` for the connection test; and, for the readiness check, `ses:GetAccount`, `ses:GetEmailIdentity`, `ses:GetConfigurationSet` and `ses:GetConfigurationSetEventDestinations` — nothing else.
+6. **Connect bounce and complaint events** (next section) before leaving the sandbox.
+7. **Leave the SES sandbox** only when you are ready to send to unverified recipients. AWS reviews how you handle bounces and complaints.
 
-:::caution
-Enduria does not yet process SES bounce and complaint notifications or keep a suppression list. Until it does, monitor bounce and complaint rates in the SES console, and consider offering platform email only to organisations you trust. SES may pause an account whose bounce or complaint rate is too high, which stops platform email — including invitations — for every organisation that uses it.
-:::
+### Receive bounce and complaint events
+
+Enduria suppresses addresses that bounce or complain (see [Bounces, complaints and suppression](../admin/email/deliverability)). It learns about them from SES through Amazon SNS:
+
+1. Create an SNS topic, for example `enduria-ses-events`, in the same region.
+2. Create an SES **configuration set** with an event destination that publishes **Bounce**, **Complaint** and **Delivery** events to that topic.
+3. Set `AWS_SES_CONFIGURATION_SET` to the configuration set's name and `AWS_SES_SNS_TOPIC_ARN` to the topic's ARN, and restart Enduria.
+4. Add an **HTTPS** subscription to the topic for `https://<your Enduria host>/api/webhooks/ses`. Enduria confirms the subscription automatically.
+5. In the SNS console, check that the subscription shows **Confirmed**.
+
+Enduria accepts only messages signed by SNS for that topic. If `AWS_SES_SNS_TOPIC_ARN` is not set, the endpoint refuses every request.
+
+Addresses that hard-bounce are suppressed for platform email from every organisation and are not shown to organisations. List or clear them with:
+
+```bash
+npx tsx scripts/email-suppressions.ts list
+```
+
+```bash
+npx tsx scripts/email-suppressions.ts remove --address someone@example.com --apply
+```
+
+## Sending limits
+
+| Variable | Purpose |
+| --- | --- |
+| `EMAIL_PLATFORM_MAX_PER_HOUR` | Most platform emails one organisation may send per hour. Defaults to `100`. |
+| `EMAIL_PLATFORM_MAX_PER_DAY` | Most platform emails one organisation may send per day. Defaults to `1000`. |
+| `EMAIL_SYSTEM_MAX_PER_HOUR` | Most system emails (password resets, invitations) one organisation may send per hour, counted separately from its other mail. Defaults to `100`. |
+| `EMAIL_SYSTEM_MAX_PER_DAY` | The same, per day. Defaults to `1000`. |
+| `EMAIL_MAX_PER_RECIPIENT_PER_HOUR` | Most system emails, booking confirmations and survey alerts one address may receive per hour. Defaults to `10`. |
+
+Limits count calendar hours and days in UTC and are enforced in the database, so they hold across several application instances.
+
+Organisations may choose limits lower than yours, never higher. Their sender name appears as the display name and their Reply-To address receives replies; the From address is always yours.
+
+When platform email is configured, Enduria also uses it for **system email** — password resets, invitations and welcome messages — for every organisation, including those on custom SMTP. This keeps sign-in working when an organisation's own mail server is misconfigured. Without platform email, system email uses each organisation's own provider, and an organisation with none cannot receive password-reset email.
+
+Every message Enduria sends is recorded in the organisation's email log with the provider's message ID.
+
+## Readiness check
+
+Organisations can choose platform email only when Enduria's readiness check passes:
+
+- **SMTP** — Enduria connects to `PLATFORM_SMTP_URL` and signs in.
+- **SES** — the account has production access and is sending normally, the From address or its domain is verified with DKIM, and the configuration set publishes Bounce and Complaint events to `AWS_SES_SNS_TOPIC_ARN`.
+
+The result is logged at startup and refreshed every ten minutes; a partly configured sender, such as a malformed `PLATFORM_SMTP_URL`, is reported precisely. Organisations already using platform email keep it if the check later fails; sending itself is never blocked by the check.
+
+```bash
+npx tsx scripts/email-sender.ts readiness
+```
+
+## Pausing organisations with a poor sending record
+
+With SES, Enduria pauses an organisation's platform notifications, documents and reports — never its password resets or invitations — when its bounce or complaint rate over seven days exceeds your limits, and logs `email_tenant_paused`. Alert on that log code.
+
+| Variable | Purpose |
+| --- | --- |
+| `EMAIL_PAUSE_BOUNCE_RATE` | Bounce rate that pauses an organisation. Defaults to `0.04` (4%). |
+| `EMAIL_PAUSE_COMPLAINT_RATE` | Complaint rate that pauses an organisation. Defaults to `0.0008` (0.08%). |
+| `EMAIL_PAUSE_MIN_SENT` | Messages an organisation must have sent in the period before rates count. Defaults to `100`. |
+
+The defaults sit below the rates at which SES reviews an account (5% bounces, 0.1% complaints). Review a paused organisation, then resume it; rates are counted afresh from that point:
+
+```bash
+npx tsx scripts/email-sender.ts status --org <organisation id>
+```
+
+```bash
+npx tsx scripts/email-sender.ts unpause --org <organisation id> --reason "list cleaned" --by "your name" --apply
+```
+
+Also set CloudWatch alarms on the account's own bounce and complaint rates: SES may pause the whole account, which would stop platform email — including password resets — for every organisation.
 
 ## Stored mail credentials
 
 `EMAIL_ENCRYPTION_SECRET` encrypts the SMTP and IMAP passwords organisations save. Keep it stable and back it up with your other secrets: if it changes, stored mail passwords can no longer be decrypted and every organisation must re-enter them.
+
+## Mail servers on private networks
+
+Organisations enter their own SMTP and IMAP host names. Enduria connects only to public addresses, so that a host name cannot be used to reach services inside your network, such as `127.0.0.1`, an internal relay or a cloud metadata address. It checks every address a name resolves to, connects to the address it checked, and verifies the server's certificate against the name, so a DNS answer that changes afterwards cannot redirect the connection.
+
+If an organisation's mail server is deliberately on your network, list it:
+
+| Variable | Purpose |
+| --- | --- |
+| `MAIL_ALLOWED_PRIVATE_HOSTS` | Comma-separated host names (or addresses) that may resolve to private addresses, as organisations enter them. `relay.internal` allows any port; `relay.internal:2525` allows only that port. |
+
+A host that is refused shows *The mail server address is on a private or reserved network* in the connection test, the email log and the inbound mailbox status.
 
 ## Inbound mailbox checks
 
@@ -50,6 +157,7 @@ The scheduler checks each organisation's inbound mailboxes once a minute, honour
 
 After changing email variables, restart the application. Then, in an organisation:
 
-1. Open **Settings → Email Integration** and confirm **Platform email** is available and shows your From address.
-2. Select **Test Connection**.
-3. Trigger a notification and confirm it arrives with the organisation's name and your From address.
+1. Run `npx tsx scripts/email-sender.ts readiness` and fix anything it reports.
+2. Open **Settings → Email Integration** and confirm **Platform email** is available and shows your From address.
+3. Choose it, save, and select **Test connection** under **Verification**.
+4. Trigger a notification and confirm it arrives with the organisation's name and your From address.

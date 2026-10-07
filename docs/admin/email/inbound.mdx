@@ -15,13 +15,15 @@ Enduria reads mailboxes over IMAP with an encrypted connection (TLS or STARTTLS)
 2. Enter a name, the mailbox address, and the IMAP host, port, username and password from your mail provider.
 3. Set the **Polling Interval** — how often Enduria checks the mailbox, from 60 seconds to 24 hours.
 4. Choose what happens to a message after it is processed:
-   - **Processed Folder** moves it to that folder. The field starts as `Processed`; the folder must already exist in the mailbox, and the server must support IMAP MOVE or UIDPLUS.
+   - **Processed Folder** moves it to that folder. The folder must already exist in the mailbox, and the server must support IMAP MOVE or UIDPLUS.
    - Leave **Processed Folder** empty to mark the message as read and leave it in the inbox.
    - **Delete After Processing** removes it instead. The server must support IMAP UIDPLUS.
 5. Optionally choose a default assignee and auto-assignment rules.
 6. Save, then use the test button to check the connection.
 
 :::caution
+The server must have a public address. A mail server on a private network — such as `10.0.0.5` or a name that resolves to one — is refused unless the operator of your installation allows it.
+
 If the processed folder does not exist, Enduria cannot file messages after processing them, and every check fails. Create the folder first, or leave the field empty.
 :::
 
