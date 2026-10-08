@@ -1,0 +1,98 @@
+---
+title: Plan asset replacement
+description: Record support and end-of-life dates for models and operating systems, set replacement ages and costs, and see which assets need replacing and when.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Plan asset replacement
+
+**Assets → Planning** shows which assets need replacing within a period you choose, and why. Each asset becomes a candidate when it hits one of four triggers. The page groups candidates by quarter and estimates the cost in each currency.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Lifecycle dates, **Settings → OS releases**, replacement ages and costs, and **Assets → Planning** require a future application release. Publishing this guidance does not deploy these features.
+
+</Admonition>
+
+The plan uses only facts you record. An asset with no recorded dates, age rule or warranty is not a candidate, and the page shows those gaps instead of treating them as fine. Nothing here is converted between currencies, and it is a planning estimate, not an accounting figure.
+
+## Before you start
+
+Recording lifecycle dates needs `assets.manage` and access across the organisation. Setting replacement ages and model costs needs the settings permissions for categories and models. Anyone who can view assets can open the plan; people tied to one customer see only that customer's assets.
+
+## Record support and end-of-life dates
+
+Dates come from the vendor's published lifecycle. Each record has:
+
+- **End of sale**, **End of support** and **End of life**. Leave any you don't know empty; it shows as **Unknown**.
+- **Source** (required): the vendor's lifecycle page or a document reference.
+- An optional **Note**.
+
+Recording again creates a new version. Earlier versions stay listed under **Earlier versions**, and nothing is overwritten.
+
+### For a hardware model
+
+1. Open **Settings → Models**.
+2. Select **Lifecycle** beside the model.
+3. Enter the dates and the source, then select **Record dates**.
+
+The **Support ends** column shows the end-of-support date, or the end-of-life date when no support date is recorded.
+
+### For an operating system release
+
+1. Open **Settings → OS releases**. It lists the operating systems your devices and connectors report, most common first, with how many devices report each.
+2. Select **Record dates** beside the release.
+3. Enter the dates and the source, then select **Record dates**.
+
+Each release is one name and version exactly as reported, ignoring capital letters and surrounding spaces. If two sources report the same system differently (for example, one connector adds the version to the name), it appears twice. Record dates for each.
+
+The asset's **Overview** shows **Support and end of life** for its model and its operating system.
+
+## Set replacement ages and costs
+
+- **Replacement age:** in **Settings → Asset categories**, edit a category and enter **Replace after (months)**. An asset in that category becomes a candidate when it reaches that age, counted from its purchase date. Leave it empty for no age rule.
+- **Expected replacement cost:** in **Settings → Models**, edit a model and enter **Expected replacement cost** with its **Currency**. The currency starts as your organisation's. Enter both, or clear the cost to remove both.
+
+## Read the plan
+
+Open **Assets → Planning**. Choose a **Horizon** of 6, 12, 24 or 36 months, and optionally a **Client** and **Category**.
+
+An asset is a candidate when, by the end of the horizon:
+
+| Trigger | When |
+| --- | --- |
+| **Model support ends** | Its model's end of support, or end of life when no support date is recorded |
+| **Operating system support ends** | Its reported operating system's end of support, or end of life |
+| **Replacement age reached** | Its purchase date plus its category's replacement age |
+| **Warranty ends** | Its recorded warranty end |
+
+Every trigger is listed under the asset with its date. The earliest is its due date.
+
+Candidates are grouped:
+
+- **Overdue:** due before today.
+- **By quarter:** each calendar quarter after that, in your organisation's time zone.
+
+Each group shows its expected cost in each currency, from the models' expected costs, and how many candidates have no known cost. The summary at the top totals these.
+
+**What is unknown** counts, per category, assets with:
+
+- no age rule;
+- no purchase date;
+- no model dates;
+- no operating system dates;
+- no warranty.
+
+Fill these in to make the plan complete.
+
+**Assumptions** lists the date the plan was made, the horizon, the rules above, how costs are worked out and the scope.
+
+Select **Export CSV** to download the same candidates, followed by the assumptions and the totals.
+
+## What planning doesn't do
+
+- **No depreciation:** it doesn't depreciate assets or calculate book values.
+- **No conversion:** it doesn't convert currencies.
+- **No requests:** it doesn't create purchase or replacement requests.
+- **No automatic dates:** it doesn't fetch dates from any data feed. Dates are only those your team records.
