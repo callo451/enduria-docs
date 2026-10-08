@@ -3,6 +3,8 @@ title: Manage projects
 description: Plan and deliver projects with tasks, timelines, and governance records.
 ---
 
+import Admonition from '@theme/Admonition';
+
 # Manage projects
 
 Projects bring planning, delivery, and governance information together. Use the portfolio for an overall view, then open a project workspace for detailed work.
@@ -16,3 +18,35 @@ Common views include:
 - **Time and expenses** for delivery records.
 
 Project statuses and priorities belong to each project. Use the project's configured values when creating or updating work.
+
+## Link assets
+
+Use a project's **Assets** section to record the devices and equipment the project changes, delivers or uses. Each asset then shows the project.
+
+<Admonition type="info" title="Awaiting rollout">
+
+The **Assets** section and the asset's **Projects** card require a future application release. Publishing this guidance does not deploy these features.
+
+</Admonition>
+
+You need permission to change the project and to view assets. Linking doesn't change the asset.
+
+1. Open the project and select **Assets** under **Work**.
+2. Select **Link asset** and find the asset by tag, name or serial number.
+3. Choose a **Relationship**:
+
+   | Relationship | Use it when |
+   | --- | --- |
+   | **Affected** | The project changes the asset, for example an upgrade, migration or replacement |
+   | **Delivered** | The project deployed or supplied the asset |
+   | **Used** | The project uses the asset as a resource |
+   | **Related** | Any other connection |
+
+4. Optionally add a **Note** of up to 500 characters, then select **Link asset**.
+
+A project for a customer links that customer's assets and your organisation's own assets, such as spares or loaners. An internal project links only your organisation's own assets. Other customers' assets appear in the search but can't be chosen.
+
+Select **Remove** beside an asset to unlink it. Links and removals are recorded in the project's audit history.
+
+The list shows only assets you can see. If others are linked, it says how many without naming them. Archived assets stay linked and are marked **Archived**. If an asset later moves to a different customer, its link is marked as no longer fitting the project so you can remove it. Deleting a project removes its asset links.
+
