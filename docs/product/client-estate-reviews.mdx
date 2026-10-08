@@ -1,0 +1,79 @@
+---
+title: Client estate reviews
+description: Prepare a reviewed summary of one client's estate — custody, devices not reporting, warranty and support ends, coverage and replacement outlook — and publish it as a PDF to the client's portal.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Client estate reviews
+
+An estate review is a PDF summary of one client's estate that you prepare, check and publish to that client's portal. It answers the questions a client's IT contact asks in a quarterly review:
+
+- what they have;
+- who holds it;
+- which devices have gone quiet;
+- what warranty and support is ending;
+- what coverage is in force;
+- what is due for replacement, and roughly what it costs.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Estate reviews require a future application release. Publishing this guidance does not deploy these features.
+
+</Admonition>
+
+Estate reviews are available to MSP organisations.
+
+## What a review contains
+
+Everything in a review is about the one client's active assets, as they stood when the review was generated:
+
+| Section | Shows |
+| --- | --- |
+| **Your estate** | Active assets by category and by state |
+| **Who holds what** | Assets held by the client's own people, by name. Counts of those held by your staff (never named), in storage, with a supplier, unassigned or lost. Loans past their due date. |
+| **Devices not reporting** | Devices with an agent or connector that haven't reported within your organisation's threshold (see [Asset data quality](./asset-data-quality)), and counts of devices that report normally, never reported, or are recorded by hand |
+| **Warranty and support** | Warranty, model support and operating system support ending within the period or already ended, and how many have no recorded date |
+| **Coverage in force** | Warranty and support records in force, and whether each was verified |
+| **Replacement outlook** | Assets due for replacement in the period, with why (see [Plan asset replacement](./asset-planning)). Expected replacement costs are totalled per currency and never converted; assets without an estimate are counted. |
+
+A review never includes other clients, purchase prices, billing figures, internal notes, asset fields, network or hardware detail, or the names of your own staff.
+
+## Prepare a review
+
+You need asset view and manage permissions (`assets.view`, `assets.manage`). If your account is bound to a client, you can prepare reviews only for that client.
+
+1. Open the client, select the **Assets** tab, and find **Estate reviews**.
+2. Choose how far ahead to look (6, 12, 24 or 36 months) and select **Generate draft**.
+3. In the draft:
+   - Write a **Note for the client**, shown at the top of the review.
+   - Untick replacement candidates you don't want to include; the estimate updates as you go.
+   - Select **Preview PDF** to see exactly what will be published. A draft's PDF is marked as a draft.
+   - Select **Save review** to keep your changes.
+4. Select **Regenerate** if the estate has changed since you generated the draft. Your note is kept; unticked candidates are included again.
+
+A draft is visible only to your staff. Drafts are deleted 30 days after they were last generated.
+
+## Publish a review
+
+Select **Publish**. The review gets the next number (EP-0001, EP-0002 and so on), its PDF is created and stored, and it appears in the client's portal. A published review never changes: to correct one, delete it and publish a new one.
+
+Select **PDF** beside a published review to download it, for example to attach it to an email yourself. Enduria doesn't email reviews.
+
+## What the client sees
+
+The client's IT contacts, portal users with the **Client IT contact** role, see an **Estate reviews** section on the portal's **Devices** page once a review is published. They see their own client's published reviews, newest first, and can download each PDF. They never see drafts or other clients' reviews.
+
+## Withdraw a review, and how long reviews are kept
+
+**Delete** a published review to withdraw it from the portal; its record and PDF are removed. Published reviews are deleted automatically 24 months after publication.
+
+Generating, publishing, regenerating, discarding, deleting and every download (by staff or in the portal) are recorded in the audit log.
+
+## What estate reviews don't do
+
+- **Delivery:** they aren't emailed, scheduled or generated automatically.
+- **Customer actions:** clients can't comment on or acknowledge a review.
+- **Agreements:** reviews don't link assets to agreements or support contracts.
+- **Branding:** a review uses your organisation's name and brand colour, without per-client templates.
+- **Accounting:** estimates are for planning, not quotes or accounting figures.
