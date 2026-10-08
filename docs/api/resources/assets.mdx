@@ -29,13 +29,25 @@ For example, replace the category and lifecycle placeholders before submitting:
   "manufacturer": "Example Manufacturer",
   "model": "ExampleBook 14",
   "serialNumber": "SERIAL-EXAMPLE",
-  "specifications": {"memoryGb": 16, "encrypted": true}
+  "fields": {"memory": 16, "storage_type": "SSD"}
 }
 ```
 
 Omit `assetTag` to generate one using the organisation's configured format. If supplied, `assignedTo` must identify a user in the same organisation, and `clientId` must identify one of its clients. Dates use ISO timestamps, such as `2026-10-04T00:00:00Z`.
 
 The public API accepts the field names in its schema. Staff-interface aliases such as `categoryId`, `locationId` and `assignedUserId` are not interchangeable public API fields.
+
+## Asset fields
+
+Assets carry your organisation's [asset fields](../../product/asset-fields) as `fields`, an object keyed by each field's key, in responses and in create and update requests. Field values require a future application release.
+
+- Send numbers as JSON numbers, yes/no fields as `true` or `false`, dates as `YYYY-MM-DD` strings and choices as one of the field's options.
+- Send `null` to clear a value. Keys you leave out keep their values.
+- A value of the wrong type, an option that isn't offered, a retired field, or a field that doesn't apply to the asset's category returns `400`.
+- When you create an asset, or send `fields` in an update, every applicable required field needs a value, from the request or from the catalogue model's defaults.
+- API keys never read or write restricted fields; naming one returns `400` as an unknown field.
+
+The `specifications` object is no longer written through the API. On a device imported from a device management connector it holds that connector's observations, which the connector refreshes.
 
 ## Update or clear fields
 

@@ -20,7 +20,7 @@ Have the relevant categories, locations, clients and assignees ready. Imports cr
 3. Fill in one asset per row, retaining the template headers.
 4. Save as CSV, preserving identifiers as text.
 
-The template includes name, category, tag, serial number, manufacturer, model, location, assignee, client, status, purchase/warranty dates, purchase cost/currency, and notes.
+The template includes name, category, tag, serial number, manufacturer, model, location, assignee, client, status, purchase/warranty dates, purchase cost/currency, and notes, followed by the keys of the [asset fields](./asset-fields) you may import.
 
 Use `categoryId`, `locationId`, `assignedUserId` and `clientId` for references. Obtain these from authorised records or your administrator; display names are not interchangeable with IDs. For one shared category, you can leave the category column blank and select **Default category** on the import page. Legacy category/location text is accepted, but does not establish the same link to a configured reference.
 
@@ -29,6 +29,7 @@ Use `categoryId`, `locationId`, `assignedUserId` and `clientId` for references. 
 - Include `purchaseCurrency` when a cost's currency is known. An omitted currency remains unknown.
 - Use a nonnegative purchase cost with no more than six decimal places, without a currency symbol or thousands separator.
 - Keep the same number of columns in each row. Use CSV quoting for commas, quotes and embedded line breaks.
+- Name [asset field](./asset-fields) columns by the field's key, exactly as **Settings → Asset fields** shows it. Write yes/no values as *yes* or *no*, dates as `YYYY-MM-DD` and choices as one of the options. A row missing a required field is refused unless its model supplies the value. A restricted field's column needs the restricted fields permission. Field values require a future application release.
 
 ### Import existing stock
 
