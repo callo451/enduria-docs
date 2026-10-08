@@ -3,6 +3,8 @@ title: Webhooks
 description: Subscribe to Enduria events, verify signatures, and process retries safely.
 ---
 
+import Admonition from '@theme/Admonition';
+
 # Webhooks
 
 Webhooks deliver lifecycle events to an HTTPS receiver. Delivery is at least once, so receivers must verify signatures and deduplicate before applying side effects.
@@ -75,6 +77,59 @@ The receiver must respond within the configured timeout and return no more than 
 ```
 
 The outer `id` identifies the delivery and stays stable across retries. The timestamp and signature can change on a retry.
+
+## Asset governance events
+
+Every recorded asset governance event is sent as `asset_governance.<source>_<action>`. Examples:
+
+- `asset_governance.archived`
+- `asset_governance.restoration_requested`
+- `asset_governance.disposal_verified`
+- `asset_governance.hold_placed`
+- `asset_governance.custody_overdue`
+- `asset_governance.archive_request_approved`
+- `asset_governance.coverage_expiring`
+- `asset_governance.maintenance_overdue`
+- `asset_governance.repair_opened`
+- `asset_governance.acceptance_declined`
+- `asset_governance.data_quality_agent_silent`
+
+Each event is queued in the same transaction as the change it describes, so a change that is rolled back sends nothing.
+
+<Admonition type="info" title="Awaiting rollout">
+
+The `asset_governance.*` events require a future application release. Retrieve the names available in your workspace from `/webhooks/events`.
+
+</Admonition>
+
+Their `data` carries identifiers and states only:
+
+```json
+{
+  "event": "asset_governance.hold_placed",
+  "eventId": "SOURCE_EVENT_UUID",
+  "assetId": "ASSET_UUID",
+  "clientId": "CLIENT_UUID_OR_NULL",
+  "sourceKind": "hold",
+  "referenceId": "HOLD_UUID",
+  "operationalState": {"before": "in_use", "after": "in_use"},
+  "actorKind": "staff",
+  "occurredAt": "2026-10-08T03:12:44.120Z"
+}
+```
+
+| Field | Meaning |
+| --- | --- |
+| `eventId` | The recorded event, also listed in the asset's event history |
+| `referenceId` | The request, hold, custody event, repair case, coverage record, maintenance work, acceptance or data-quality item; `null` for an archive |
+| `operationalState` | The asset's fixed operational state before and after the change |
+| `actorKind` | `staff`, `customer`, `api` or `system` |
+
+Names, asset tags, reasons, notes and evidence are never included. Read them through the API with your own key, which applies your scopes and customer access.
+
+`asset.retired` is sent only when an asset leaves the register as retired, with the same fields. It is not sent when a status is renamed or chosen.
+
+The older `asset.*` events, such as `asset.repair_opened` and `asset.acceptance_declined`, are unchanged and still include display fields.
 
 ## Verify signatures
 

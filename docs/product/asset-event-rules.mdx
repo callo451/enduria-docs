@@ -1,17 +1,25 @@
 ---
 title: Configure asset event rules
-description: Notify authorised staff and highlight existing reviews when retained asset events match published rules.
+description: Notify authorised staff, highlight existing reviews and suggest follow-up actions when retained asset events match published rules.
 ---
 
 import Admonition from '@theme/Admonition';
 
 # Configure asset event rules
 
-Use **Settings → Asset event rules** to notify selected staff when an asset is archived, reviewed restoration or disposal progresses, or a disposal hold changes. A rule can also highlight an existing review for someone who is already eligible to act on it.
+Use **Settings → Asset event rules** to react when something is recorded about an asset. Examples include an archive, a restoration or disposal step, a custody change, a repair, a coverage or maintenance reminder, a declined hand-over or a data-quality finding.
+
+A rule can:
+
+- notify selected staff;
+- highlight an existing review for someone who is already eligible to act on it;
+- suggest a follow-up action, which a selected person runs themselves.
 
 <Admonition type="info" title="Awaiting rollout">
 
-Asset event rules, **Event notices** and rule-driven review highlights require a future application release. Publishing this guide does not enable these features in your workspace. Keep your existing procedures until the controls are available.
+Asset event rules, **Event notices** and rule-driven review highlights require a future application release. So do suggested actions, the archive request, reminder, repair, acceptance and data-quality events, and the matching governance webhooks.
+
+Publishing this guide does not enable these features in your workspace. Keep your existing procedures until the controls are available.
 
 </Admonition>
 
@@ -31,6 +39,15 @@ Configure the asset's customer, category and lifecycle vocabulary before using t
 | Restoration | **Restoration requested**, **Restoration approved and completed**, **Restoration rejected**, **Restoration cancelled** |
 | Disposal | **Disposal requested**, **Disposal approved**, **Disposal execution evidence recorded**, **Disposal independently verified**, **Disposal rejected**, **Disposal cancelled** |
 | Disposal hold | **Hold placed**, **Hold independently released** |
+| Custody | **Handed over to a person**, **Returned by its holder**, **Recorded as lost**, **Recorded as found**, **Loan overdue** |
+| Archive requests | **Archive requested**, **Archive request approved**, **Archive request rejected** (the final decision, not each stage) |
+| Coverage | **Coverage expiring** (at each configured reminder before the end date), **Coverage expired** |
+| Maintenance | **Maintenance due** (on the due date), **Maintenance overdue** |
+| Repair | **Repair case opened**, **Back from repair**, **Repair case closed** |
+| Acceptance | **Acceptance declined** |
+| Data quality | **Source missing**, **Agent silent** (each time the item opens) |
+
+Coverage and maintenance events are recorded when their reminder is delivered, once per reminder. They follow your reminder settings in **Settings → Asset service**.
 
 These events describe recorded actions. An archive event does not prove physical disposal, and recorded execution evidence does not replace independent verification.
 
@@ -38,8 +55,32 @@ These events describe recorded actions. An archive event does not prove physical
 | --- | --- |
 | **Create an in-app event notice** | **Assets → Event notices** for currently authorised selected recipients |
 | **Highlight an existing eligible review** | **Assets → Reviews**, only for a selected person who already qualifies for that pending review |
+| **Suggest an action to the recipients** | **Suggested actions** on **Assets → Event notices** and on the asset's **History** tab, for the selected recipients |
 
 Review highlights are available only for restoration requests, disposal requests and recorded disposal execution evidence. They cannot appoint a reviewer, change a policy, restart a round or make an approval decision.
+
+## Suggest an action
+
+When you choose **Suggest an action to the recipients**, also choose **Action to suggest**. Then enter a **Reason shown to recipients** of 10–500 characters, in plain text.
+
+| Action to suggest | What running it does |
+| --- | --- |
+| **Archive the asset** | Submits an archive request under your [archive approval](./asset-approvals) settings. If archive approval is off, it archives the asset directly. |
+| **Check the asset in** | Records the asset's return from its holder in custody, optionally to a stockroom. |
+| **Mark the asset lost** | Records the asset as lost in custody. |
+| **Place a disposal hold** | Places a disposal hold. A different asset manager releases it. |
+| **Propose a follow-up ticket** | Proposes one [follow-up ticket](./asset-follow-up-tickets) from the event. A different person reviews it before the ticket exists. |
+| **Open a repair case** | Opens a [repair case](./asset-repairs-and-maintenance), using the reason as the fault. |
+| **Schedule maintenance work** | Schedules one piece of maintenance work. |
+
+A suggestion never runs by itself. One of the selected recipients runs it as themselves, and every check of that action still applies:
+
+- their own permissions;
+- your custody policy (a gated custody change becomes a custody request);
+- archive approval;
+- independent review of a ticket proposal.
+
+A rule creates one suggestion per event, shared by its recipients. The first person to run or dismiss it decides it for everyone.
 
 ## Prepare and publish rules
 
@@ -64,9 +105,37 @@ A preview evaluates hypothetical rule events against the selected asset's curren
 
 Check the selected customer, category and lifecycle conditions. If a recipient loses access, becomes inactive or no longer qualifies to review the request, the published rule cannot restore that authority.
 
+## Act on a suggested action
+
+1. Open **Assets → Event notices** and find **Suggested actions**, or open the asset's **History** tab. A suggestion appears there only when it was addressed to you.
+2. Read the action, the reason, the event and the rule.
+3. Select the action's button, for example **Place a disposal hold…**. Complete what it asks for:
+
+   | Action | You provide |
+   | --- | --- |
+   | **Check the asset in** | **Check in to**: a stockroom, or **Unplaced** |
+   | **Propose a follow-up ticket** | **Ticket title**, **Ticket description**, priority and category |
+   | **Schedule maintenance work** | **Work title** and **Due on** |
+
+4. Edit the prefilled **Reason** (or **Fault** for a repair case) to say what you found. Then select the action's button in the dialog.
+5. To decline a suggestion, select **Dismiss…** and give a reason of at least 10 characters.
+
+You need asset view permission and at least one of `assets.edit`, `assets.manage`, `assets.archive`, `assets.dispose` or `tickets.view.all`. The action then needs its own permission; for example, placing a hold needs `assets.dispose`. A person who can only view assets sees the suggestion but cannot run or dismiss it.
+
+A suggestion is shown as **Waiting**, **Done**, **Dismissed** or **No longer applies**. Select **Open the result** on a done suggestion to see the request, hold, case or work it created.
+
+A suggestion no longer applies when, since the event:
+
+- the asset moved to another customer;
+- the asset was archived or restored;
+- the asset is archived (except for a follow-up ticket);
+- the rule was disabled or removed.
+
+Running such a suggestion records that it no longer applies instead of acting.
+
 ## Disable a published rule
 
-Enter **Reason for publication or disable**, then select **Disable published rule** beside the published rule. Disabling publishes a new version and stops work that has not been delivered. It does not erase prior events, publications or delivery evidence. Changing a draft alone does not disable its published rule.
+Enter **Reason for publication or disable**, then select **Disable published rule** beside the published rule. Disabling publishes a new version and stops work that has not been delivered. Suggestions from that rule that are still waiting no longer apply. It does not erase prior events, publications or delivery evidence. Changing a draft alone does not disable its published rule.
 
 Disabling uses the published rule set and replaces the saved draft with that set plus the disabled rule. Preserve any draft changes you still need before using it. Previously captured actions from a rule that remains enabled retain the publication and recipients selected for their event; editing a future version does not rewrite them.
 
@@ -108,6 +177,11 @@ When available, an authorised staff member can manually [propose a reviewed foll
 | A preview matched but delivery did not occur | Preview uses current hypothetical facts. Actual matching and recipient authority are checked for the real event and delivery. |
 | Saving says the rules changed | Select **Reload saved draft**, compare the current draft and publication, then reapply the intended changes. Another administrator's newer version is not overwritten automatically. |
 | A selected person or condition is refused | Select an active tenant-owned customer, category or asset status, and currently eligible recipients. These are checked even for disabled draft rules. Narrow a directory search if its results are truncated. |
+| A suggestion's button is missing | You need a staff permission beyond viewing assets to act on suggestions. Ask an administrator, or ask another recipient to act. |
+| Running a suggestion is refused | The action's own checks apply: its permission, your custody policy, an open repair case, or an existing ticket proposal for the same event. Fix the cause and run it again, or dismiss it. |
+| A suggestion says it no longer applies | The asset changed since the event, or the rule was turned off. Act from the asset directly if it is still needed. |
 | The log shows skipped work | Check its reason: the rule may have been disabled, the asset's customer binding changed, the publisher or recipient lost authority, or the original independent review was no longer available. Skipped work is retained rather than silently delivered later. |
 
-Rules do not send email, change asset lifecycle or assignment, release holds, perform disposal, restore credentials or create tickets. They cannot run scripts or call arbitrary external URLs. External integrations remain separate from these in-app outcomes.
+Rules do not act by themselves. They do not send email, change asset lifecycle or assignment, release holds, perform disposal, restore credentials or create tickets. A suggested action runs only when a person runs it. Rules cannot run scripts or call arbitrary external URLs.
+
+For external integrations, subscribe to the `asset_governance.*` [webhooks](../api/webhooks#asset-governance-events). Every event in the tables above is also sent as a webhook with identifiers and states only.
