@@ -1,0 +1,105 @@
+---
+title: Stock counts and asset audits
+description: Count what is really in a stockroom and check that assets are where the register says, with a second person reviewing every difference before anything changes.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Stock counts and asset audits
+
+Counts and audits check your records against what is physically there. Both work the same way:
+
+1. When you start one, Enduria **freezes what the records say** should be there.
+2. People **record what they find**, by scanning labels or ticking items off.
+3. Enduria lists the **differences**.
+4. **A different person reviews them.** Nothing in stock or the asset register changes until they do.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Stock counts and asset audits require a future application release. This guide describes the intended behaviour for that release; publishing documentation does not change your workspace.
+
+</Admonition>
+
+## Count a stockroom
+
+1. Open **Inventory → Counts** and select **Start a count**.
+2. Choose the stockroom. The count covers the stockroom and all its bins.
+3. Leave **Blind count** on (recommended). Counters then don't see the quantities on record until the count is submitted, so they count what is there rather than confirming a number.
+4. Select **Start count**.
+
+On the count page:
+
+- Type the quantity you count for each item and place.
+- For items tracked by serial number, scan each unit's label (or type its tag or serial number and press Enter), or tick it off the list. A unit you scan that isn't expected here is recorded as seen.
+- Select **Save counts** as you go, and **Submit count** when every line is counted.
+
+**Stock can keep moving while you count.** Each line is compared with the stock at the moment you saved it, so an issue or receipt during the count doesn't show up as a difference.
+
+If everything matches, the count completes straight away. Otherwise it waits for review.
+
+### Review a count
+
+A person with inventory management access, **who neither started nor submitted the count**, opens it and sees:
+
+- each item that differs, and by how much;
+- units that weren't found;
+- units seen that weren't expected.
+
+They either send the count back to be counted again, with a reason, or select **Approve and post corrections**. Approving:
+
+- posts a correction for each difference, applied to the stock as it is now, so anything that moved since counting is kept;
+- writes off each unit that wasn't found as lost, if it is still recorded in that stockroom;
+- records what was done about each unexpected unit (a note is required for each).
+
+Approval is the independent approval for these corrections, so they don't also need your stock approval settings. Each item's last count date is updated.
+
+The quick **Count** action on an item still exists for one-off corrections, and still follows your adjustment approval settings.
+
+## Audit assets at a place
+
+1. Open **Assets → Audits** and select **Start an audit**.
+2. Give it a title, then choose **Places** (each place includes everything beneath it) or **A client's sites**.
+3. Select **Start audit**. The active assets recorded at those places are listed. Archived assets are left out.
+
+On the audit page:
+
+- Scan each asset's label (or type its tag or serial number) to record it as **seen here**, or use **Here** on its row.
+- If an asset is somewhere else, select **Elsewhere** and choose where it was seen.
+- If you scan an asset that isn't on the list, it is recorded as seen at the place you chose under **Where you are**.
+- Select **Submit audit** when done. Anything not seen is listed as not found.
+
+If every asset was seen where expected, the audit completes. Otherwise a person with asset management access, who neither started nor submitted it, decides each exception:
+
+| Exception | Choices |
+| --- | --- |
+| Not found | **Record as missing** (recorded as lost through custody, so your custody settings apply), or **Note it** with a reason |
+| Found elsewhere, or not expected here | **Record the new location**, or **Note it** with a reason. An asset kept in storage at a stockroom must be moved through custody first. |
+
+Completing the review applies these decisions. Every asset seen is stamped with the audit, and its page shows **Last audited** with a link to the audit.
+
+## Permissions
+
+| To | You need |
+| --- | --- |
+| Start, count and submit a stock count | Stock adjustment permission (inventory staff without a client restriction) |
+| Review a stock count | Inventory management permission, and not having started or submitted it |
+| Start, observe and submit an audit | Asset edit permission |
+| Review an audit | Asset management permission, and not having started or submitted it |
+
+Staff limited to one client can audit that client's sites only. Customers don't take part in audits.
+
+## Resolve common problems
+
+| Problem | What to check |
+| --- | --- |
+| **Submit count** is disabled | Save your counts first, and count every line. |
+| "Stock at this place has fallen below what the count would remove" | Stock moved out since the count. Send it back and count again. |
+| A scan finds nothing | Scan the asset tag on the label, or type the tag or serial number. |
+| **Record the new location** isn't offered | The asset is kept in storage at a stockroom. Move it through its Custody tab, then note the exception. |
+| Recording an asset as missing is refused | Your custody settings require approval to record assets as lost. Ask for it on the asset's Custody tab first, then note the exception. |
+
+## Current limits
+
+- People can't confirm the assets they hold themselves; audits are carried out by staff.
+- Scanning works with a USB or Bluetooth scanner that types into the page, or by typing. There is no camera scanning yet.
+- Counts aren't scheduled automatically, and there are no value thresholds for reviewing differences.

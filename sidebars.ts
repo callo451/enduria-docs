@@ -7,9 +7,9 @@ const sidebars: SidebarsConfig = {
     {type: 'category', label: 'Using Enduria', link: {type: 'doc', id: 'product/overview'}, items: [
       'product/tickets',
       {type: 'category', label: 'Asset management', link: {type: 'doc', id: 'product/assets'}, items: [
-        'product/asset-imports', 'product/asset-lifecycle', 'product/asset-approvals',
+        'product/asset-imports', 'product/asset-data-quality', 'product/asset-custody', 'product/asset-acceptance', 'product/asset-loans-and-leavers', 'product/asset-statuses', 'product/asset-lifecycle', 'product/asset-approvals', 'product/asset-event-rules', 'product/asset-follow-up-tickets', 'product/inventory', 'product/stock-reservations', 'product/purchase-orders', 'product/supplier-invoices', 'product/client-stock-and-billing', 'product/counts-and-audits', 'product/asset-repairs-and-maintenance', 'product/asset-planning', 'product/software-catalogue', 'product/asset-fields', 'product/client-estate-reviews', 'product/agreement-coverage', 'product/asset-assistance',
       ]},
-      'product/projects', 'product/knowledge-base', 'product/customer-portal',
+      'product/projects', 'product/knowledge-base', 'product/customer-portal', 'product/email-notifications',
     ]},
     'troubleshooting',
   ],
@@ -17,7 +17,7 @@ const sidebars: SidebarsConfig = {
     {type: 'doc', id: 'admin/overview', label: 'Administration overview'},
     'admin/users-and-permissions', 'admin/branding',
     {type: 'category', label: 'Email', link: {type: 'doc', id: 'admin/email/overview'}, items: [
-      'admin/email/outbound', 'admin/email/inbound', 'admin/email/notifications', 'admin/email/troubleshooting',
+      'admin/email/outbound', 'admin/email/inbound', 'admin/email/notifications', 'admin/email/deliverability', 'admin/email/troubleshooting',
     ]},
     'admin/integrations', 'admin/storage',
   ],

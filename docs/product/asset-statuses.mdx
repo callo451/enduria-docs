@@ -1,0 +1,98 @@
+---
+title: Asset states and statuses
+description: Understand the fixed state every asset is in, name your own statuses under each state, choose defaults, hide states you don't use, and send assets for repair.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Asset states and statuses
+
+Every asset is in one **state** that describes where it is in its life. Under each state, your organisation names its own **statuses**, for example *Awaiting imaging* under **In stock** or *With vendor* under **In repair**.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Asset states, the **Asset statuses** settings page and the repair actions require a future application release. This guide describes the intended behaviour for that release; publishing documentation does not change your workspace.
+
+</Admonition>
+
+## States
+
+States are the same for every organisation. Enduria sets an asset's state from what has happened to it; you can't pick a state directly.
+
+| State | What it means | How an asset gets there |
+| --- | --- | --- |
+| **On order** | Ordered and not yet received. | Reserved for purchasing, which a later release adds. Hidden until then. |
+| **In stock** | Held in a stockroom. | Checked in to a stockroom, received into stock, or returned from repair to a stockroom. |
+| **In use** | Deployed, with a person or without one, such as a server, a switch or a meeting-room screen. | Checked out to a person, created, or returned from repair to a person. |
+| **In repair** | With a supplier or at your own repair bench. | **Send for repair**. |
+| **Missing** | Recorded as lost. | **Mark lost**. |
+| **Retired** | Taken out of service: written off stock and awaiting disposal, or archived. | Removing a unit from stock, or [archiving the asset](./asset-lifecycle). |
+| **Disposed** | Disposal completed and independently verified. | [Verifying a disposal](./asset-lifecycle#dispose-of-an-asset). |
+
+Archived assets are always **Retired** or **Disposed**. Restoring an archived asset returns it to the state its custody implies: **In use** for an asset held by a person or by nobody, **In stock** for one in a stockroom.
+
+## Statuses
+
+A status is a name within one state. It never changes what Enduria does with the asset: stock counts, custody rules and approvals follow the state. Use statuses to label and filter, for example to separate laptops *Awaiting imaging* from those *Ready to issue* while both are **In stock**.
+
+- **Each state has one default status.** When something moves an asset to a new state, such as a check-in, the asset takes that state's default status.
+- **People choose any status of the current state.** On the asset's edit page, the status list offers only statuses of the asset's current state.
+- **Statuses are kept, never deleted.** Retire a status you no longer use; Enduria moves the assets that have it to another status of the same state that you choose.
+
+Every organisation starts with one status per state, named after the state.
+
+## Manage statuses
+
+You need settings-management permission, without a client restriction.
+
+1. Open **Settings → Asset statuses**. Statuses are grouped by state.
+2. To add one, choose **Add status** in the state's section, enter a name and, optionally, a colour as a hex value such as `#00959a`, and save.
+3. Use **Edit** to rename or recolour a status, **Up** and **Down** to reorder it, and **Make default** to make it the state's default.
+4. To stop using a status, choose **Retire**, then choose where its assets move. A state's default can't be retired: make another status the default first. Retired statuses stay listed so you can **Restore** them.
+
+Renaming a status keeps its key, the value integrations and imports use, so they keep working.
+
+## Hide states you don't use
+
+In **States in use**, turn off a state your organisation doesn't use and choose **Save**. A hidden state isn't offered in filters or pickers. A state can be hidden only while no asset is in it. **On order** starts hidden.
+
+Hiding **In repair** turns off **Send for repair**. Show it again to send assets for repair.
+
+## Send an asset for repair
+
+You need asset-edit permission. Repairs are recorded in custody, so the asset's custody history shows when it left and who had it.
+
+1. Open the asset, select the **Custody** tab and choose **Send for repair**.
+2. Choose **Supplier** and select the repairer, or **Internal repair** and select the stockroom or bench where your own team repairs it. Suppliers come from **Settings → Inventory → Suppliers**.
+3. Enter a reason. Optionally add a ticket number, the expected return date (for a supplier) and the asset's condition.
+4. Choose **Send for repair**.
+
+The asset is **In repair**, held by the supplier or at the repair location, with **In repair**'s default status. Anyone who held it is recorded as handing it over. A [tracked unit](./inventory#work-with-a-unit) leaves stock, whatever its stock state; this is not an issue to a person, so the issue approval setting does not apply.
+
+While an asset is in repair, it can't be checked out or transferred. You can still mark it lost or record its condition.
+
+## Return an asset from repair
+
+1. On the **Custody** tab, choose **Return from repair**.
+2. Choose **Person** to put it back into use with someone, or **Stockroom** to put it back in stock.
+3. Optionally record its condition and notes, then confirm.
+
+A tracked unit returned to an organisation stockroom is counted there again as available. To record a different triage outcome, such as **Defective**, use **Check in to stock** on the asset's **Stock** card instead.
+
+## Find assets by state
+
+On the **Assets** list, use the state filter to show, for example, everything **In repair**. The asset page shows the state with the status, such as **In stock · Awaiting collection**.
+
+## Resolve common problems
+
+| What you see | What to do |
+| --- | --- |
+| **Choose a status within the asset's current state** | The status belongs to another state. Pick one of the offered statuses, or change custody first. |
+| **Repairs are turned off** | **In repair** is hidden. Show it in **Settings → Asset statuses**. |
+| **A state can be hidden only while no asset is in it** | Move or return the assets in that state first. Use the state filter on the **Assets** list to find them. |
+| **Choose another default for this state before retiring its default status** | Make another status of the same state the default, then retire this one. |
+| **This asset is in repair. Return it from repair first.** | Use **Return from repair** before checking the asset out. |
+
+## Current limits
+
+This release does not yet provide repair records with costs, RMA numbers or loaner devices, reservations of stock, or purchasing that puts assets **On order**.

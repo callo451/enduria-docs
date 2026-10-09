@@ -1,0 +1,96 @@
+---
+title: Software catalogue
+description: See which software your devices run, map reported programs to catalogue titles with reviewed rules, record version support dates, and link titles to licensing.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Software catalogue
+
+**Assets → Software** lists the software your devices report, grouped into catalogue titles such as *Microsoft 365 Apps* or *Zoom Workplace*. For each title you can see:
+
+- the devices that run it, with their versions and platforms;
+- when each version stops being supported;
+- for licensing staff, how its licences compare in four separate figures.
+
+<Admonition type="info" title="Awaiting rollout">
+
+The software catalogue requires a future application release. Publishing this guidance does not deploy these features.
+
+</Admonition>
+
+An installed program is not a licence. The catalogue never works out licence counts, shortfalls or reclaimable licences from what is installed.
+
+## Where the software comes from
+
+The Enduria agent reports each device's installed programs. Every report replaces that device's list:
+
+- a program reported again keeps the date it was first seen;
+- a program no longer reported leaves the device's list.
+
+Device management connectors don't report software. A device's software appears after its agent's next report; earlier reports are not imported.
+
+The asset's **Software** tab lists its programs with their catalogue title, or **Unmapped**, and when the version's support ends.
+
+## Map programs to titles
+
+Programs are mapped to titles by rules that asset managers review. You need `assets.manage` and access across the organisation.
+
+1. Open **Assets → Software** and select **Unmapped**. Programs that no rule maps yet are grouped by name and publisher, with how many devices report each, most common first.
+2. Select **Map…** beside a program.
+3. Choose **New title** (enter its publisher and name), or **Existing title**.
+4. Choose how the rule matches the program name:
+
+   | Match | Use it for |
+   | --- | --- |
+   | **Name is** | One program name exactly |
+   | **Name starts with** | Names that add an edition or language, such as *Microsoft 365 Apps for enterprise - en-us* |
+   | **Name matches pattern** | Names with a variable part in the middle. Use `*` where any text may appear, for example `Microsoft Visual C++ * Redistributable*` |
+
+   Capital letters and extra spaces are ignored. A starts-with rule or a pattern needs at least three letters besides `*`, so it can't match almost everything.
+5. Under **Publisher**, choose **Must be** with the reported publisher, or **Any publisher**.
+6. Select **Preview**. It shows how many installs on how many devices the rule would map, how many are unmapped now, and how many would move from another title, with examples.
+7. Select **Save rule**. You can only save the exact rule you previewed; change anything and preview again.
+
+When more than one rule matches a program, the most specific wins:
+
+1. **Name is** beats **Name starts with**, which beats a pattern.
+2. Between rules of the same kind, the one with more letters wins.
+3. A rule naming a publisher beats one for any publisher.
+4. If they are still tied, the older rule wins.
+
+To undo a mapping, open the title and select **Remove** beside the rule. Its programs then follow the next rule that matches, or return to **Unmapped**. Rules can't be edited; remove one and add another instead. Adding and removing rules is recorded in the audit history.
+
+## Record support dates for versions
+
+On a title, add a **version line** for each group of versions that share support dates.
+
+1. Enter what the version **starts with**, for example `16.` or `2019`, and select **Add line**. Leave it empty for every version.
+2. Select **Record dates** beside the line.
+3. Enter the end of sale, support and life you know, and the **Source** they come from. Then select **Record dates**.
+
+An installed version takes the dates of the longest line it starts with. Dates work as they do for models and operating systems: every change is a new version with its source, and an unrecorded date shows as **Unknown** (see [Plan asset replacement](./asset-planning)).
+
+The asset's **Support and end of life** card lists its installed software that has recorded dates, soonest end of support first. Replacement planning doesn't use software dates yet.
+
+## Link a title to licensing
+
+People with `licensing.edit` or `licensing.manage` can link a title to one licensing product. Open the title, choose the **Licensing product**, and select **Save link**. Choose **Not linked** to remove the link. Links are recorded in the audit history.
+
+People with `licensing.view` then see four figures side by side:
+
+| Figure | What it counts |
+| --- | --- |
+| **Installed** | Devices you can see that report the title |
+| **Assigned** | Active licence assignments for the product |
+| **Entitled** | Active entitlement quantity for the product |
+| **Used** | People or devices with usage records in the last 90 days |
+
+Each figure is its own fact. They count different things, so the page doesn't subtract one from another or flag differences.
+
+## What the catalogue doesn't do
+
+- **Connectors:** it doesn't import software from Intune, Fleet or other connectors.
+- **Usage:** it doesn't meter usage.
+- **Mapping:** it doesn't map programs automatically or from a public software database.
+- **Licensing:** it doesn't decide licence compliance.

@@ -1,0 +1,106 @@
+---
+title: Asset fields
+description: Define the fields your team records on assets, such as processor or screen size, choose which categories they apply to, keep sensitive values restricted, and give catalogue models default values.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Asset fields
+
+Asset fields record facts your team enters on assets that the standard record doesn't hold, such as a laptop's memory or a printer's paper size. You define them once for your organisation, in **Settings → Asset fields**, and choose which categories each applies to.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Asset fields require a future application release. Publishing this guidance does not deploy these features.
+
+</Admonition>
+
+Fields are for facts people enter. What devices report, such as hostname, IP and MAC addresses, operating system and installed software, comes from agents and connectors, and the asset shows it separately. The asset's identity, client, custodian, location, status and cost stay on the standard record.
+
+## Define a field
+
+You need `settings.edit` or `settings.manage`, and an account not bound to one client.
+
+1. Open **Settings → Asset fields** and select **Add field**.
+2. Enter a **Label**. The **Key** is generated from it; you can change the key before saving.
+3. Choose the **Type**:
+
+   | Type | Holds |
+   | --- | --- |
+   | **Text** | One line, up to 500 characters |
+   | **Number** | A number, with an optional **Unit** such as GB or in |
+   | **Date** | A calendar day |
+   | **Yes/no** | Yes or no |
+   | **Choice** | One of the **Options** you list, one per line |
+
+4. Optionally enter a **Section**, such as *Hardware*, to group fields on forms, and a **Help text**.
+5. Under **Applies to**, choose **All categories** or **Chosen categories**.
+6. Turn on **Required** if every asset the field applies to should have a value.
+7. Choose the **Sensitivity**: **Standard** or **Restricted** (see [Restricted fields](#restricted-fields)).
+8. Select **Add field**.
+
+The key, type and unit never change after you add the field. The key names the field in imports, exports and the API. To change a field's type or unit, retire it and add another.
+
+Use the arrows beside a field to change the order forms show fields in.
+
+## Change, retire or delete a field
+
+Select **Edit** to change a field's label, help text, section, categories, options, sensitivity or whether it is required. Each saved change is a new version of the field; **History** lists every version, with who saved it and when.
+
+A change never alters values assets already hold:
+
+- **Options:** a removed option is no longer offered. Assets that hold it keep it, shown as *no longer offered*, until someone changes that field.
+- **Required:** a field you make required applies the next time someone saves an asset's fields. The field list shows how many assets are missing it; existing assets aren't blocked.
+- **Categories:** an asset in a category the field no longer applies to keeps its value. The asset shows it under *Other fields*, where it can be cleared but not changed.
+
+**Retire** a field that has values. It leaves forms and imports; assets keep their values, shown as retired, and exports still include them. **Reinstate** brings it back. You can **Delete** only a field that no asset or model has a value for.
+
+## Restricted fields
+
+A restricted field holds a value only some staff may see. Reading or changing one needs the **Restricted asset fields** permission (`assets.fields.restricted`) as well as permission to view or edit the asset. Making a field restricted, or changing a restricted field, needs it too.
+
+People without the permission don't see a restricted field anywhere:
+
+- on the asset, its edit form or the create form;
+- in CSV exports, or as an import column (a row that names one is refused);
+- in the asset's history, which shows only that *a field changed*.
+
+API keys never read or write restricted fields, and customers never see any asset field.
+
+The permission is granted to the Administrator, Technical lead and Asset manager roles. Existing organisations receive it through the role permission repair; a custom role gets it only if an administrator adds it.
+
+Restricted fields aren't a password vault. Don't store passwords, recovery keys or other credentials in them.
+
+## Fill in fields on an asset
+
+The asset's create and edit forms show a **Fields** section with the fields that apply to its category, grouped by section. Required fields are marked, and the asset can't be saved without them.
+
+The asset's Overview has a **Fields** card listing its values. The asset's **History** records each change to a field with the old and new value. Restricted fields are recorded only as *changed*. Values entered when the asset is created aren't history entries.
+
+If someone else changed the same field while you were editing, saving is refused and the form names the field. Select **Load their changes**, check them, and save again.
+
+## Give a model default values
+
+A catalogue model can give its new assets starting values, for example 16 GB of memory for a laptop model.
+
+1. Open **Settings → Models** and select **Fields** beside the model.
+2. Enter the values. Only fields that apply to the model's category are offered.
+3. Select **Save defaults**.
+
+A new asset of the model starts with these values, however it is created: the asset form, an import, the API, or receiving stock. On the asset form they appear filled in, and the person creating the asset can change or clear them. Each value belongs to the asset from then on. Changing a model's defaults later, or linking an existing asset to a model, never changes existing assets.
+
+## Import, export and the API
+
+- **Export:** the asset register's CSV export has a column for each field you may see, headed by its key, including retired fields. Yes/no values are written as *yes* or *no*.
+- **Import:** add a column named by the field's key, exactly as **Settings → Asset fields** shows it. Write yes/no fields as *yes* or *no*, dates as `YYYY-MM-DD` and choices as one of the options. A row missing a required field is refused unless the model supplies it. The downloaded template includes the keys of the fields you may import. See [Import assets from CSV](./asset-imports).
+- **API:** assets carry their standard fields as `fields`, by key, and accept them on create and update. See [Assets](../api/resources/assets).
+
+## When you first set up
+
+A new organisation starts with a short list of common fields, each applied to the categories it fits: processor, CPU cores, memory, storage type and capacity, graphics, screen size, resolution, port count, PoE, printer type and duplex. Edit, retire or delete any of them. An organisation that already has fields keeps its own list.
+
+## What asset fields don't do
+
+- **Reporting:** fields aren't yet available in the report builder or as asset list columns and filters.
+- **Types:** there are no multi-select, link, person or calculated fields, and no fields shown only when another field has a value.
+- **Scope:** fields are organisation-wide. There are no per-client field lists, and fields don't apply to stock items or licences.

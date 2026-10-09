@@ -1,0 +1,194 @@
+---
+title: Manage inventory stock
+description: Keep stock in stockrooms, receive and issue tracked units by serial number, record stock you already hold, move stock with transfer orders, and set which changes need approval.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Manage inventory stock
+
+Use **Inventory** to keep stock of parts and equipment: what you hold, which stockroom it is in, what has been received, issued, counted or written off, and what is running low. Each inventory item is a stock-keeping record with a SKU and a unit cost. Its stock is held in one or more stockrooms.
+
+<Admonition type="info" title="Awaiting rollout">
+
+The stock ledger, transfer orders, approval settings and tracked units described here require a future application release. Publishing documentation does not change your workspace.
+
+</Admonition>
+
+## Before you start
+
+Inventory is shared across your whole organisation. You need inventory permissions to use it:
+
+- **View** inventory to browse items, stock, units, transfers and movements. Staff who can only view movements can open the movement history.
+- **Adjust stock** to record stock changes and create, dispatch and receive transfers. Receiving units also needs permission to create assets, and changing a unit needs permission to edit assets, because each unit is an asset.
+- **Manage inventory** to approve or reject stock changes and transfers, and to change inventory settings.
+
+Customer portal users and staff assigned to a specific client can't use inventory or change units, even if their role includes inventory permissions.
+
+## Two kinds of stock
+
+How an item's stock is counted depends on its [catalogue model](./assets#models):
+
+- **Counted by quantity.** Items with no model, or with a consumable or component model, such as cables, toner or spare drives. You record how many are received, issued and so on.
+- **Tracked units.** Items whose model is a **tracked asset**, such as laptops, phones and monitors. Each unit has a serial number and is its own asset record, the same record while it sits in a stockroom and after it is issued. The item's stock is the number of its units in stock. A tracked model has one stock item; Enduria creates it, named after the model, the first time one of its assets joins stock.
+
+Whether new models are tracked by default is set per asset category in **Settings → Asset categories** (**Track new models by serial number**). Computers, laptops, servers, network devices, mobile devices and monitors start tracked; you can change any category, and each model's own tracking setting.
+
+## Where stock is
+
+Stock is kept in **stockrooms**: organisation-wide locations marked **Holds stock** in the shared location list (see [Locations](./assets#locations)). A bin is a stockroom location inside another stockroom.
+
+Open an item to see **Stock by place**: how many units are in each stockroom or bin, how many are on transfer orders in transit, and any changes waiting for approval. For tracked items, **Units** lists each unit with its asset tag, serial number, state and where it is.
+
+- **On hand** is stock in stockrooms. **Available** is on-hand stock that isn't [reserved for a service request](./stock-reservations). Stock in transit counts towards what you hold but isn't available.
+- **Reserved** stock is held for service requests. It can only be issued against its request; see [stock reservations](./stock-reservations).
+- For tracked items, only units in the **Available** state count as available. Units pending repair, defective, in quarantine or awaiting disposal are on hand but can't be issued.
+- Each item has a **home stockroom**, the default place for receipts. Changing it doesn't move any stock.
+
+## Receive tracked units
+
+Open a tracked item and choose **Receive units**.
+
+1. Choose **Delivery** for units arriving now, or **Opening stock** for units you already hold.
+2. Choose the stockroom and enter the delivery or opening-stock reference.
+3. Enter one serial number per unit: one per line, or paste a column from a spreadsheet. Up to 200 units at a time.
+4. Check the asset category (it defaults to the model's). Optionally enter an asset name, purchase date, warranty end date and unit purchase cost for every unit.
+5. Choose **Receive**.
+
+Each serial becomes an asset in stock, **Available**, with a generated asset tag. Serial numbers must be unique among your active assets of the same model; a serial already recorded, or repeated in the list, is refused before anything is created.
+
+## Work with a unit
+
+Open the unit's asset page. Its **Stock** card shows the stock item, the unit's state and its stockroom, with these actions:
+
+| Action | What it does |
+| --- | --- |
+| **Issue** | Gives an available unit to a person, for a ticket or with a reason, optionally with a due-back date. Issued to a client's contact, the unit becomes that client's and a sale is recorded for finance to review (see [Client stock and hardware billing](./client-stock-and-billing), awaiting rollout). |
+| **Change state** | Records a triage outcome for a unit in stock, for example **Defective** after testing or **Available** once repaired. |
+| **Move** | Moves the unit to another place in the same stockroom, such as a bin. Use a transfer order for another stockroom. |
+| **Remove** | Writes the unit off stock with a reason code and reason. It stays an asset, unassigned, ready for the [disposal process](./asset-lifecycle). |
+| **Check in to stock** | Brings an asset of a tracked model into a stockroom with an outcome, for example when a leaver returns a laptop. A client's unit checked in to your stockroom returns to your organisation's stock, recording a return for finance. |
+
+Unit states:
+
+| State | Meaning |
+| --- | --- |
+| **Available** | Ready to issue. |
+| **Pending repair** | Needs repair before it can be issued. |
+| **Defective** | Faulty; kept for parts, return or disposal. |
+| **Quarantine (data handling)** | Held until its data has been handled, for example a wipe. |
+| **Disposal candidate** | Expected to leave through the disposal process. |
+| **In transit** | On a dispatched transfer order. Set by the transfer order only. |
+
+A unit entering stock takes the default status of the **In stock** [state](./asset-statuses), and an issued unit the default of **In use**. Choose those defaults in **Settings → Asset statuses**. Sending a unit for repair takes it out of stock, and returning it to a stockroom brings it back.
+
+Custody changes made elsewhere keep stock in step. Checking out a unit from the **Custody** tab issues it from stock; checking an asset of a tracked model in to an organisation stockroom brings it into stock; recording a unit as lost writes it off with the reason **Lost**. A unit in stock can't be archived or disposed of until it is removed from stock, and a client's own asset is kept outside your stock.
+
+## Record stock you already hold
+
+You don't need purchase orders to start. To record the stock you hold today:
+
+- **Tracked units:** use **Receive units** with **Opening stock**, or import them with the [asset import](./asset-imports) by giving each row a `modelId` and `stockroomId`. An asset already in your register joins stock when you check it in to a stockroom.
+- **Quantity items:** use **Change stock → Receive** with **Opening stock**, or choose **Import opening stock** on the inventory list and upload a CSV with the columns `sku`, `stockroom` (the stockroom's code), `quantity` and, optionally, `reference`. Each row becomes an opening-stock receipt. Rows that fail are listed with the reason; fix them and import the same file again. Rows already recorded aren't repeated.
+
+Opening stock is shown as **Opening stock** in the movement history, apart from deliveries.
+
+## Change stock (quantity items)
+
+Open an item, or **Inventory → Movements**, and choose **Change stock**. Choose what happened:
+
+| Change | Use it for | What it needs |
+| --- | --- | --- |
+| **Receive** | Stock arriving (a delivery) or stock you already hold (opening stock) | A stockroom and a delivery or opening-stock reference |
+| **Issue** | Stock given out | A ticket number when it's for a ticket, otherwise a reason |
+| **Consume** | Stock used up while doing work | A ticket number or a reason |
+| **Return** | Unused stock coming back | A ticket number or a reason |
+| **Count** | Setting a stockroom to what you counted, for a quick correction. For a full stockroom count with review, use [stock counts](./counts-and-audits) (awaiting rollout). | The counted quantity and a count reference |
+| **Adjust** | Correcting by a number of units | A reason code and a reason |
+| **Write off** | Removing damaged, lost or expired stock | A reason code and a reason |
+| **Move within stockroom** | Moving between bins of one stockroom | The destination and a reason |
+
+Tracked items don't offer **Change stock**: their stock changes only by receiving, issuing, checking in, moving and removing units.
+
+Every change is recorded as a new entry in the stock ledger with who made it, when, where and why. Entries are never edited: to correct a mistake, record another change. A count that matches the stock records the count date without changing anything.
+
+If the item's or unit's stock changed since you opened the page, Enduria asks you to reload rather than applying your change over someone else's. Retrying after a lost connection doesn't record the change twice.
+
+## Approve stock changes
+
+Your inventory manager decides which changes need **independent approval** in **Settings → Inventory → Approvals**:
+
+- Transfers between stockrooms
+- Write-offs (recommended), including units removed from stock
+- Counts and adjustments
+- Moves within a stockroom, including unit moves
+- Receipts, including units received by serial number and opening stock
+- Issues, consumption and returns, including units issued from stock
+
+Until the settings are saved, transfers need approval and everything else follows the item's own setting. An item marked **Requires approval** needs approval for every change, whatever the settings say. Changes to the settings are versioned and recorded in the audit log. Checking a unit in to stock never waits for approval, because the unit is physically back.
+
+- A change that needs approval is sent as a **request**. It appears under **Awaiting approval** on the **Movements** page, on the item and, for a unit, on its asset page. Stock doesn't change until it is approved.
+- **A different person must approve.** The person who asked can **Withdraw** the request but can't approve it. Approvers need inventory management permission, and a rejection or withdrawal records its reason.
+- Approving applies the change as a new ledger entry. If a requested count no longer matches the stock, or a unit changed since its request, approval is refused: reject it and ask again.
+- When issues, moves or write-offs need approval, the asset's **Custody** tab and asset edits refuse that change for a unit in stock; use the unit's **Stock** card so it can be approved.
+
+## Transfer stock between stockrooms
+
+Use a **transfer order** to move stock from one stockroom to another, including part of an item's stock. Open **Inventory → Transfers** and choose **New transfer**, or choose **Transfer** on an item.
+
+1. Choose the stockroom the stock leaves from and the stockroom it goes to, then the items and quantities. You can't ask for more than the source holds. For a tracked item, choose the units to send: available units held in the source stockroom itself, each on one open transfer at a time.
+2. The transfer starts as a **draft**. If transfers need approval, choose **Submit for approval**; a different person with inventory management permission approves or rejects it.
+3. Choose **Dispatch** when the stock leaves. It is taken from the source and shown as **in transit**. Tracked units stay recorded at the source with the state **In transit**.
+4. Whoever receives it chooses **Receive** and records what arrived, into the destination stockroom or one of its bins. For tracked lines, untick any unit that didn't arrive. Received units become available at the destination. The receiver is recorded.
+5. If some stock doesn't arrive, it stays in transit. Receive it later, or choose **Write off remainder** with a reason. That write-off follows your write-off approval setting; tracked units written off leave stock unassigned.
+
+A transfer can be cancelled until it is dispatched. Moving between bins of the same stockroom doesn't need a transfer order.
+
+A stockroom can't be retired while it holds stock or has open transfers.
+
+## Bulk changes
+
+Select items in the inventory list using the checkbox at the start of each row, then choose:
+
+- **Set home stockroom** to change where receipts go by default. No stock moves.
+- **Raise purchase order** to draft a purchase order. With the [purchase orders](./purchase-orders) release (awaiting rollout), this opens a new order with those items at their reorder quantities.
+- **Set status**, for example to mark items discontinued.
+
+Bulk quantity changes aren't available, because each stock change needs its own stockroom and reference. To load stock you already hold, use **Import opening stock**.
+
+## Reorder levels and costs
+
+- When available stock falls to or below an item's reorder level, Enduria raises a low-stock alert and sends the `inventory.low_stock` or `inventory.out_of_stock` webhook. **Automatic purchase orders are not available**; raise purchase orders yourself. Older items may show an auto-reorder setting that has no effect.
+- Inventory keeps **one unit cost per item**. Stock value is quantity × unit cost. FIFO and LIFO costing aren't available. Costs have no currency recorded, so don't treat totals as converted amounts. A tracked unit's own purchase cost is recorded on its asset.
+- With the [purchase orders](./purchase-orders) release (awaiting rollout), inventory costs become exact to six decimal places and record your organisation's currency, and each item's unit cost is its **weighted average cost**: receiving an order re-averages it at the order price. FIFO and LIFO remain unavailable. With the [supplier invoices](./supplier-invoices) release (awaiting rollout), approving a supplier invoice billed at a different price revalues the stock still on hand.
+- **Stock cover** on the inventory list estimates how many days current stock would last at the last 30 days' issue rate.
+
+## Movement history
+
+The **Movements** page lists the stock ledger for the selected range: each entry with its signed change, the place, and its reference. Ticket and transfer references link to the ticket or transfer. Filter by type or by place. Entries for tracked items each move one unit.
+
+Only the latest 500 entries are listed. The totals at the top always cover the whole range; narrow the range or filters to see older rows.
+
+## Resolve common problems
+
+| What you see | What to do |
+| --- | --- |
+| **Only N on hand at …** | The stockroom doesn't hold enough. Choose another stockroom or a smaller quantity. |
+| **Stock for this item changed since the page loaded** | Reload the page and record the change again. |
+| **This item is tracked by serial number** | Receive, issue, move or remove its units instead of changing a quantity. |
+| **Already recorded for this model** | A serial number in the list is already an active asset of this model. Remove it from the list, or check the existing asset in to stock. |
+| **Only available units can be issued** | Change the unit's state to **Available** once it is ready, or issue another unit. |
+| **This asset belongs to a client** | A client's own asset is kept outside your stock. Store it at one of the client's locations instead. |
+| **Only assets of a tracked catalogue model can be stock units** | Give the asset a tracked model first, or keep it outside stock. |
+| **Link a ticket or give a reason** | Issues, consumption and returns need a ticket number or a reason. |
+| **These places are in different stockrooms** or **Use a transfer order** | Use a transfer order to move stock between stockrooms. |
+| **Issuing from stock needs approval** | Use **Issue** on the unit's **Stock** card so a different person can approve it. |
+| **This unit is on a dispatched transfer order** | Receive the transfer at its destination first. |
+| **This asset is in stock. Remove it from stock before archiving it** | Use **Remove** on the **Stock** card, then archive or dispose of the asset. |
+| **This transfer needs independent approval before dispatch** | Submit it for approval and ask a different inventory manager to approve it. |
+| **A different person must decide this request** | Ask another inventory manager to approve it, or withdraw it. |
+| **Stock at this place changed since the count was requested** | Reject the count and count again. |
+| Inventory says you don't have access | Inventory is organisation-wide. Client-assigned staff and portal users can't use it. |
+| **Showing the latest 500 movements** | Narrow the date range or filters to see older movements. |
+| A location isn't offered for stock | Stock can only be kept in active, organisation-wide stockrooms. Mark the location **Holds stock** and make it available to the whole organisation. |
+| A stockroom can't be retired | Move or transfer its stock, finish or cancel its open transfers, and choose another home stockroom for items that use it. |

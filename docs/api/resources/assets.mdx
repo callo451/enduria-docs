@@ -17,7 +17,7 @@ Pages default to 20 records and support 1–100 records. List and individual-rec
 
 ## Create a record using your configured vocabulary
 
-Provide a name and an active configured category name, code or ID. Set `status` explicitly to an active lifecycle value configured for your organisation. The API currently defaults an omitted status to `active`, but that value must still pass your organisation's vocabulary validation.
+Provide a name and an active configured category name, code or ID. A new asset is in the **In use** state, so `status` must be an active status of that state from [`GET /statuses?type=asset`](./configured-vocabulary#statuses); omit it to use the state's default. When you update an asset, `status` must belong to its current state; a status of another state is refused with `400`. States and the rules above require a future application release.
 
 For example, replace the category and lifecycle placeholders before submitting:
 
@@ -25,17 +25,29 @@ For example, replace the category and lifecycle placeholders before submitting:
 {
   "name": "Reception laptop",
   "category": "YOUR_CONFIGURED_CATEGORY",
-  "status": "YOUR_CONFIGURED_LIFECYCLE_VALUE",
+  "status": "YOUR_IN_USE_STATUS_KEY",
   "manufacturer": "Example Manufacturer",
   "model": "ExampleBook 14",
   "serialNumber": "SERIAL-EXAMPLE",
-  "specifications": {"memoryGb": 16, "encrypted": true}
+  "fields": {"memory": 16, "storage_type": "SSD"}
 }
 ```
 
 Omit `assetTag` to generate one using the organisation's configured format. If supplied, `assignedTo` must identify a user in the same organisation, and `clientId` must identify one of its clients. Dates use ISO timestamps, such as `2026-10-04T00:00:00Z`.
 
 The public API accepts the field names in its schema. Staff-interface aliases such as `categoryId`, `locationId` and `assignedUserId` are not interchangeable public API fields.
+
+## Asset fields
+
+Assets carry your organisation's [asset fields](../../product/asset-fields) as `fields`, an object keyed by each field's key, in responses and in create and update requests. Field values require a future application release.
+
+- Send numbers as JSON numbers, yes/no fields as `true` or `false`, dates as `YYYY-MM-DD` strings and choices as one of the field's options.
+- Send `null` to clear a value. Keys you leave out keep their values.
+- A value of the wrong type, an option that isn't offered, a retired field, or a field that doesn't apply to the asset's category returns `400`.
+- When you create an asset, or send `fields` in an update, every applicable required field needs a value, from the request or from the catalogue model's defaults.
+- API keys never read or write restricted fields; naming one returns `400` as an unknown field.
+
+The `specifications` object is no longer written through the API. On a device imported from a device management connector it holds that connector's observations, which the connector refreshes.
 
 ## Update or clear fields
 
@@ -53,7 +65,9 @@ Do not send `null` for every optional field: check which fields are nullable in 
 
 `purchaseCost` is a numeric value. The current public write schemas do not accept `purchaseCurrency`, even though an asset response may contain a recorded currency. Do not infer a currency from the API key's organisation or treat an amount with unknown currency as a converted value. Use the staff asset interface when the recorded currency needs editing.
 
-An assignment or lifecycle field update is a register change; it does not record independent custody acceptance, verified sanitisation or disposal approval. Connector-managed devices may also receive later provider updates, so confirm which fields your connector owns before making manual changes.
+Changing `assignedTo` is recorded in the asset's [custody history](../../product/asset-custody) with the API as its source (awaiting rollout). With that release, the user must be active and compatible with the asset's client, otherwise the request returns `400`. A customer contact must belong to the asset's own client. A new assignee also queues the `asset.assigned` webhook, which is emitted for assignments from every source, not only the API. Sending `null` clears the assignee and records the asset as unassigned. If your organisation asks for [asset acceptance](../../product/asset-acceptance) for the asset's category, a new assignee is asked to accept it and `asset.acceptance_requested` is queued; the assignment itself still takes effect immediately.
+
+An assignment or lifecycle field update does not record recipient acceptance, verified sanitisation or disposal approval. Connector-managed devices may also receive later provider updates, so confirm which fields your connector owns before making manual changes.
 
 ## Archive an asset
 

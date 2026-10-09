@@ -1,0 +1,97 @@
+---
+title: Assets covered by agreements
+description: Record which of a client's assets each agreement covers, with dates and evidence, so billing reviews, the client portal and estate reviews show coverage consistently.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Assets covered by agreements
+
+Record which of a client's assets an agreement covers, from when, and why. Coverage records are then used in three places:
+
+- **Per-device billing** ticks covered devices in advance.
+- **The client portal** names the agreements covering each device.
+- **Estate reviews** list coverage by agreement.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Agreement coverage requires a future application release. Publishing this guidance does not deploy these features.
+
+</Admonition>
+
+Agreement coverage is available to MSP organisations.
+
+## How coverage works
+
+A coverage record links one agreement to one asset for a span of days:
+
+- **From** a start date.
+- **Until** an end date, or, if you leave it empty, until the agreement ends. Both dates are included.
+- **Reason or reference**, required. Use the evidence for the coverage, such as "Schedule B, signed 1 July" or a ticket number.
+
+Enduria also records who added the record and when, and who ended it, when and why.
+
+The rules:
+
+- **Several agreements.** An asset can be covered by several agreements at once, for example a managed services agreement and a maintenance agreement.
+- **No double coverage.** One agreement can't cover the same asset twice on the same day.
+- **Same client.** An agreement covers only its own client's assets. If an asset moves to another client, its coverage under the old client's agreements ends that day, and the record says so.
+- **Within the term.** Coverage dates must fall inside the agreement's start and end dates.
+- **In force.** Coverage counts on a day only while the agreement is in force. A draft agreement, or one awaiting review, approval or signature, or terminated, covers nothing.
+- **Records are kept.** Records are never edited or deleted. To change dates, end the record and add a new one.
+- **No automatic coverage.** Nothing is added by discovery, imports or rules; a person always chooses the assets.
+
+## Add assets to an agreement
+
+You need agreement edit permission (`agreements.edit` or `agreements.manage`) and asset view permission (`assets.view`). If your account is bound to a client, you can work only with that client's agreements.
+
+1. Open the client and select the **Agreements** tab.
+2. Open the agreement's actions menu (**⋯**) and select **Covered assets**. The dialog shows how many of the client's active assets the agreement doesn't cover today.
+3. Under **Add assets**:
+   - Choose one or more of the client's active assets.
+   - Set **Covered from**, and **Until** if the coverage ends before the agreement does.
+   - Enter the **Reason or reference**.
+4. Select **Add**.
+
+Adding is all or nothing: if any chosen asset can't be covered on those dates, nothing is added and the dialog says why.
+
+## End coverage
+
+1. In **Covered assets**, select **End** beside the record.
+2. Enter the last covered day and why the coverage ends.
+3. Select **End coverage**.
+
+The record moves to **Ended**. You can end a record only once, and never later than an end date it already had.
+
+An agreement that has covered assets can't be deleted. Terminate it instead, so the record of what it covered is kept.
+
+## Where coverage shows
+
+| Where | Shows |
+| --- | --- |
+| **Covered assets** (agreement) | Current and ended records with dates, reasons and who added or ended them. Anyone who can view agreements can open it; only editors see the add and end controls. |
+| **Agreements** card (asset **Overview**) | Each agreement covering the asset, current first, with dates and the reason. Anyone who can view the asset sees it. |
+| **Billing** (usage review) | Each device's coverage for the period, explained below. |
+| **Client portal** | The names of the client's own agreements covering each device today, on the **Devices** list and each device's page. No dates, reasons or prices. |
+| **Estate reviews** | **Covered by your agreements**: each agreement in force with how many assets it covers, and the active assets no agreement covers. See [Client estate reviews](./client-estate-reviews). |
+
+## Per-device billing
+
+When you review usage for a billing period (**Billing → Agreements**, choose the agreement, then **Review usage**), each device shows its coverage under that agreement for the period:
+
+- **Covered for the whole period**: ticked in advance and listed first.
+- **Covered for part of the period**: shown, but not ticked.
+- **Not covered by this agreement**: shown, but not ticked.
+
+You still review every device and confirm the full period before approving, exactly as before. Coverage never changes a prepared period, an approved quantity or an invoice, and nothing is prorated.
+
+## Audit
+
+Adding and ending coverage are recorded in the audit log against the agreement, with the assets, dates and reason.
+
+## What agreement coverage doesn't do
+
+- **Rules:** coverage isn't added by discovery, imports, categories or rules.
+- **Proration:** partial coverage isn't charged or credited automatically.
+- **Users and licences:** coverage applies to assets only.
+- **Supplier warranties:** a manufacturer's warranty or support contract is recorded separately, on the asset's **Service** tab.

@@ -10,15 +10,25 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 | Message | Cause | Fix |
 | --- | --- | --- |
 | Platform email is not available on this installation. | The operator has not configured platform email. | Use custom SMTP, or ask the operator. |
+| Platform email is not ready on this installation yet. | The operator's sending service has not passed its readiness check, so it cannot be chosen yet. The settings page lists what is missing. | Use custom SMTP for now, or ask the operator. |
+| The platform sender could not be reached. Contact the operator of your installation. | The operator's mail server or sending service is down or misconfigured. Your settings are not at fault. | Ask the operator; they can run the readiness check described in the self-hosting guide. |
+| Platform email is paused for this organization after high bounce or complaint rates | Too much recent email bounced or was marked as spam. Password resets and invitations still go out. | See [When sending is paused](./deliverability#when-sending-is-paused). |
 | SMTP authentication failed. Check username and password. | The SMTP server rejected the sign-in. | Check the username and password. Some providers require an app password, or SMTP sign-in to be enabled for the account. |
+| The mail server address is on a private or reserved network | The SMTP host is, or resolves to, a private address such as `10.0.0.5` or `127.0.0.1`. | Use your provider's public host name. If the server is deliberately on your own network, ask the operator of your installation to allow it. |
+| The SMTP host name is not valid | The host contains spaces or other characters a host name cannot have. | Enter only the host name, such as `smtp.example.com` — no `smtp://`, path or port. |
 | Cannot connect to SMTP server. Check host and port. | Enduria could not reach the server. | Check the host and port, and that **Use SSL/TLS** matches the port (on for 465, off for 587). |
+| Failed to test email settings, after **Send test email** | The test message could not be sent. | Select **Test connection**, which reports the reason. |
+| That domain is already in use. | Another organisation uses it, or it is set up for the service itself. | Remove it from the other organisation first, or contact support. |
+| That domain belongs to this installation's own sender. | You entered the service's own sending domain, or a domain above or below it. | Use your organisation's own domain. |
+| The From address must be on one of your verified domains | The address's domain is not added, or not verified yet. | Add the domain under **Your domains** and wait for **Verified**. |
 | SMTP Error *code* | The server refused the message with that SMTP status code. | Look the code up in your provider's documentation. A 5xx code usually means the From address is not allowed for the account or a recipient was rejected. |
 | Email rejected by SES. Check sender verification. | Platform email was refused by the sending service. | Contact the operator of your installation. |
 | Rate limit exceeded. Please try again later. | The sending service is throttling. | Wait and retry. |
-| The sending limit has been reached | Your organisation's hourly or daily limit is used up. | Wait for the next hour or day, or raise your limit within what is allowed. |
+| The hourly sending limit has been reached / The daily sending limit has been reached | Your organisation's limit for the current UTC hour or day is used up, or one address has received the maximum number of system emails this hour. | Wait for the next hour or day, or raise your limit within what is allowed. |
 | Enter the SMTP password | No password is stored yet for this SMTP configuration. | Type the password and save. |
+| Every recipient is on the suppression list | Each address bounced, complained or was refused before. | See [Bounces, complaints and suppression](./deliverability); remove an address from the suppression list if it should receive email again. |
 
-**Recipients do not get email, but no error is shown.** Check that **Global Notifications** is on, check **Settings → Email Logs**, and ask recipients to check their spam folder. With custom SMTP, make sure your domain's SPF, DKIM and DMARC records allow your SMTP provider to send for it.
+**Recipients do not get email, but no error is shown.** Check that **Send email** is on, that the person has not switched email off or chosen a digest under **Settings → Notifications**, check **Settings → Email Logs** for a *suppressed* or *bounced* status, check the [suppression list](./deliverability#the-suppression-list), and ask recipients to check their spam folder. With custom SMTP, make sure your domain's SPF, DKIM and DMARC records allow your SMTP provider to send for it.
 
 **Replies to notifications do not reach tickets.** Set the outbound Reply-To address to a mailbox connected under **Inbound Email**, and check that the reply's subject still contains the ticket number.
 
@@ -40,6 +50,7 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 | The mail server rejected the sign-in. Check the username and password, or whether the provider requires an app password. | Credentials; whether IMAP access is enabled for the account. |
 | A secure connection could not be established or the server certificate could not be verified. | The host name matches the server's certificate; the TLS setting matches the port. |
 | The mail server host name could not be found. Check the IMAP host. | Spelling of the host. |
+| The mail server address is not allowed: it is invalid or on a private network. | Use the provider's public IMAP host. A server on your own network must be allowed by the operator of your installation. |
 | The mail server could not be reached or closed the connection. Check the host, port and firewall. | Host, port, and that the server accepts connections from Enduria. |
 | The mail server did not respond in time. | Server availability; try again later. |
 | The mail server is rate-limiting this account. | Reduce how often the mailbox is checked. |

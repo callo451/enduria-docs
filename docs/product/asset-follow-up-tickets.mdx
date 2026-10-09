@@ -1,0 +1,86 @@
+---
+title: Create reviewed asset follow-up tickets
+description: Propose an ordinary follow-up ticket from retained asset activity and have a different staff member review its exact content.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Create reviewed asset follow-up tickets
+
+Use a retained asset event to propose one ordinary follow-up ticket. A different authorised staff member reviews its exact content and either creates the ticket with their approval or rejects the proposal. The original asset event and its evidence remain unchanged.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Reviewed asset follow-up tickets require a future application release. This guide describes the intended controls for that release; publishing documentation does not enable them in your workspace.
+
+</Admonition>
+
+## Before you start
+
+Every proposal, decision, cancellation and history read requires an active staff account with organisation-wide access and all three permissions: `assets.view`, `tickets.create` and `tickets.view.all`. Customer-bound staff and portal accounts cannot use this workflow. The proposer must still have this authority when the ticket is created, because they become its requester.
+
+The event must belong to the asset and its current customer scope, including internal assets without a customer. It must also come from the asset's current archive/restoration cycle. Archived assets can have follow-up tickets; archiving alone does not make their current retained events ineligible.
+
+Your organisation must already have an active priority applicable to ordinary tickets, an active service-catalogue category and exactly one applicable default status that represents an open, non-final ticket. These are configured organisation values. The proposal screen does not create defaults or guess a missing status.
+
+## Propose the ticket
+
+1. Open the asset's **History** tab and find **Retained asset events**. You can also find this section in archive or disposal detail.
+2. Find the event that needs follow-up work and choose **Propose follow-up ticket**.
+3. Enter the ticket title and description, then select its configured priority and category. Use the search fields to narrow long lists; a list shows at most 50 matches. Check the displayed initial status; it is read-only.
+4. Enter the reason for creating the follow-up ticket.
+5. Review the proposed content and choose **Submit ticket proposal**.
+
+The title requires 3–200 characters, the description 10–10,000 characters and the proposal reason 10–2,000 characters. Leading and trailing whitespace is removed.
+
+The proposal fixes the source asset and customer. Its author becomes the requester, and the approving staff member becomes the ticket creator. You cannot select another requester, assignee, customer, project, queue or ticket type. The ticket starts unassigned and links only to the source asset.
+
+<Admonition type="important" title="Review the ticket audience">
+
+The ticket uses the ordinary ticket audience, which may be broader than the audience for private asset-governance evidence. Include only information suitable for that audience. Certificate details, execution evidence, private review notes and credentials are not copied automatically; review anything you enter yourself.
+
+</Admonition>
+
+Submitting creates a retained proposal, not a ticket. It appears under **Follow-up ticket proposals** below the event history. Event rules cannot submit these proposals or create tickets automatically.
+
+## Review, create or decline
+
+A different eligible staff member opens the asset's **Follow-up ticket proposals** section and checks its source, asset, customer, title, description, priority, category and initial status. The original asset event's actor may review when they are not the proposal author; reviewing this follow-up does not approve or change that earlier asset action.
+
+1. Read the exact proposed content and retained reason.
+2. Choose **Approve and create ticket** or **Reject ticket proposal**, then record a decision reason of 10–2,000 characters.
+3. After successful approval, choose **Open ticket** to go to the ordinary ticket.
+
+Approval and ticket creation happen together. There is no separate scheduled creation step. If the operation fails, nothing is created: the ticket, its number and the proposal result are all rolled back together. If the response is lost, for example because of a network interruption, select the same action again without changing the reason. The repeated request returns the retained result instead of creating another ticket. You can also select **Refresh ticket proposals** to inspect the result.
+
+The original proposer may choose **Cancel ticket proposal** for a pending proposal, also recording a reason of 10–2,000 characters. Submitted content cannot be edited. After rejection or cancellation, a new proposal is a separate retained request.
+
+There can be one pending proposal per source event and at most one successfully created ticket for that event. Approval does not authorise restoration, disposal, verification, hold release, custody acceptance or any asset lifecycle change.
+
+## Keep configuration and source bindings current
+
+The proposal retains the selected priority, category and initial-status identities and names. They are checked again at creation. Renaming, retiring or removing one of these values blocks the pending creation rather than changing its approved content silently. Correct the configuration or cancel/reject the proposal and submit a new one as appropriate.
+
+A later archive/restoration cycle makes creation from the older event unavailable. A customer change also blocks creation and hides the old proposal through this surface; there is no rebinding action. Renaming the asset alone does not invalidate a proposal or rewrite its reviewed ticket title.
+
+Rejection and proposer cancellation remain available for a proposal made stale by its archive/restoration cycle or configuration while its customer binding is still visible. They retain the earlier proposal and do not create a ticket.
+
+## Work with the created ticket
+
+The result is an ordinary ticket that staff can update through its normal workflow. Its creation proposal and source relationship remain retained. Deletion is refused with an explanation that the ticket has retained follow-up proposal records; resolve or close it through your configured ticket lifecycle instead.
+
+A result link is shown only when the viewer can currently access that ticket and its customer binding remains compatible. Moving a ticket or changing access does not erase its retained creation evidence.
+
+## Resolve common problems
+
+| What you see | What to check |
+| --- | --- |
+| The proposal action is unavailable | Check your current staff status, organisation-wide access and all three required permissions. Check the event's current customer and archive/restoration cycle. |
+| No usable priority, category or initial status | Ask an administrator to check active, applicable configuration. The initial status must be the single applicable default open, non-final status. Narrow a truncated options search; it is not the complete organisation directory. |
+| You cannot approve or reject | The decision-maker must differ from the proposer and retain current required authority. A role name alone does not grant it. |
+| Creation says the proposer lost authority | The proposer must still be active, organisation-wide staff with the required permissions. The system cannot substitute a different requester. |
+| A selected value changed | Review its retained identity and name. Cancel or reject the stale proposal before submitting newly reviewed content. |
+| A ticket already exists for the event | Use that ticket. A different operation or proposal cannot create a second one. |
+| Ordinary-ticket approval configuration blocks creation | This workflow cannot replace a separate ticket-approval requirement. Use the organisation's ordinary ticket process; do not treat asset proposal approval as that missing approval. |
+
+This workflow creates ordinary tickets only. Incidents, changes, service requests, problems, automatic assignments and lifecycle changes are outside its scope.

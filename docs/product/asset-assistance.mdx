@@ -1,0 +1,96 @@
+---
+title: Asset assistance
+description: Ask for a plain-language reading of asset records — why two assets look like duplicates, a draft note for an estate review, or a summary of one asset — with every sentence linked to the recorded facts it uses.
+---
+
+import Admonition from '@theme/Admonition';
+
+# Asset assistance
+
+Asset assistance uses your organisation's AI provider to explain what Enduria already records about your assets. It never changes anything: it reads, explains and links to its sources, and a person decides what to do.
+
+<Admonition type="info" title="Awaiting rollout">
+
+Asset assistance requires a future application release. Publishing this guidance does not deploy these features.
+
+</Admonition>
+
+## Where it appears
+
+| Where | Button | What you get |
+| --- | --- | --- |
+| **Assets → Data quality**, on a possible match, possible duplicate or fact conflict | **Explain** | What the evidence shows, how strong it is, and what each available action would do, including why a merge would be refused. See [Asset data quality](./asset-data-quality). |
+| The draft **estate review** dialog | **Suggest a note** | A short covering note for the client, drafted from the review. See [Client estate reviews](./client-estate-reviews). |
+| An asset's **Overview** | **Summarise** | A few sentences on the asset's state, who holds it, how it reports, its coverage, any repair, its lifecycle and agreements. |
+
+## How answers are built
+
+When you ask, Enduria gathers numbered facts from records you're allowed to see and sends only those to the AI provider. The answer comes back as a few sentences, and each one must name the facts it rests on.
+
+- **Every sentence is linked.** Beside each sentence are links to its sources: the assets by their tags, or the sections of the review.
+- **Ungrounded sentences are removed.** Enduria removes any sentence that cites nothing, cites a fact it wasn't given, or contains a value it wasn't sent, and tells you how many it left out.
+- **You can check every fact.** Open **Facts given** to see exactly what was sent.
+- **Answers are labelled.** Each one is marked as generated, with the model and time.
+
+Answers are a reading aid. Check the cited facts before acting.
+
+## What is sent to the AI provider
+
+Only comparisons and descriptions are sent:
+
+- comparisons such as "serial number: the same for asset A and asset B (compared after normalising)" or "hostname: different";
+- categories, states, your status names, manufacturer and model;
+- supplier and agreement names;
+- dates, durations and counts;
+- custody as a kind (held by a person at the client, by your staff, in a stockroom, with a supplier), never a name.
+
+Never sent:
+
+- serial numbers, hardware IDs, MAC and IP addresses, hostnames;
+- asset names and tags (assets are called "asset A" and "asset B");
+- people's names and email addresses;
+- notes, asset field values, ticket titles;
+- prices and costs.
+
+The links you see show the real tags; they are part of the page, not of what was sent.
+
+## What is kept
+
+Nothing generated is kept. An answer is shown once and disappears when you close it or leave the page; **Ask again** generates a new one.
+
+The AI audit log records metadata only:
+
+- who asked, and about which record;
+- how many facts were sent, and how many sentences were shown and left out;
+- the model, token counts, duration and outcome.
+
+It never records the facts or the answer.
+
+Suggesting a note doesn't change the review. **Use this text** fills the note field, and the note is saved only when you select **Save review**.
+
+## Turn it on
+
+Asset assistance is **off** until an administrator turns it on.
+
+1. Go to **Settings → AI**.
+2. Under **Asset assistance**, turn on **Enable asset assistance**.
+3. Select **Save Configuration**.
+
+To use it, a person also needs:
+
+- **Use Copilot** permission (`ai.copilot.use`);
+- for **Explain** and **Summarise**: asset view permission (`assets.view`);
+- for **Suggest a note**: asset manage permission (`assets.manage`).
+
+Staff bound to a client see assistance only for that client's records. It is never available in the client portal.
+
+Requests count towards your organisation's AI request limits in **Settings → AI → Security**.
+
+Asset assistance uses the model your installation configures for the copilot. A self-hosted installation chooses its AI provider in its server configuration, and can use its own model.
+
+## What asset assistance doesn't do
+
+- **Actions:** it never merges, links, changes licences, runs remote commands or creates tickets.
+- **Chat:** there are no follow-up questions; ask again for a new answer.
+- **Automatic summaries:** nothing is generated on a schedule or when a page opens.
+- **Client portal:** clients never see generated answers, except a note you choose to use and publish in an estate review.

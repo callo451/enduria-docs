@@ -11,7 +11,7 @@ Use **Archive** to remove an asset from the active register while keeping its re
 
 <Admonition type="info" title="Availability">
 
-Configurable disposal reviewers and the **Asset reviews** inbox are awaiting release. Until those features are enabled in your workspace, open requests through **Archive** or **Disposals**. This guide identifies where the newer reviewer settings apply.
+Configurable disposal reviewers, the **Asset reviews** inbox and audited review corrections are awaiting release. Publishing this guidance does not deploy those application features. Until they are enabled in your workspace, open requests through **Archive** or **Disposals**.
 
 </Admonition>
 
@@ -19,18 +19,20 @@ Configurable disposal reviewers and the **Asset reviews** inbox are awaiting rel
 
 These screens are for staff, not customer portal accounts. You need `assets.view` and access to the asset's current customer scope. The following permissions are additional:
 
-| Task | Required permission |
-| --- | --- |
-| Archive an asset | `assets.delete` |
-| Request restoration or disposal; record disposal evidence | `assets.edit` |
-| Approve or reject restoration | `assets.edit` and `assets.manage` |
-| Approve or reject disposal | `assets.manage` |
-| Verify disposal and archive | `assets.manage` and `assets.delete` |
-| Place or release a hold | `assets.manage` |
+| Task | Current release | With approval routing (awaiting rollout) |
+| --- | --- | --- |
+| Archive an asset, or request it when archive approval is on | `assets.delete` | `assets.archive` |
+| Request restoration | `assets.edit` | `assets.restore` |
+| Request disposal; record disposal evidence | `assets.edit` | `assets.dispose` |
+| Approve or reject restoration | `assets.edit` and `assets.manage` | `assets.manage` and `assets.review` |
+| Approve, verify or reject disposal | `assets.manage` (verification also `assets.delete`) | `assets.manage` and `assets.review` |
+| Place or release a hold | `assets.manage` | `assets.manage` |
 
-Where [reviewer policies](./asset-approvals.mdx) apply, the reviewer must also qualify under the policy retained with that request. Configured disposal verification reviewers need `assets.delete` even when rejecting submitted evidence. Selecting a reviewer does not grant permissions, and an administrator cannot approve their own request.
+With approval routing, everyone who can do a task today receives its new key once, so nobody loses access. Where [approval routing](./asset-approvals.mdx) applies, a reviewer must also be on the stage retained with that request. Selecting a reviewer does not grant permissions, and nobody approves their own request.
 
-Your organisation's asset lifecycle labels remain unchanged by archive, restoration and verified disposal. A label alone does not establish that a device was returned, sanitised or destroyed.
+Archiving moves an asset to the **Retired** [state](./asset-statuses), and verified disposal to **Disposed**, each with that state's default status. Restoration returns it to the state its custody implies. A status name alone does not establish that a device was returned, sanitised or destroyed.
+
+When enabled, **Retained asset events** in asset history and archive/disposal detail records these governed actions in the current customer scope. [Read the source-event guide](./asset-event-rules#inspect-the-retained-source-event) for its limits. Event notices and review highlights do not replace the decisions below.
 
 ## Archive an asset
 
@@ -40,7 +42,7 @@ Your organisation's asset lifecycle labels remain unchanged by archive, restorat
 
 The asset leaves the active register and remains available under **Assets → Archive**. Existing agent credentials are revoked, and commands that have not been dispatched are stopped. Work already delivered to a device may still execute.
 
-Archiving keeps the recorded customer, custody, location, lifecycle value, costs, inventory membership and related evidence. It does not return stock, release an assignment or verify disposal. Ordinary archiving uses a confirmation; it does not create an independent approval request.
+Archiving keeps the recorded customer, custody, location, costs, inventory membership and related evidence, and moves the asset to **Retired**. It does not return stock, release an assignment or verify disposal. Ordinary archiving uses a confirmation. With [archive approval](./asset-approvals.mdx#decide-whether-archiving-needs-approval) on (awaiting rollout), **Archive asset** instead asks for a reason and submits a request; the asset's **Archive requests** card shows its stages, and the last approval archives it.
 
 ## Request restoration
 
@@ -60,7 +62,7 @@ A different eligible reviewer opens the archived asset, reads the request and re
 2. Enters a **Decision reason** and **Independent review reference**.
 3. Confirms the asset identity and current obligations, then selects **Approve and restore**.
 
-The existing record returns to the active register. Select **Open active asset** to continue. Its recorded custody, stock, costs and lifecycle value are preserved; restoration does not establish operational readiness.
+The existing record returns to the active register. Select **Open active asset** to continue. Its recorded custody, stock and costs are preserved, and it returns to the state its custody implies, usually **In use**, with that state's default status; restoration does not establish operational readiness.
 
 To decline, select **Reject request** and supply a decision reason. The submitted request and decision remain recorded.
 
@@ -74,7 +76,7 @@ Restoration does not reactivate old agent credentials. Issue a fresh enrollment 
 
 Restoration cannot proceed while there is an active disposal hold, an open disposal request, completed disposal, or retained disposal execution evidence. Evidence on a rejected disposal still blocks restoration. There is no override for these conditions or a supported process to erase that evidence and restore the asset.
 
-Approval also checks that the submitted asset facts are still current. If the request must use a different reviewer policy, the requester can cancel a pending restoration and submit a new request. Existing requests do not adopt later policy changes automatically.
+Approval also checks that the submitted asset facts are still current. If the request must use a different reviewer policy, the requester can cancel a pending restoration and submit a new request. Existing requests do not adopt later policy changes automatically. When available, [review corrections](./asset-approvals#restart-or-reassign-a-pending-review) provide a separately approved restart or reassignment for eligible pending phases; they do not remove any restoration block.
 
 ## Dispose of an asset
 
@@ -121,7 +123,7 @@ A verifier must be independent of both the requester and the person who recorded
 3. Enter the **Independent verification reference** and **Verification findings**.
 4. Confirm the obligations, then select **Verify and archive**.
 
-Successful verification records **Verified disposal** and archives the asset. Credentials are revoked and undispatched commands are stopped. The completed request remains available under **Disposals**.
+Successful verification records **Verified disposal** and archives the asset as **Disposed**. Credentials are revoked and undispatched commands are stopped. The completed request remains available under **Disposals**.
 
 ### Cancel or reject a disposal request
 
@@ -143,7 +145,7 @@ Holds can be placed on active or archived assets, including while restoration is
 | --- | --- |
 | A review action is missing | Confirm your current asset permissions, customer scope, independence and membership in the request's retained reviewer policy. |
 | No independent reviewer is eligible | For a new request, ask a settings manager to correct future routing. For an existing request, changing settings or adding a new role member does not replace its assigned people. |
-| Verification is blocked after a reviewer becomes unavailable | Actual execution evidence can still be retained, but completion waits for an originally assigned, independent reviewer to regain valid access. If the sole verifier recorded the evidence, they cannot verify it; there is no reassignment override. |
+| Verification is blocked after a reviewer becomes unavailable | Actual execution evidence can still be retained. Before review corrections are enabled, completion waits for an originally assigned, independent reviewer to regain valid access. If the sole verifier recorded the evidence, they cannot verify it. When available, an independently approved [reassignment](./asset-approvals#restart-or-reassign-a-pending-review) can select eligible replacement reviewers while retaining that evidence. |
 | Asset facts or the request changed during review | Reopen the current record and reassess. Do not repeat a decision against outdated facts. Before disposal evidence is recorded, the requester can cancel and submit a fresh request if appropriate. |
 | Earlier records disappear after changing the asset's customer | Retained requests and holds are shown only for their original customer binding. An older open request or hold may still block action. Resolve open work before changing customer ownership; there is no history-rebinding tool. |
 | An older request is not listed | Asset detail shows the latest 20 requests; disposal detail also shows up to 50 holds and 100 activity entries. Earlier evidence remains retained, but complete historical browsing and evidence export are not available here. |

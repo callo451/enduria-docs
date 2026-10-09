@@ -5,7 +5,7 @@ description: Discover tenant and project-specific values before writing records.
 
 # Configured vocabulary and queues
 
-Enduria organisations control their own ticket priorities, statuses, categories, asset lifecycle values, and project settings. Connectors must discover valid values instead of hardcoding labels.
+Enduria organisations control their own ticket priorities, statuses, categories, asset statuses, and project settings. Connectors must discover valid values instead of hardcoding labels.
 
 ## Categories
 
@@ -33,7 +33,15 @@ The project response uses its configured slug as `value`.
 
 `GET /statuses` accepts `type=ticket|incident|change|problem|service_request|project|task|asset` and defaults to `ticket`.
 
-Project and task types require `projectId`. Asset results come from active lifecycle settings. Ticket-family results are filtered to statuses applicable to the requested work-item type.
+Project and task types require `projectId`. Ticket-family results are filtered to statuses applicable to the requested work-item type.
+
+Asset results are the organisation's active statuses, each under a fixed state:
+
+```json
+{"id": "UUID", "value": "awaiting_imaging", "label": "Awaiting imaging", "state": "in_stock", "isDefault": false, "color": "#00959a"}
+```
+
+`value` is the key an asset's `status` stores; it never changes when a status is renamed. `state` is one of `on_order`, `in_stock`, `in_use`, `in_repair`, `missing`, `retired` and `disposed`. An asset's status must belong to its current state, which custody, stock, repair and the archive and disposal processes set (this requires a future application release).
 
 ## Queues
 
