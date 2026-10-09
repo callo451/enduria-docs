@@ -43,9 +43,11 @@ Rename an existing entry when its meaning stays the same and your team needs a d
 3. Change **Name** in **Edit Status** or **Edit Priority**.
 4. For a status rename, leave **Category**, **Final Status**, **Pauses SLA** and **Active** unchanged. Change those settings in a separate save.
 5. Choose **Save Changes**.
-6. Check an existing ticket that used the entry. It should now display the new name.
+6. Check the entry in Settings to confirm that it has the new name.
 
 A successful rename updates matching tickets together with the configuration. A status rename also carries the current RFC policy's lifecycle labels. Existing reviews retain their approved rules and evidence and continue to use the renamed status.
+
+The ticket workspace's priority picker currently offers a fixed list. A renamed custom priority is retained on the ticket, but may not display in that picker. Confirm the configured name in Settings; the picker does not yet show every custom priority.
 
 The rename is retained for audit. Renaming a label does not complete or reopen a ticket, replace its completion timestamps, or restart its SLA clock. Earlier ticket history and frozen selections keep the names recorded at the time.
 
@@ -91,6 +93,7 @@ Historical imports can preserve the source resolution and closure timestamps. If
 | An upgrade reports duplicate configuration names | Ask your operator to review the reported status and priority conflicts, including inactive entries, and resolve them before retrying. The upgrade does not choose or rename entries automatically. |
 | A selected status is unavailable | Check whether it is inactive, restricted to another ticket type, or duplicated with different letter casing. |
 | A custom status is missing from the workspace picker | The ordinary workspace still offers its fixed list. Adding the status in Settings does not currently add it to that picker. |
+| A renamed priority is missing from the workspace picker | The picker still offers its fixed list and may not display a custom priority retained on the ticket. Check the renamed entry under Settings → Tickets → Priorities. |
 | Reopening is refused | Ask an administrator to check your current role and `tickets.reopen` permission. |
 | An approval status is refused | Use the work item's approval action. A status edit cannot record an approval decision. |
 | An import row rejects its status | Correct the mapping to your organisation's configured vocabulary and retry the failed row. |
