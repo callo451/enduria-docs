@@ -32,6 +32,12 @@ The status category determines when evidence is required, including custom statu
 
 If completion is refused, check that the destination is active, applicable, final and in the resolved or closed category; the code is active and applicable; and the explanation is present where required. Review any approval or transition-rule error too. An unchanged terminal status cannot be used to replace resolution evidence. Reload settings if another administrator changed the requirements while you were editing.
 
+### API clients and automatic completion
+
+API clients with `tickets:read` can read `/api/v1/tickets/{id}/resolution` to discover that ticket's requirements, applicable code IDs and available destinations. To complete work, send `status`, `resolutionCodeId` and `resolution` together in a ticket PATCH using `tickets:write`. Use the returned code ID and your organisation's status value; never infer a code from its name. Missing or invalid required evidence refuses the update, including other changes submitted in that PATCH.
+
+Automatic completion follows the same rule. A completed appointment leaves its linked ticket unresolved when required evidence is missing; resolve the ticket separately. Software-request provisioning also checks resolution requirements before creating its local licence assignment. If you enable the requirement for service requests, automatic approval-driven provisioning cannot invent an outcome: check the provisioning recovery message and complete the request manually with evidence. Approved AI status actions must supply the chosen code and explanation too.
+
 Status names belong to your organisation. A status's **Category** describes its meaning; its **Final Status** switch determines whether it is finished. Different names can share a category.
 
 ## Set the starting status
@@ -75,6 +81,8 @@ Former status and priority names remain reserved for the same entry. You can ren
 ## Status change rules
 
 The ordinary ticket workspace currently offers a fixed list of status choices. It displays a custom starting status, but other custom names may not be selectable there yet. The creation preview also shows the fixed vocabulary. A listed name is not proof that it is configured: an unavailable choice is refused and leaves the ticket unchanged.
+
+The **Resolve** dialog offers your configured final resolved and closed destinations, including custom names. Use it to complete work when a destination is absent from the ordinary picker.
 
 Status changes require an active status applicable to the ticket type. Ordinary edits permit movement between configured statuses subject to these rules:
 
@@ -123,6 +131,8 @@ Map each imported status to an active status configured for that ticket type. An
 
 Historical imports can preserve the source resolution and closure timestamps. If the source has no timestamp, it remains unknown; the import time is not substituted. Subsequent status changes follow the same protected timestamp rules as other tickets.
 
+Resolution requirements also apply to new imports; importing does not bypass them. The current CSV importer has no resolution-code or explanation columns. If completed historical rows cannot supply required evidence, an administrator must explicitly turn that type's requirement off under **Settings → Tickets → Resolution** before importing, then restore it afterward. Imported missing evidence stays unknown; enabling the requirement does not fill earlier history.
+
 ## Resolve common problems
 
 | Message or symptom | What to check |
@@ -146,4 +156,3 @@ Historical imports can preserve the source resolution and closure timestamps. If
 | An import row rejects its status | Correct the mapping to your organisation's configured vocabulary and retry the failed row. |
 
 For day-to-day work, see [Work with tickets](../product/tickets.mdx).
-
