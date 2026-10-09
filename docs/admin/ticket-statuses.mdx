@@ -11,7 +11,7 @@ Choose the names your team uses for service work and give each ticket type a val
 
 ## Before you start
 
-You need **Manage settings** (`settings.manage`) to change ticket statuses or priorities. Staff also need access to the ticket and permission to edit it to change its status. Reopening a final ticket requires `tickets.reopen` in addition to that access.
+You need **Manage settings** (`settings.manage`) to change ticket statuses or priorities. Transition settings additionally require organisation-wide staff access; portal users and staff restricted to one client cannot manage them. Staff also need access to the ticket and permission to edit it to change its status. Reopening a final ticket requires `tickets.reopen` in addition to that access.
 
 Status names belong to your organisation. A status's **Category** describes its meaning; its **Final Status** switch determines whether it is finished. Different names can share a category.
 
@@ -66,6 +66,28 @@ Status changes require an active status applicable to the ticket type. Ordinary 
 
 Selecting the current status again does not record another status-change event. Status names alone do not grant approval or bypass a review.
 
+## Limit permitted transitions
+
+> **Awaiting rollout.** The optional transition matrix is awaiting application rollout.
+
+Use a separate matrix for tickets, incidents, service requests, changes and problems when your team needs a defined route through its statuses. Transition rules are off by default. With them off, the existing status-change requirements above still apply.
+
+1. Open **Settings → Tickets → Transitions**.
+2. Choose **Ticket type**.
+3. Review the matrix. Each row is the current status and each column is its destination. Check the changes you want to permit and clear the others. Scroll horizontally to see additional destinations.
+4. Turn **Enable transition rules** on.
+5. Choose **Save transitions**.
+
+The first unsaved matrix selects all applicable transitions as a starting draft. **Allow all applicable transitions** restores those selections in the draft; it does not enable or save the rules. A diagonal dash means the status is unchanged, which requires no transition.
+
+Before enabling, configure exactly one valid default and at least one final status for that type. Every active applicable status must be reachable from the default. Every unfinished status must also have a route to a final status; that route can pass through other statuses. Saving refuses a matrix that leaves work stranded. The matrix supports up to 100 active applicable statuses per type.
+
+Once saved and enabled, ordinary status changes, including automatic actions, must have a checked route. Approval actions still require their existing authority, and reopening still requires `tickets.reopen`. Checking an approval or reopening route grants no permission. RFC-governed changes continue to follow their retained RFC lifecycle rules; the Changes matrix applies to ordinary changes.
+
+Renaming a status keeps its checked routes. Other status edits can make an enabled matrix invalid: for example, retiring its only final status or removing a status's applicability. To make an incompatible edit, turn **Enable transition rules** off for each affected type and save first. Then edit the statuses, review the matrix and enable it again when valid.
+
+When a saved route uses a status that is no longer available, the panel shows a warning. Review the remaining matrix before saving; only the routes shown in the matrix will be saved.
+
 ## Configure destinations for automatic actions
 
 > **Awaiting rollout.** Consistent validation across alternate creation and status-change paths, and protected completion timestamps, are awaiting application rollout.
@@ -96,6 +118,12 @@ Historical imports can preserve the source resolution and closure timestamps. If
 | A renamed priority is missing from the workspace picker | The picker still offers its fixed list and may not display a custom priority retained on the ticket. Check the renamed entry under Settings → Tickets → Priorities. |
 | Reopening is refused | Ask an administrator to check your current role and `tickets.reopen` permission. |
 | An approval status is refused | Use the work item's approval action. A status edit cannot record an approval decision. |
+| A transition is not allowed | Check the route for the ticket's current status and destination in the enabled matrix for its type. Ticket access, approval and reopening requirements still apply. |
+| A matrix cannot be saved | Check the default, final statuses, and routes from the default to every active applicable status and from every unfinished status to a final status. |
+| Transition settings changed while you edited | Choose Reload configuration, review the latest matrix and make your changes again before saving. Unsaved selections are replaced by the reload. |
+| Some saved routes use statuses no longer available | Review the statuses and the visible routes. Saving replaces the earlier routes with the matrix shown. |
+| A status edit would invalidate transition rules | Disable and save every affected type's matrix first, then edit the statuses and restore valid routes before enabling again. |
+| Transition settings cannot be opened | Check organisation-wide staff access and `settings.manage`. If a type has more than 100 active applicable statuses, reduce its configuration before managing the matrix. |
 | An import row rejects its status | Correct the mapping to your organisation's configured vocabulary and retry the failed row. |
 
 For day-to-day work, see [Work with tickets](../product/tickets.mdx).
