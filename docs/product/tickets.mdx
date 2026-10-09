@@ -24,6 +24,21 @@ Changes may require a versioned review and approval before implementation. Probl
 
 Administrators can [configure ticket statuses and defaults](../admin/ticket-statuses.mdx). That guide includes rollout availability, creation errors, reopening permissions and historical import mappings.
 
+## Record a resolution
+
+> **Awaiting rollout.** The resolution dialog and retained resolution history described here are awaiting application rollout.
+
+You need access to the ticket and permission to edit it. Tickets and incidents require a resolution code and explanation by default; your administrator can enable the same requirement for other work-item types.
+
+1. Open the ticket and choose **Resolve**. Choosing a configured resolved or closed status in the status selector also opens the dialog.
+2. Choose **Destination status** from your organisation's active resolved or closed statuses.
+3. Select a **Resolution code** and enter the **Resolution explanation**. The dialog marks required fields.
+4. Choose **Save resolution**.
+
+The status and evidence are saved together. If saving fails, the dialog keeps your entries so you can correct the problem. If there is no applicable code or destination, ask an administrator to review **Settings → Tickets → Resolution** or **Statuses**. Approval, transition and RFC requirements still apply.
+
+**Resolution history** shows the code name and explanation recorded for previous resolutions. It is read-only. Reopening requires reopening permission and clears current resolution evidence without removing that history. Completing a later cycle needs fresh evidence. You cannot replace evidence by saving the same finished status again.
+
 :::tip
 Link relevant assets, knowledge articles, projects, and related tickets. This keeps operational context attached to the work instead of burying it in comments.
 :::
