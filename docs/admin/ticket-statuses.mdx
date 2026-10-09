@@ -1,0 +1,63 @@
+---
+title: Configure ticket statuses
+description: Set a valid starting status and understand which status changes staff can make.
+---
+
+# Configure ticket statuses
+
+Choose the names your team uses for service work and give each ticket type a valid starting status.
+
+> **Awaiting rollout.** The default-status and transition validation described here is awaiting application rollout. Confirm availability with your Enduria administrator before relying on it.
+
+## Before you start
+
+You need **Manage settings** (`settings.manage`) to change ticket statuses. Staff also need access to the ticket and permission to edit it to change its status. Reopening a final ticket requires `tickets.reopen` in addition to that access.
+
+Status names belong to your organisation. A status's **Category** describes its meaning; its **Final Status** switch determines whether it is finished. Different names can share a category.
+
+## Set the starting status
+
+1. Open **Settings → Tickets → Statuses**.
+2. Choose **Add Status**, or edit the status you want to use.
+3. Enter its **Name** and set **Category** to **Open**.
+4. Turn **Active** and **Default** on. Leave **Final Status** off.
+5. Choose **Create Status** for a new status, or **Save Changes** for an existing one.
+6. Create a ticket to check the result.
+
+Each ticket type needs exactly one active, applicable default. The standard creation form adds statuses for all five work-item types. Where your configuration restricts a status to particular types, check each affected type separately.
+
+Ordinary work starts at the configured default. Approval-required requests enter their configured pending-approval status, and governed changes use their RFC policy's starting status. Those flows still require a valid default configuration; choosing a default never grants approval.
+
+If creation reports a settings problem, correct the configuration and try again. Creating a ticket does not initialise missing statuses automatically.
+
+For approval-required requests, also keep exactly one active, applicable status with **Category → Pending Approval**. Leave **Default** and **Final Status** off for that status. Create or edit it in the same Statuses tab. The **Approved** and **Rejected** categories are available there too; these categories are reserved for approval actions, not ordinary status edits.
+
+## Status change rules
+
+The ordinary ticket workspace currently offers a fixed list of status choices. It displays a custom starting status, but other custom names may not be selectable there yet. The creation preview also shows the fixed vocabulary. A listed name is not proof that it is configured: an unavailable choice is refused and leaves the ticket unchanged.
+
+Status changes require an active status applicable to the ticket type. Ordinary edits permit movement between configured statuses subject to these rules:
+
+- Leaving a final status requires your current `tickets.reopen` permission.
+- Pending approval, approved and rejected categories are controlled by approval actions.
+- A request awaiting approval cannot progress through an ordinary status edit. Cancellation remains available where permitted.
+- RFC-governed changes retain their review, scheduling and implementation requirements.
+
+Selecting the current status again does not record another status-change event. Status names alone do not grant approval or bypass a review.
+
+## Import historical tickets
+
+Map each imported status to an active status configured for that ticket type. An old platform name is not accepted merely because it was once a default. Historical imports can use configured final statuses; the starting-status rule for new live tickets does not prevent importing completed history.
+
+## Resolve common problems
+
+| Message or symptom | What to check |
+| --- | --- |
+| Creation asks for a valid default | Exactly one applicable active default must have category Open and Final Status off. |
+| A selected status is unavailable | Check whether it is inactive, restricted to another ticket type, or duplicated with different letter casing. |
+| A custom status is missing from the workspace picker | The ordinary workspace still offers its fixed list. Adding the status in Settings does not currently add it to that picker. |
+| Reopening is refused | Ask an administrator to check your current role and `tickets.reopen` permission. |
+| An approval status is refused | Use the work item's approval action. A status edit cannot record an approval decision. |
+| An import row rejects its status | Correct the mapping to your organisation's configured vocabulary and retry the failed row. |
+
+For day-to-day work, see [Work with tickets](../product/tickets.mdx).
