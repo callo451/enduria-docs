@@ -45,9 +45,21 @@ Status changes require an active status applicable to the ticket type. Ordinary 
 
 Selecting the current status again does not record another status-change event. Status names alone do not grant approval or bypass a review.
 
+## Configure destinations for automatic actions
+
+> **Awaiting rollout.** Consistent validation across alternate creation and status-change paths, and protected completion timestamps, are awaiting application rollout.
+
+Email intake, proactive incident alerts and the legacy ticket creation path require the same valid starting status as staff creation. Approval decisions use the applicable **Approved** or **Rejected** category. Software provisioning completion requires a final **Closed** category, and requester cancellation uses **Cancelled**. Finishing a linked appointment requires a final **Resolved** category; it cannot complete a change request. AI suggestions that wait for a reply use **On Hold**.
+
+Keep exactly one active, applicable destination in each category needed by these actions. A missing or ambiguous destination is not chosen automatically. Correct it under **Settings → Tickets → Statuses**, then retry the refused action. A completed appointment can remain complete while its linked ticket remains unresolved; check both records.
+
+The first entry into a final **Resolved** status records the ticket's resolution time. The first entry into another final category records its closure time. These timestamps are protected from manual replacement and remain when a ticket reopens. They describe the first recorded completion, not the latest completion cycle; SLA results use the retained lifecycle history. Existing missing historical times are not filled with an estimated date.
+
 ## Import historical tickets
 
 Map each imported status to an active status configured for that ticket type. An old platform name is not accepted merely because it was once a default. Historical imports can use configured final statuses; the starting-status rule for new live tickets does not prevent importing completed history.
+
+Historical imports can preserve the source resolution and closure timestamps. If the source has no timestamp, it remains unknown; the import time is not substituted. Subsequent status changes follow the same protected timestamp rules as other tickets.
 
 ## Resolve common problems
 
