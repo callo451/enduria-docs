@@ -1,6 +1,6 @@
 ---
 title: Configure ticket statuses
-description: Set a valid starting status and understand which status changes staff can make.
+description: Set starting statuses, rename your ticket vocabulary, and understand status change rules.
 ---
 
 # Configure ticket statuses
@@ -11,7 +11,7 @@ Choose the names your team uses for service work and give each ticket type a val
 
 ## Before you start
 
-You need **Manage settings** (`settings.manage`) to change ticket statuses. Staff also need access to the ticket and permission to edit it to change its status. Reopening a final ticket requires `tickets.reopen` in addition to that access.
+You need **Manage settings** (`settings.manage`) to change ticket statuses or priorities. Staff also need access to the ticket and permission to edit it to change its status. Reopening a final ticket requires `tickets.reopen` in addition to that access.
 
 Status names belong to your organisation. A status's **Category** describes its meaning; its **Final Status** switch determines whether it is finished. Different names can share a category.
 
@@ -31,6 +31,27 @@ Ordinary work starts at the configured default. Approval-required requests enter
 If creation reports a settings problem, correct the configuration and try again. Creating a ticket does not initialise missing statuses automatically.
 
 For approval-required requests, also keep exactly one active, applicable status with **Category → Pending Approval**. Leave **Default** and **Final Status** off for that status. Create or edit it in the same Statuses tab. The **Approved** and **Rejected** categories are available there too; these categories are reserved for approval actions, not ordinary status edits.
+
+## Rename a status or priority
+
+> **Awaiting rollout.** Unique names and coordinated status and priority renaming are awaiting application rollout.
+
+Rename an existing entry when its meaning stays the same and your team needs a different label. Status names must be unique within your organisation's status list, and priority names within its priority list. Letter casing does not distinguish names: for example, `Waiting` and `waiting` conflict. Inactive entries still reserve their names.
+
+1. Open **Settings → Tickets → Statuses** or **Priorities**.
+2. Select the pencil icon beside the entry you want to rename.
+3. Change **Name** in **Edit Status** or **Edit Priority**.
+4. For a status rename, leave **Category**, **Final Status**, **Pauses SLA** and **Active** unchanged. Change those settings in a separate save.
+5. Choose **Save Changes**.
+6. Check the entry in Settings to confirm that it has the new name.
+
+A successful rename updates matching tickets together with the configuration. A status rename also carries the current RFC policy's lifecycle labels. Existing reviews retain their approved rules and evidence and continue to use the renamed status.
+
+The ticket workspace's priority picker currently offers a fixed list. A renamed custom priority is retained on the ticket, but may not display in that picker. Confirm the configured name in Settings; the picker does not yet show every custom priority.
+
+The rename is retained for audit. Renaming a label does not complete or reopen a ticket, replace its completion timestamps, or restart its SLA clock. Earlier ticket history and frozen selections keep the names recorded at the time.
+
+Former status and priority names remain reserved for the same entry. You can rename that entry back to a former name, but cannot give the name to a different entry in the same list. To retire a status or priority, turn **Active** off and save; retain the entry so earlier evidence remains meaningful. Before retiring a default or automatic-action destination, configure its replacement.
 
 ## Status change rules
 
@@ -66,8 +87,13 @@ Historical imports can preserve the source resolution and closure timestamps. If
 | Message or symptom | What to check |
 | --- | --- |
 | Creation asks for a valid default | Exactly one applicable active default must have category Open and Final Status off. |
+| A name is already in use | Choose a distinct name. Check inactive entries too; changing letter casing alone does not make a name distinct. |
+| A former status or priority name is unavailable | Edit the original entry to reuse its former name, or choose a different name for the new entry. |
+| A status rename asks for a separate edit | Save the name change separately from changes to category, finality, SLA pausing, activity or applicability. |
+| An upgrade reports duplicate configuration names | Ask your operator to review the reported status and priority conflicts, including inactive entries, and resolve them before retrying. The upgrade does not choose or rename entries automatically. |
 | A selected status is unavailable | Check whether it is inactive, restricted to another ticket type, or duplicated with different letter casing. |
 | A custom status is missing from the workspace picker | The ordinary workspace still offers its fixed list. Adding the status in Settings does not currently add it to that picker. |
+| A renamed priority is missing from the workspace picker | The picker still offers its fixed list and may not display a custom priority retained on the ticket. Check the renamed entry under Settings → Tickets → Priorities. |
 | Reopening is refused | Ask an administrator to check your current role and `tickets.reopen` permission. |
 | An approval status is refused | Use the work item's approval action. A status edit cannot record an approval decision. |
 | An import row rejects its status | Correct the mapping to your organisation's configured vocabulary and retry the failed row. |
