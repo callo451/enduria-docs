@@ -1,0 +1,42 @@
+---
+title: Notification rules and email templates
+---
+
+Choose which events send email, who receives it, and what each message says.
+
+> **Awaiting rollout.**
+> The rule editor, template preview and test-send controls described here are awaiting application rollout. Your workspace may still show the earlier screens.
+
+You need **Manage Settings** (`settings.manage`). A custom role with this permission can open these settings; an administrator role name is not required. Configure [outbound email](./outbound) before testing delivery.
+
+## Prepare a template
+
+1. Open **Settings → Email templates** and create a template or open an existing one.
+2. Enter a **Name** and select the event under **Written for**.
+3. Write the **Subject** and **HTML body**. Optionally add a **Plain-text version**.
+4. Use **Variables** to insert values supported by that event. The preview uses example values, so it does not show a particular customer's ticket.
+5. Review the preview and save. If rendering fails, correct the reported template expression before saving.
+6. In the test-send section, enter **Send to** and send a test. Save changes first: the test uses the saved version.
+
+Tests use your organisation's notification email settings and delivery limits. If a test cannot send, check [email troubleshooting](./troubleshooting). A successful template test checks rendering and sending; it does not test a rule's conditions or recipient selection.
+
+Ready-made templates are editable copies for your organisation. They cannot be deleted. A template used by a rule also cannot be deleted: change or remove the rule first. Turning **Template on** off stops rules using that template from sending.
+
+## Create a notification rule
+
+1. Open **Settings → Notification Rules** and create a rule.
+2. Name the rule and choose its event. The event determines the available conditions, recipients and templates.
+3. Choose a template for that event.
+4. Select recipients, such as the requester, assignee or watchers when offered. You can also select people, roles or email addresses.
+5. Add conditions where needed. Status and priority choices use your organisation's configured vocabulary.
+6. Turn **Rule on** on and save.
+
+The rule runs when its event occurs. Work-item creation, assignment, comments, status changes and supported approval decisions raise events from their service operations, including supported API paths. Rules do not run retroactively when created.
+
+For work-item messages, account recipients must be allowed to read the work item. Internal notes are not sent to customer accounts or outside email addresses. Take care when adding bare email addresses: these recipients do not need an Enduria account. Personal email preferences, unsubscribe choices and sending limits can prevent delivery.
+
+## If a message does not arrive
+
+Check that both the rule and its template are on, the template matches the event, the conditions match the work item, and the recipients are eligible. A rule with a disabled template is flagged in the list and can still be turned off. Software requests also honour the software catalogue's notification switches.
+
+An approval can produce a status-change event and an approval-decision event. Separate email rules for those events can each send mail; select the events that fit your communication needs.
