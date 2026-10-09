@@ -32,9 +32,11 @@ If creation reports a settings problem, correct the configuration and try again.
 
 For approval-required requests, also keep exactly one active, applicable status with **Category → Pending Approval**. Leave **Default** and **Final Status** off for that status. Create or edit it in the same Statuses tab. The **Approved** and **Rejected** categories are available there too; these categories are reserved for approval actions, not ordinary status edits.
 
-## Change a ticket's status
+## Status change rules
 
-Open the ticket and choose an active status applicable to its type. Ordinary edits permit movement between configured statuses subject to these rules:
+The ordinary ticket workspace currently offers a fixed list of status choices. It displays a custom starting status, but other custom names may not be selectable there yet. The creation preview also shows the fixed vocabulary. A listed name is not proof that it is configured: an unavailable choice is refused and leaves the ticket unchanged.
+
+Status changes require an active status applicable to the ticket type. Ordinary edits permit movement between configured statuses subject to these rules:
 
 - Leaving a final status requires your current `tickets.reopen` permission.
 - Pending approval, approved and rejected categories are controlled by approval actions.
@@ -53,6 +55,7 @@ Map each imported status to an active status configured for that ticket type. An
 | --- | --- |
 | Creation asks for a valid default | Exactly one applicable active default must have category Open and Final Status off. |
 | A selected status is unavailable | Check whether it is inactive, restricted to another ticket type, or duplicated with different letter casing. |
+| A custom status is missing from the workspace picker | The ordinary workspace still offers its fixed list. Adding the status in Settings does not currently add it to that picker. |
 | Reopening is refused | Ask an administrator to check your current role and `tickets.reopen` permission. |
 | An approval status is refused | Use the work item's approval action. A status edit cannot record an approval decision. |
 | An import row rejects its status | Correct the mapping to your organisation's configured vocabulary and retry the failed row. |
