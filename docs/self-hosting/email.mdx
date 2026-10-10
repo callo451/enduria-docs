@@ -161,3 +161,12 @@ After changing email variables, restart the application. Then, in an organisatio
 2. Open **Settings → Email Integration** and confirm **Platform email** is available and shows your From address.
 3. Choose it, save, and select **Test connection** under **Verification**.
 4. Trigger a notification and confirm it arrives with the organisation's name and your From address.
+
+
+## Satisfaction survey links
+
+> **Awaiting rollout.** Intent-bound satisfaction survey links are awaiting application rollout.
+
+Set `BETTER_AUTH_URL` to the application's canonical public URL so survey links point to the address customers can reach. `NEXTAUTH_URL` remains a compatibility fallback when `BETTER_AUTH_URL` is absent. Production survey delivery requires a configured URL; it does not fall back to localhost. `NEXTAUTH_SECRET` remains required in production to sign survey links. Preserve this secret securely and do not include it in logs or support messages.
+
+Keep the scheduler running for invitations due at the next survey dispatch, including those configured as immediate. See [customer satisfaction surveys](../admin/customer-satisfaction) for eligibility, retained invitation settings and delivery recovery.

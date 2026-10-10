@@ -1,0 +1,61 @@
+---
+title: Configure customer satisfaction surveys
+description: Choose which completed work receives a satisfaction survey and manage delivery settings.
+---
+
+# Configure customer satisfaction surveys
+
+Choose which completed service work receives a customer satisfaction (CSAT) invitation, using the meaning of your statuses rather than their names.
+
+> **Awaiting rollout.** Completion category selection and the delivery safeguards described here are awaiting application rollout. Confirm availability with your Enduria administrator before relying on them.
+
+## Before you start
+
+You need active organisation-wide staff access and **View settings** (`settings.view`) or **Edit settings** (`settings.edit`) to open these settings. Editing requires `settings.edit`. Portal users and staff restricted to one client cannot manage this organisation-wide policy.
+
+Configure [outbound email](./email/outbound) and keep sending enabled. A ticket needs a current requester with a usable email address. Self-hosted installations also need the scheduler running.
+
+## Choose eligible completions
+
+1. Open **Settings → CSAT**.
+2. In **General**, turn **Enable CSAT Surveys** and **Automatically Send Surveys** on.
+3. Open **Triggers**. Under **Completion categories**, select the final categories that should qualify: **Resolved**, **Closed**, **Cancelled** or **Rejected**.
+4. Review **Excluded Categories**. These are service catalogue categories to leave out, separate from completion categories.
+5. Choose **Save**. **Settings Saved** confirms the policy was saved. **Reset** reloads saved settings and discards your unsaved changes.
+
+New settings select resolved and closed, with both survey switches on. Cancelled and rejected are excluded unless you select them. Only a genuine change into a configured **final** status in a selected category qualifies. A custom status name works according to its category; creating a ticket, renaming a status, an unchanged status or importing historical work does not queue an invitation.
+
+Each ticket can receive one automatic invitation. Moving from resolved to closed, reopening or completing it again does not reset that limit. A closed-only policy can qualify when work moves from resolved to closed if no earlier invitation exists.
+
+Turning either survey switch off suppresses invitations that have not yet been claimed for sending. Pending delivery also checks that the ticket still qualifies and its requester, email and client binding are unchanged. Reopening can therefore suppress an invitation before delivery; it does not grant a replacement invitation.
+
+## Set delivery and survey content
+
+In **Delivery**, choose **Send Timing**. **Immediate - Next survey dispatch** adds no waiting period: sending happens through the dispatcher, which runs every 15 minutes. It does not send during the ticket update. **Delayed - Wait before sending** uses **Delay Hours**; the default is 24 hours. Actual delivery can occur at the following dispatch.
+
+**Minimum Ticket Age (hours)** defaults to 1. Work younger than the threshold when it completes does not qualify automatically. Adjust **Email Subject** and **Include Ticket Details**, then choose **Save**. Survey messages use the sender identity configured in [outbound email](./email/outbound); the legacy **From Name** field in CSAT settings does not override that sender.
+
+In **Content**, configure **Survey Question**, **Thank You Message**, **Include Comment Field** and **Comment Field Label**. In **Responses**, review **Allow Multiple Responses** and **Survey Link Expiry (days)**, which defaults to 30 days. Save your changes. These changes apply to future invitations. An existing invitation retains the survey content and response settings, including whether multiple responses are allowed, captured when it was queued.
+
+The requester follows the email link, selects a rating from 1 to 5 and submits it, optionally with a comment. The survey link does not require signing in. Access still checks the master survey switch, current requester and client authority, final completion state and whether the ticket has reopened. Category selection and the automatic-send switch control future or unclaimed sending; changing them does not by itself withdraw a valid already-issued link. Treat the link as private and do not forward it to another person. A successful submission displays the thank-you message.
+
+## Existing settings after an upgrade
+
+Existing survey switches, delay, minimum age, exclusions and content are retained. Recognised former trigger names are converted explicitly: `resolved` becomes resolved, `closed` becomes closed, and `completed` becomes resolved. Review **Triggers** after upgrading. An unrecognised value refuses the upgrade and needs deliberate correction before retrying; ask your deployment maintainer for help rather than bypassing the check. Historical completions are not replayed.
+
+Already sent invitations and retained old delivery queue records continue to block automatic reissue. Old queued invitations are suppressed; a delivery already in progress is retained as uncertain. They are not replayed by the new dispatcher. Old links that cannot be tied to a verified invitation are no longer accepted. Reopening invalidates an invitation from the previous completion cycle, even if the ticket is completed again. There is no automatic resend or invitation reissue control in this screen.
+
+## Recover from common problems
+
+| Problem | What to check |
+| --- | --- |
+| Settings cannot be opened or saved | Ask an administrator to check your settings permission and organisation-wide staff access. On **Save Failed**, correct the reported error and retry; your draft remains available. |
+| No invitation arrives | Check both switches, final status category, service category exclusions, minimum age, current requester and email, and whether the ticket already has an invitation. Then check outbound email and, for self-hosting, scheduler operation. |
+| Immediate delivery is not instantaneous | Wait for the next survey dispatch. Delayed delivery also waits for its configured due time. |
+| A reopened ticket receives no replacement | Pending invitations can be suppressed after reopening. The once-per-ticket limit remains; another completion does not automatically resend. |
+| Delivery failed or its outcome is uncertain | Check email delivery records and contact your administrator. Enduria does not blindly resend after an uncertain provider handoff. |
+| Survey link is unavailable | The link may be expired, already answered, from before the upgrade, or no longer match the ticket's requester/client binding. Contact support; this screen has no reissue action. |
+
+In **Alerts**, **Notify on Low Ratings** and **Notify Users** control low-rating alerts. Alert recipients must remain active organisation-wide staff with CSAT feedback access (`dashboard.view.csat`). Revoking that authority hides the alert while retaining its record.
+
+These settings do not grant access to individual feedback. Reports and dashboards use their own permissions and client scope; viewing recent feedback additionally requires `dashboard.view.csat`.
