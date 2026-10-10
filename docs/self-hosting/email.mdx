@@ -153,6 +153,18 @@ A host that is refused shows *The mail server address is on a private or reserve
 
 The scheduler checks each organisation's inbound mailboxes once a minute, honouring each mailbox's own polling interval. Inbound processing needs the scheduler service running with a valid `CRON_SECRET`; see [Configuration](./configuration).
 
+### Inbound sender verification
+
+> **Awaiting rollout.** Mailbox sender-verification and intake policies are awaiting application rollout.
+
+Incoming sender verification is separate from the SPF, DKIM and DMARC records used by your outbound sender. Each mailbox defaults to Require, which needs trusted DMARC pass evidence for the actual From domain before a recognised participant's reply can be public.
+
+Confirm the receiving gateway's authentication-service identifiers with its administrator. Before configuring them in Enduria, verify that the gateway removes attacker-supplied matching `Authentication-Results` headers and stamps its own results. The mailbox administrator must acknowledge that protection. Neither the IMAP host name nor a header containing a familiar identifier establishes trust by itself. With no confirmed boundary, retain messages as unverified notes for staff review.
+
+Relaxed mode permits missing evidence with a warning for receiving paths that strip it; explicit failures, malformed or conflicting evidence remain unverified. It never grants unrelated senders participation. Configure new-ticket intake separately; see [inbound email](../admin/email/inbound).
+
+For reply threading, preserve delivered message identifiers and the exact recorded ticket reference in subjects. Services can rewrite identifiers: Enduria cannot match an Amazon SES wire identifier it has not observed, so recorded subject references remain important. There is no separate environment variable that turns an arbitrary inbound header into trusted evidence.
+
 ## Check the configuration
 
 After changing email variables, restart the application. Then, in an organisation:
