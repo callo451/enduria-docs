@@ -131,11 +131,13 @@ The first entry into a final **Resolved** status records the ticket's resolution
 
 ## Import historical tickets
 
+Use the [mapped CSV import](./ticket-imports) under **Settings → Service Management → Import tickets** to preview source-to-configured-status mappings before creating operational work. This is separate from the retained historical archive.
+
 Map each imported status to an active status configured for that ticket type. An old platform name is not accepted merely because it was once a default. Historical imports can use configured final statuses; the starting-status rule for new live tickets does not prevent importing completed history.
 
 Historical imports can preserve the source resolution and closure timestamps. If the source has no timestamp, it remains unknown; the import time is not substituted. Subsequent status changes follow the same protected timestamp rules as other tickets.
 
-Resolution requirements also apply to new imports; importing does not bypass them. The current CSV importer has no resolution-code or explanation columns. If completed historical rows cannot supply required evidence, an administrator must explicitly turn that type's requirement off under **Settings → Tickets → Resolution** before importing, then restore it afterward. Imported missing evidence stays unknown; enabling the requirement does not fill earlier history.
+Resolution requirements also apply to new imports; importing does not bypass them. The current CSV importer has no resolution-code or explanation columns. If a completed historical row cannot supply required evidence, map it to an appropriate unfinished status and resolve it afterward with actual evidence, or ask an administrator to review the type's requirement under **Settings → Tickets → Resolution**. An administrator can explicitly turn the requirement off for the import and restore it afterward. Neither option invents missing historical evidence; enabling a requirement does not fill earlier history.
 
 ## Resolve common problems
 
