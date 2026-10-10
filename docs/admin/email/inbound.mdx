@@ -5,7 +5,9 @@ description: Connect a support mailbox, understand how messages become tickets a
 
 # Inbound email
 
-Inbound email turns messages sent to a support mailbox into tickets, and replies into ticket comments. Open **Settings → Inbound Email**. You need the **Manage Settings** (`settings.manage`) permission.
+Inbound email turns accepted messages sent to a support mailbox into tickets, and retains replies on the matching ticket. Open **Settings → Inbound Email**. You need current tenant-wide staff access and **Manage Settings** (`settings.manage`).
+
+> **Awaiting rollout.** Header threading, sender verification, intake restrictions and unverified-note review described here are awaiting application rollout.
 
 ## Connect a mailbox
 
@@ -18,27 +20,48 @@ Enduria reads mailboxes over IMAP with an encrypted connection (TLS or STARTTLS)
    - **Processed Folder** moves it to that folder. The folder must already exist in the mailbox, and the server must support IMAP MOVE or UIDPLUS.
    - Leave **Processed Folder** empty to mark the message as read and leave it in the inbox.
    - **Delete After Processing** removes it instead. The server must support IMAP UIDPLUS.
-5. Optionally choose a default assignee and auto-assignment rules.
+5. Configure the mailbox's sender verification and new-ticket intake policy as described below. Optionally choose a default assignee and auto-assignment rules.
 6. Save, then use the test button to check the connection.
 
-:::caution
-The server must have a public address. A mail server on a private network — such as `10.0.0.5` or a name that resolves to one — is refused unless the operator of your installation allows it.
+> **Connection requirements.** The server must have a public address. A mail server on a private network — such as `10.0.0.5` or a name that resolves to one — is refused unless the operator of your installation allows it.
 
 If the processed folder does not exist, Enduria cannot file messages after processing them, and every check fails. Create the folder first, or leave the field empty.
-:::
 
 **Poll Now** checks every active mailbox immediately instead of waiting for the next scheduled check.
 
 ## How messages are processed
 
-- **New messages** become tickets. The sender becomes the requester; if the address is not yet known, a requester account is created for it.
-- **Replies** are recognised by a ticket number such as `TKT-00042` in the subject, for example `Re: [TKT-00042] Printer not working`. The message is added to that ticket as a comment.
-- **A subject naming a ticket number your organisation does not have**, such as another company's reference in a forwarded email, opens a new ticket instead.
+- **New messages** are subject to the mailbox's intake policy. For accepted new work, the sender becomes the requester; intake that permits unknown contacts can create a requester account.
+- **Replies** first match retained message references in reply headers. Otherwise, Enduria looks for an exact recorded ticket number or historical reference in the subject. Matching is independent of the current [number format](../ticket-numbering).
+- **Public replies** require an authenticated, recognised participant. Other replies become staff-only unverified notes, without a customer notification or a new account for the sender.
+- **Unknown references** may be treated as new work under the intake policy. Conflicting references are refused rather than attached to an arbitrary ticket; review the processing log.
 - **Automatic replies and bounce notifications** — out-of-office messages, delivery failures and similar — are skipped.
-- **Attachments** are saved to the ticket.
+- **Attachments** are saved to the ticket. Files from an unverified reply remain staff-only with its note until staff explicitly make it public.
 - **Auto-assignment rules** assign new tickets by subject, sender domain or body text; otherwise the default assignee is used.
 
 Enduria reads up to 25 unread messages per check, in the order they arrived. Messages larger than 40 MiB are not processed.
+
+### Verify reply senders
+
+On the account's **Rules** tab, set **Sender verification** to **Require DMARC pass**, the default. Configure **Trusted receiving services** only after confirming that the gateway removes forged matching `Authentication-Results` headers before adding its own. Enter up to 10 comma-separated authentication-service identifiers, each at most 253 characters, and select **I have verified that this receiving service strips forged authentication results before adding its own** only when that protection has been confirmed. An IMAP host name is not proof of it. Ask your mail administrator or installation operator to confirm the receiving service and boundary; see [operator guidance](../../self-hosting/email#inbound-sender-verification).
+
+Require needs trusted DMARC pass evidence for the message's actual From domain. With no configured trust boundary, replies remain unverified. **Relaxed: allow missing results** permits missing evidence with a retained warning; it does not accept explicit authentication failure or conflicting evidence.
+
+Authentication alone does not grant participation. Public replies must also come from an active requester, registered watcher, eligible portal contact of the ticket's client with `tickets.comment.client`, or active staff with current write access to the ticket. A CC contact must be explicitly registered as a watcher; simply appearing in a message's To or CC headers does not grant participation.
+
+### Choose new-ticket intake
+
+Set **New ticket intake** to **Anyone**, **Known contacts only**, or **Allowed domains**. Anyone preserves open intake. For Allowed domains, enter **Allowed sender domains** as a comma-separated list of up to 50 domains, each at most 253 characters. They match the sender's exact domain; allowing a parent domain does not allow its subdomains. This policy controls new work and does not make an unrelated sender's reply public. Save the account with **Create** or **Update**.
+
+### Review unverified replies
+
+Open the ticket conversation and review the note marked **Unverified sender**, its sender evidence and attached files. Staff with current ticket write access and `tickets.edit.all`, or `tickets.edit.own` on an involved ticket, can choose **Make public** when disclosure is appropriate, then confirm the disclosure. This makes the note and its linked files customer-visible and records the review actor and time; the customer may be notified through the normal delivery path.
+
+The original sender and verification evidence remain recorded. Making a note public does not turn its author into staff or create a staff first-response fact. Leaving it internal sends no customer notification.
+
+### Reply-header limitations
+
+Keep the recorded ticket number in the subject when replying, even when your mail app preserves reply headers. Some sending services rewrite message identifiers. In particular, an Amazon SES identifier that Enduria has not observed on the delivered message cannot be used for header matching; the exact recorded subject reference remains the fallback. Forwarding or removing both forms of reference can prevent threading.
 
 ## The processing log
 

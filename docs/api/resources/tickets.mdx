@@ -27,7 +27,13 @@ Retrieve valid status and priority values from `/statuses?type=...` and `/priori
 
 ## Create a ticket
 
-Required fields are `title` and `description`. Common optional fields are:
+Required fields are `title` and `description`.
+
+> **Awaiting rollout.** Organisation-configured ticket numbering is awaiting application rollout.
+
+Enduria assigns new ticket numbers using the organisation's saved format. Treat the returned number as a recorded reference; do not derive it from type codes or assume a fixed prefix or sequence length. Format changes leave existing references unchanged. Continue using the returned ticket ID for the operations below.
+
+Common optional fields are:
 
 | Field | Type | Notes |
 | --- | --- | --- |

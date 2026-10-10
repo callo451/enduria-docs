@@ -1,0 +1,37 @@
+---
+title: Ticket numbers
+description: Configure new work-item numbers while retaining existing ticket references.
+---
+
+# Ticket numbers
+
+Configure recognisable numbers for tickets, incidents, service requests, changes and problems under **Settings → Tickets → Numbering**. You need current tenant-wide staff access and **Manage Settings** (`settings.manage`); customer and client-bound accounts cannot change the format.
+
+> **Awaiting rollout.** Configured numbering and previews described here are awaiting application rollout.
+
+## Configure a format
+
+1. Open **Numbering** and review **Ticket Number Format**.
+2. Enter an optional **Prefix** and **Suffix**. Each accepts up to 12 letters or digits; lowercase letters are saved as uppercase.
+3. Choose **Separator**, either `-` or `_`, and **Sequence Length**, from 3 to 10 digits.
+4. Choose whether to **Include configured type code in ticket number**. Enter the **ticket code**, **incident code**, **service request code**, **change code** and **problem code**, using 1–8 letters or digits each. The default codes are `TKT`, `INC`, `SRQ`, `CHG` and `PRB`.
+5. Review **Live Preview**, then choose **Save**.
+
+For example, prefix `ACME`, incident code `INC`, separator `-` and six digits produce a number such as `ACME-INC-000123`. The sequence length sets minimum padding: larger numbers are never shortened. A complete number can contain at most 50 characters.
+
+Live Preview illustrates the format using a ticket example with sequence 1; it is not the next available number. A next-number estimate shown during creation reserves nothing. Another creation or import can use a number before you create your work item.
+
+## What changes
+
+The saved format applies to newly created work, including email intake and imports. Existing numbers and historical references remain unchanged. With no saved format, new work uses the default type codes and five-digit padding; a valid saved four-digit format continues to apply.
+
+Each type retains its sequence. Changing or restoring a format, or deleting a ticket, does not reset it. Enduria skips numbers already used by current or historical ticket references in your organisation, including references belonging to another work-item type. Switching type codes off can therefore leave gaps between numbers.
+
+## Common problems
+
+| Problem | What to do |
+| --- | --- |
+| The format cannot be saved. | Use only letters and digits in codes, prefix and suffix; select one of the supported separators and a sequence length from 3 to 10. Shorten the format if it exceeds 50 characters. |
+| Creation or preview reports an invalid saved format. | Correct the format here and save it. Enduria does not silently replace invalid saved settings or rewrite existing numbers. |
+| A preview differs from the created number. | Live Preview illustrates the format, and a next-number estimate reserves nothing. Other work or an existing reference can advance the next available number. |
+| An old email reply uses the previous format. | Keep the ticket's recorded reference. Matching does not depend on today's number format; see [inbound email](./email/inbound). |

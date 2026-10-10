@@ -30,7 +30,7 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 
 **Recipients do not get email, but no error is shown.** Check that **Send email** is on, that the person has not switched email off or chosen a digest under **Settings → Notifications**, check **Settings → Email Logs** for a *suppressed* or *bounced* status, check the [suppression list](./deliverability#the-suppression-list), and ask recipients to check their spam folder. With custom SMTP, make sure your domain's SPF, DKIM and DMARC records allow your SMTP provider to send for it.
 
-**Replies to notifications do not reach tickets.** Set the outbound Reply-To address to a mailbox connected under **Inbound Email**, and check that the reply's subject still contains the ticket number.
+**Replies to notifications do not reach tickets.** Set the outbound Reply-To address to a mailbox connected under **Inbound Email**. Preserve reply headers and the ticket's exact recorded number in the subject. Check the mailbox log and the ticket's internal conversation before assuming the message was lost.
 
 ## Inbound
 
@@ -41,7 +41,15 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 - *Quarantined* — it failed repeatedly or cannot be processed. Open it for the reason, then **Retry** or **Dismiss**.
 - Not listed — it has not been fetched yet. Check the mailbox for connection problems, or use **Poll Now**.
 
-**A reply created a new ticket instead of a comment.** Enduria matches replies by a ticket number such as `TKT-00042` in the subject. If the number was removed, or names a ticket your organisation does not have, a new ticket is opened.
+> **Awaiting rollout.** Header matching, sender-policy and intake checks described below are awaiting application rollout.
+
+**A reply created new work instead of a comment.** Enduria first matches retained reply-header references, then exact recorded current or historical ticket numbers in the subject. If neither identifies a ticket, the mailbox's new-ticket intake policy applies. Keep the recorded reference even after an administrator changes the number format. Sending services that rewrite message identifiers, including unobserved Amazon SES identifiers, may require the subject fallback.
+
+**A reply is an unverified internal note.** Check whether the sender is a recognised participant with current authority, and whether the mailbox has a confirmed receiving-service trust boundary. Require needs trusted DMARC pass for the actual From domain. Relaxed permits missing evidence with a warning, but explicit failure or conflicting evidence remains unverified. Staff can review the note and its files before choosing **Make public**; do not weaken verification simply to make a suspicious message visible.
+
+**A new sender cannot open a ticket.** Review the mailbox's intake policy. Known contacts only refuses unknown contacts; Allowed domains requires an exact permitted domain. These restrictions do not change who may publicly reply to an existing ticket.
+
+**A message has conflicting ticket references.** Review the headers and subject against the intended ticket. Enduria refuses ambiguous routing. Send a fresh, clearly addressed reply with the correct recorded reference rather than assuming a retry will resolve the conflict.
 
 ### Inbound connection messages
 
