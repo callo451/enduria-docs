@@ -37,7 +37,7 @@ List filters include related ticket/project/task, user, billable state, and star
 | `GET` | `/sla` | `tickets:read` |
 | `POST` | `/sla` | `tickets:write` |
 
-Policy creation requires a name and response/resolution targets for the seeded keys `critical`, `high`, `medium`, and `low`. Target values are positive numbers. Optional business hours specify an IANA time zone, all seven named weekdays, and holidays.
+Policy creation requires a name and response/resolution targets for the current API compatibility keys `critical`, `high`, `medium`, and `low`. These fields do not require your organisation to use those names for its ticket priorities. Target values are positive numbers. Optional business hours specify an IANA time zone, all seven named weekdays, and holidays. See the [administrator guide](../../admin/service-level-targets) for clock behavior and the current Settings controls.
 
 ```json
 {
