@@ -11,23 +11,23 @@ For response targets, configured pauses and business calendars, see [service-lev
 
 ## Find work
 
-Use queue search, filters, and saved views to narrow the currently loaded rows by assignee, customer, type, status, priority, or other configured fields. Status and priority names come from your organisation's settings.
+Search the queue by ticket number, title or description, and use its type, queue and saved-view filters to narrow the matching work. Status and priority names come from your organisation's settings.
 
 > **Awaiting rollout.** Configured workspace choices and queue classification described below are awaiting application rollout.
 
-Under **Loaded work**, **My open work**, **Unassigned** and **SLA breached** include work with a recognised unfinished status. **Awaiting approval** uses the status's approval category. **All work** retains finished work and unfamiliar or retired labels too, so you can review recorded evidence. View counts describe the rows currently loaded in the queue; they are not organisation-wide totals.
+Under **This page**, **My open work**, **Unassigned** and **SLA breached** include work with a recognised unfinished status. **Awaiting approval** uses the status's approval category. **All work** retains finished work and unfamiliar or retired labels too, so you can review recorded evidence. These badges describe the current page, rather than every matching ticket. The matching total follows your current search, filters and permissions.
 
 ### Find work beyond the loaded rows
 
 > **Awaiting rollout.** Bounded ticket lists and selection search described here are awaiting application rollout.
 
-The queue searches and filters only its loaded rows and currently has no page navigation. A record outside those rows can be absent from the queue even when it exists. The selectors and request lists described below provide search and paging where indicated. A loaded or shown count describes the current rows; a matching total describes work within your current permissions and filters. Dashboard and workspace summaries can remain limited samples. **Export visible rows** exports the queue's visible rows, not every matching ticket.
+Queue search and filters apply before paging, so matching work beyond the first page can be found. Use **Previous** and **Next** to browse pages of up to 20 tickets. Changing the search, type, queue or saved view returns to the first page. A loaded or shown count describes the current rows; a matching total describes work within your current permissions and filters. Dashboard and workspace summaries can remain limited samples. **Export visible rows** exports the current successful page, not every matching ticket. It is unavailable while that page is loading or has failed. Selections remain when paging through the same query; selecting or deselecting all affects only the current page. Changing the query clears the selection.
 
 Use **Search incidents by number or title...** in incident selection, or **Search tickets…** when linking work to a project. Search narrows matching work beyond the current page. **Previous** and **Next** reach additional pages; changing a search starts again at the first page. When linking a ticket to a project, select the individual ticket; your selection is retained while you browse other pages. Status-page incident management also provides **Previous** and **Next** and a matching total. If a record is still missing, check the work-item type, filters and your access before assuming it does not exist.
 
 **My Requests** shows loaded rows, the matching total and the current page, with **Previous** and **Next**. Its **Requests on this page**, **Open on this page**, **Pending on this page** and **Resolved on this page** cards describe the current page. **All statuses** and **All priorities** use your organisation's configured choices.
 
-A failed search or page load is not an empty result. Use **Retry incidents**, **Retry tickets** or **Retry requests** for the affected list, and **Retry filters** if configured filters failed to load. Retry before selecting another record or creating duplicate work.
+A failed search or page load is not an empty result. Use the queue's **Retry tickets** action after a failed load; filters and paging remain available to correct or revisit the query. Use **Retry incidents**, **Retry tickets** or **Retry requests** for the affected list, and **Retry filters** if configured filters failed to load. Retry before selecting another record or creating duplicate work.
 
 ## Work a ticket
 
@@ -37,6 +37,10 @@ A failed search or page load is not an empty result. Use **Retry incidents**, **
 4. Add an internal note or a customer-visible reply in the conversation.
 5. Record time and attach supporting material.
 6. Move the ticket through a valid status transition when the work changes state.
+
+Description and comment entries are retained if saving fails, so you can correct the problem and retry. Custom-field edits remain a draft until you choose **Save custom fields**; changing a field does not save each keystroke.
+
+Choose **Canned Responses** in the comment composer to insert a saved reply from its category. Review and edit the draft before choosing **Send**, and check whether it should be an internal note or a customer-visible reply.
 
 Changes may require a versioned review and approval before implementation. Problems can publish reviewed known-error revisions independently of the problem status.
 
