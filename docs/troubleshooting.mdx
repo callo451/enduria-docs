@@ -18,6 +18,16 @@ Start by identifying whether the problem affects one record, one user, one organ
 
 For sign-in problems, confirm the user's authentication method and tenant context. For missing interface areas, check permissions. For stale integration data, review the connection state and the scheduled synchronisation worker. For self-hosted availability, check `/api/health` before inspecting individual features.
 
-:::warning
-Never post API keys, session cookies, passwords, provider secrets, or unredacted customer data in an issue.
-:::
+## Ticket searches and failures
+
+> **Awaiting rollout.** Bounded ticket reads and controlled ticket error responses described here are awaiting application rollout.
+
+**A record is missing from a list or selector.** Check filters and your permissions. Queue search and filters apply only to loaded rows; the queue currently has no page navigation, so a record outside those rows may not appear. Incident and project selectors and **My Requests** provide server search and **Previous** or **Next**. Status-page incident management provides filters and page navigation. Use those controls only where the page provides them. Counts marked loaded, shown or on this page describe the current rows. A failed request is not evidence that no matching work exists. Use **Retry incidents**, **Retry tickets** or **Retry requests** for the affected list, or **Retry filters** when configured choices failed to load.
+
+**An operation reports a validation or conflict error.** Follow its recovery guidance and correct the input or refresh the affected record before retrying. Repeating unchanged invalid input will not resolve the problem.
+
+**A ticket, queue or service-target request fails unexpectedly.** Record the safe error code and request identifier when supplied, the time, page and affected record. Unexpected errors use a controlled message rather than database or provider details. Persistent failures need administrator or operator investigation. Before repeating a create or update after an uncertain result, check whether it already succeeded; public API integrations should follow the [idempotency guidance](./api/requests-and-responses#idempotent-writes).
+
+The public API's response format is documented separately in [requests and responses](./api/requests-and-responses). A staff-screen error need not use that API envelope.
+
+> **Protect sensitive information.** Never post API keys, session cookies, passwords, provider secrets, ticket descriptions, attachment contents or unredacted customer data in an issue. Share the request identifier and safe error code instead of a complete request payload.
