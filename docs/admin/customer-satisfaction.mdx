@@ -33,7 +33,7 @@ Turning either survey switch off suppresses invitations that have not yet been c
 
 In **Delivery**, choose **Send Timing**. **Immediate - Next survey dispatch** adds no waiting period: sending happens through the dispatcher, which runs every 15 minutes. It does not send during the ticket update. **Delayed - Wait before sending** uses **Delay Hours**; the default is 24 hours. Actual delivery can occur at the following dispatch.
 
-**Minimum Ticket Age (hours)** defaults to 1. Work younger than the threshold when it completes does not qualify automatically. Adjust **Email Subject**, **From Name** and **Include Ticket Details**, then choose **Save**.
+**Minimum Ticket Age (hours)** defaults to 1. Work younger than the threshold when it completes does not qualify automatically. Adjust **Email Subject** and **Include Ticket Details**, then choose **Save**. Survey messages use the sender identity configured in [outbound email](./email/outbound); the legacy **From Name** field in CSAT settings does not override that sender.
 
 In **Content**, configure **Survey Question**, **Thank You Message**, **Include Comment Field** and **Comment Field Label**. In **Responses**, review **Allow Multiple Responses** and **Survey Link Expiry (days)**, which defaults to 30 days. Save your changes. These changes apply to future invitations. An existing invitation retains the survey content and response settings, including whether multiple responses are allowed, captured when it was queued.
 
