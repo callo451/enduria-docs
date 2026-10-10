@@ -11,7 +11,32 @@ Choose the names your team uses for service work and give each ticket type a val
 
 ## Before you start
 
-You need **Manage settings** (`settings.manage`) to change ticket statuses or priorities. Transition settings additionally require organisation-wide staff access; portal users and staff restricted to one client cannot manage them. Staff also need access to the ticket and permission to edit it to change its status. Reopening a final ticket requires `tickets.reopen` in addition to that access.
+You need **Manage settings** (`settings.manage`) to change ticket statuses or priorities. Transition and resolution settings additionally require organisation-wide staff access; portal users and staff restricted to one client cannot manage them. Staff also need access to the ticket and permission to edit it to change its status. Reopening a final ticket requires `tickets.reopen` in addition to that access.
+
+## Configure resolution evidence
+
+> **Awaiting rollout.** Resolution codes, required explanations and the workspace resolution dialog are awaiting application rollout.
+
+Resolution evidence records the outcome and how the work was completed. Tickets and incidents require a code and explanation by default; service requests, changes and problems start with this requirement off. No codes are created automatically. Until you add an active applicable code, required work cannot enter a resolved or closed status. This does not block ticket creation.
+
+1. Open **Settings → Tickets → Resolution**.
+2. Under **Add resolution code**, enter **Name** and an optional **Description**.
+3. Choose the work-item types under **Applies to**. Turn **Active** on and set **Display order**.
+4. Choose **Save resolution code**. Repeat for the outcomes your team uses.
+5. Under **Resolution requirements**, choose whether each type requires a code and explanation, then choose **Save requirement** beside that type. Save each type separately.
+6. Open a ticket and choose **Resolve** to check the available outcomes.
+
+Codes are organisation-specific. Use **Edit** to change a code, or turn **Active** off to retire it. Previous resolution history keeps the code name and explanation recorded at the time; later code edits do not rewrite that evidence. Requirement changes apply to future entries into resolved or closed statuses.
+
+The status category determines when evidence is required, including custom status names. Cancellation and rejection do not require resolution evidence. Approval and RFC rules still apply. A resolved ticket entering a closed status can reuse its current evidence if the code is still active and applicable. Leaving resolved or closed clears the current evidence; the retained history remains, and a later resolution needs fresh evidence.
+
+If completion is refused, check that the destination is active, applicable, final and in the resolved or closed category; the code is active and applicable; and the explanation is present where required. Review any approval or transition-rule error too. An unchanged terminal status cannot be used to replace resolution evidence. Reload settings if another administrator changed the requirements while you were editing.
+
+### API clients and automatic completion
+
+API clients with `tickets:read` can read `/api/v1/tickets/{id}/resolution` to discover that ticket's requirements, applicable code IDs and available destinations. To complete work, send `status`, `resolutionCodeId` and `resolution` together in a ticket PATCH using `tickets:write`. Use the returned code ID and your organisation's status value; never infer a code from its name. Missing or invalid required evidence refuses the update, including other changes submitted in that PATCH.
+
+Automatic completion follows the same rule. A completed appointment leaves its linked ticket unresolved when required evidence is missing; resolve the ticket separately. Software-request provisioning also checks resolution requirements before creating its local licence assignment. If you enable the requirement for service requests, automatic approval-driven provisioning cannot invent an outcome: check the provisioning recovery message and complete the request manually with evidence. Approved AI status actions must supply the chosen code and explanation too.
 
 Status names belong to your organisation. A status's **Category** describes its meaning; its **Final Status** switch determines whether it is finished. Different names can share a category.
 
@@ -56,6 +81,8 @@ Former status and priority names remain reserved for the same entry. You can ren
 ## Status change rules
 
 The ordinary ticket workspace currently offers a fixed list of status choices. It displays a custom starting status, but other custom names may not be selectable there yet. The creation preview also shows the fixed vocabulary. A listed name is not proof that it is configured: an unavailable choice is refused and leaves the ticket unchanged.
+
+The **Resolve** dialog offers your configured final resolved and closed destinations, including custom names. Use it to complete work when a destination is absent from the ordinary picker.
 
 Status changes require an active status applicable to the ticket type. Ordinary edits permit movement between configured statuses subject to these rules:
 
@@ -103,6 +130,8 @@ The first entry into a final **Resolved** status records the ticket's resolution
 Map each imported status to an active status configured for that ticket type. An old platform name is not accepted merely because it was once a default. Historical imports can use configured final statuses; the starting-status rule for new live tickets does not prevent importing completed history.
 
 Historical imports can preserve the source resolution and closure timestamps. If the source has no timestamp, it remains unknown; the import time is not substituted. Subsequent status changes follow the same protected timestamp rules as other tickets.
+
+Resolution requirements also apply to new imports; importing does not bypass them. The current CSV importer has no resolution-code or explanation columns. If completed historical rows cannot supply required evidence, an administrator must explicitly turn that type's requirement off under **Settings → Tickets → Resolution** before importing, then restore it afterward. Imported missing evidence stays unknown; enabling the requirement does not fill earlier history.
 
 ## Resolve common problems
 

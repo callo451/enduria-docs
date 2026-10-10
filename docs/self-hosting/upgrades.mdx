@@ -19,3 +19,13 @@ Plan application and schema upgrades together. Enduria commits SQL migrations as
 8. Monitor logs and key workflows before declaring the upgrade complete.
 
 If an upgrade fails after a migration, use the release-specific recovery guidance. Do not assume that deploying an older image against a newer schema is safe. A rollback may require restoring the pre-upgrade database backup.
+
+## Migration history checks
+
+> **Awaiting rollout.** The migration history verification described below is awaiting application rollout. Confirm that your release includes it before relying on these checks.
+
+Use the one-shot migration service for Docker Compose installations, or **`npm run db:migrate`** for a source installation. The supported command checks that previously applied migrations match the release before applying pending changes, and verifies completion afterward. A recognised migration ordering correction is handled automatically; you do not need to replay earlier migrations.
+
+If the command reports that stored migration history does not match the release, stop the upgrade and keep the error message. Confirm that you are using the intended release and its unchanged migration files. Preserve your database backup and contact support or your deployment maintainer for release-specific recovery guidance. Do not delete migration history, edit previously applied migrations, or manually mark migrations as applied to bypass the refusal.
+
+Start the application only after the migration service succeeds. A migration failure may require correcting the deployment files or restoring the pre-upgrade backup; changing the application image alone does not undo database changes.
