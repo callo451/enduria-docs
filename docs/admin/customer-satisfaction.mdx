@@ -59,3 +59,11 @@ Already sent invitations and retained old delivery queue records continue to blo
 In **Alerts**, **Notify on Low Ratings** and **Notify Users** control low-rating alerts. Alert recipients must remain active organisation-wide staff with CSAT feedback access (`dashboard.view.csat`). Revoking that authority hides the alert while retaining its record.
 
 These settings do not grant access to individual feedback. Reports and dashboards use their own permissions and client scope; viewing recent feedback additionally requires `dashboard.view.csat`.
+
+## Understand the response rate
+
+> **Awaiting rollout.** Completion counts using configured status categories are awaiting application rollout.
+
+The response rate compares ratings submitted in the selected dates with tickets currently in an applicable final resolved or closed category whose first completion falls in those dates. Custom names and retired configured statuses keep their category meaning. Resolved work uses its first resolution date; closed work uses its first resolution date, or its first closure date when no resolution date is recorded.
+
+This is responses divided by completed tickets, not the proportion of emailed invitations answered. A rating submitted later, or retained feedback on reopened work, can fall into a different reporting window from completion. The numerator and denominator can therefore describe different sets of tickets. Existing client, service-category and assignee filters still apply; this change does not add a new report dimension or reconstruct missing historical completion times.

@@ -11,6 +11,10 @@ Enduria stores incidents, service requests, changes, problems, and general ticke
 
 Use queue search, filters, and saved views to narrow the list by assignee, customer, type, status, priority, or other configured fields. Status and priority names come from your organisation's settings.
 
+> **Awaiting rollout.** Configured workspace choices and queue classification described below are awaiting application rollout.
+
+Under **Loaded work**, **My open work**, **Unassigned** and **SLA breached** include work with a recognised unfinished status. **Awaiting approval** uses the status's approval category. **All work** retains finished work and unfamiliar or retired labels too, so you can review recorded evidence. View counts describe the rows currently loaded in the queue; they are not organisation-wide totals.
+
 ## Work a ticket
 
 1. Open a ticket from the queue.
@@ -21,6 +25,8 @@ Use queue search, filters, and saved views to narrow the list by assignee, custo
 6. Move the ticket through a valid status transition when the work changes state.
 
 Changes may require a versioned review and approval before implementation. Problems can publish reviewed known-error revisions independently of the problem status.
+
+Under **Properties**, choose **Status** or **Priority** from your organisation's active choices for that work-item type. Names and ordering follow Settings → Tickets; priorities also show their configured level. Retired or unrecognised current values remain visible; they cannot be selected as a new value. If choices fail to load, choose **Retry choices**, or reload the ticket. Status selection still follows approval, transition, RFC and reopening requirements. Complete resolved or closed work through the resolution dialog below; bulk actions do not supply resolution evidence for you.
 
 Administrators can [configure ticket statuses and defaults](../admin/ticket-statuses.mdx). That guide includes rollout availability, creation errors, reopening permissions and historical import mappings.
 
@@ -38,6 +44,14 @@ You need access to the ticket and permission to edit it. Tickets and incidents r
 The status and evidence are saved together. If saving fails, the dialog keeps your entries so you can correct the problem. If there is no applicable code or destination, ask an administrator to review **Settings → Tickets → Resolution** or **Statuses**. Approval, transition and RFC requirements still apply.
 
 **Resolution history** shows the code name and explanation recorded for previous resolutions. It is read-only. Reopening requires reopening permission and clears current resolution evidence without removing that history. Completing a later cycle needs fresh evidence. You cannot replace evidence by saving the same finished status again.
+
+## Change the client
+
+> **Awaiting rollout.** The stock-related client restriction is awaiting application rollout.
+
+Use **Properties → Client** only when you have permission to edit the ticket and access to the destination client. Once stock has moved against a ticket, or it has a retained hardware billing record, its client cannot be changed, added or cleared. This remains true after a return or when the net stock movement is zero. Saving the same client is still allowed.
+
+A pending stock reservation alone does not freeze the client; its existing reservation and approval rules still apply. If a client change is refused, keep the recorded client and ask your administrator to review the ticket and stock records. Editing the ticket does not reverse stock or transfer recorded billing to another client.
 
 :::tip
 Link relevant assets, knowledge articles, projects, and related tickets. This keeps operational context attached to the work instead of burying it in comments.
