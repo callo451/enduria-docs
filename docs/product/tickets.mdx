@@ -26,7 +26,7 @@ Under **Loaded work**, **My open work**, **Unassigned** and **SLA breached** inc
 
 Changes may require a versioned review and approval before implementation. Problems can publish reviewed known-error revisions independently of the problem status.
 
-Under **Properties**, choose **Status** or **Priority** from your organisation's active choices for that work-item type. Names and ordering follow Settings → Tickets; priorities also show their configured level. Retired or unrecognised current values remain visible; they cannot be selected as a new value. If choices fail to load, choose **Retry choices**, or reload the ticket. Status selection still follows approval, transition, RFC and reopening requirements. Complete resolved or closed work through the resolution dialog below; bulk actions do not supply resolution evidence for you.
+Under **Properties**, choose **Status** or **Priority** from your organisation's active choices for that work-item type. On smaller screens, choose **Properties** at the top of the ticket to open **Ticket properties**. Names and ordering follow Settings → Tickets; priorities also show their configured level. Retired or unrecognised current values remain visible; they cannot be selected as a new value. If choices fail to load, choose **Retry choices**, or reload the ticket. Status selection still follows approval, transition, RFC and reopening requirements. Complete resolved or closed work through the resolution dialog below; bulk actions do not supply resolution evidence for you.
 
 Administrators can [configure ticket statuses and defaults](../admin/ticket-statuses.mdx). That guide includes rollout availability, creation errors, reopening permissions and historical import mappings.
 
@@ -49,7 +49,7 @@ The status and evidence are saved together. If saving fails, the dialog keeps yo
 
 > **Awaiting rollout.** The stock-related client restriction is awaiting application rollout.
 
-Use **Properties → Client** only when you have permission to edit the ticket and access to the destination client. Once stock has moved against a ticket, or it has a retained hardware billing record, its client cannot be changed, added or cleared. This remains true after a return or when the net stock movement is zero. Saving the same client is still allowed.
+Changing a ticket's client requires permission to edit the ticket and access to the destination client. The workspace currently displays the client without an editing control. Once stock has moved against a ticket, or it has a retained hardware billing record, its client cannot be changed, added or cleared. This remains true after a return or when the net stock movement is zero. Saving the same client is still allowed.
 
 A pending stock reservation alone does not freeze the client; its existing reservation and approval rules still apply. If a client change is refused, keep the recorded client and ask your administrator to review the ticket and stock records. Editing the ticket does not reverse stock or transfer recorded billing to another client.
 
