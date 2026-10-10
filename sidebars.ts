@@ -15,7 +15,7 @@ const sidebars: SidebarsConfig = {
   ],
   adminSidebar: [
     {type: 'doc', id: 'admin/overview', label: 'Administration overview'},
-    'admin/users-and-permissions', 'admin/branding', 'admin/ticket-statuses', 'admin/customer-satisfaction',
+    'admin/users-and-permissions', 'admin/branding', 'admin/ticket-statuses', 'admin/service-level-targets', 'admin/customer-satisfaction',
     {type: 'category', label: 'Email', link: {type: 'doc', id: 'admin/email/overview'}, items: [
       'admin/email/outbound', 'admin/email/inbound', 'admin/email/notifications', 'admin/email/deliverability', 'admin/email/troubleshooting',
     ]},

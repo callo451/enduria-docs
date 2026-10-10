@@ -1,0 +1,65 @@
+---
+title: Configure service-level targets
+description: Set response and resolution targets and understand how ticket clocks are measured.
+---
+
+# Configure service-level targets
+
+Open **SLA Management** at `/settings/slas` in your Enduria workspace to define response and resolution targets and the hours during which they are measured. The page is not currently listed in Settings navigation. Targets depend on your organisation's policy, agreement, queue and service terms; there is no universal target for every ticket.
+
+> **Awaiting rollout.** The SLA corrections described here are awaiting application rollout. Documentation publication does not establish their availability in your deployment.
+
+## Before you start
+
+Creating a policy requires `sla.create`; editing one requires `sla.edit`. Removing a policy requires `sla.delete`. You also need access to Settings in your organisation.
+
+Choose targets that match your service commitments. Policy targets use the existing Critical, High, Medium and Low fields; your ticket priority names can differ. An explicit target is used directly. When a priority has no explicit target, its configured multiplier can scale the Medium fallback target.
+
+## Create or edit a policy
+
+1. Open **SLA Management** at `/settings/slas` and choose **Create Policy**, or edit an existing policy.
+2. In **General**, enter **Policy Name** and an optional **Description**. Select **Set as default policy** if this is your organisation's fallback policy.
+3. In **SLA Targets**, set **Response Time (minutes)** and **Resolution Time (minutes)** for each displayed priority field.
+4. In **Business Hours**, decide whether to enable **Use business hours for SLA calculations**. When enabled, select **Timezone** and set the working days and their start and end times. When disabled, time is measured continuously.
+5. Choose **Create Policy** or **Update Policy**.
+
+The saved policy appears in the policy list. The policy dialog does not assign customers, queues or ticket types; those service relationships are configured separately. A ticket's applicable terms are retained when its clock attaches. Editing a policy does not rewrite those retained terms.
+
+Use a desktop-width screen when editing the business calendar. The current small-screen dialog can require horizontal scrolling to reach the end-time fields.
+
+The business calendar uses its selected time zone, including daylight-saving changes. Configured holidays are dates in that time zone. The current Settings dialog has no holiday editor; the [SLA API](../api/resources/time-sla-and-reports#sla-policies) accepts holiday configuration.
+
+## Understand response and resolution
+
+**First response** is the first customer-visible comment recorded from a staff member in the ticket's organisation. Internal notes, customer replies and system-authored acknowledgements do not satisfy it. There is currently no setting that makes an automated acknowledgement count as a staff response.
+
+The response clock stops at that first response. The resolution clock follows the ticket's configured lifecycle. A status name alone does not determine a pause: administrators configure **Pauses SLA** under [Settings → Tickets](./ticket-statuses). Manual pauses are separate; resuming a manual pause does not override a status that still pauses SLA.
+
+Time in a final status is excluded if the ticket later reopens. Reopening keeps the earlier lifecycle evidence; it does not create a fresh ticket or erase an already recorded response.
+
+Imported tickets are not given reconstructed SLA clocks. Work created before lifecycle tracking began is not backfilled. An absent target or clock is not a promise that work has met its SLA.
+
+## Warnings and escalation
+
+Warnings and breaches are measured against the applicable targets. A warning does not guarantee delivery through every notification channel, and a breach does not automatically appoint a manager or senior technician.
+
+**Enable automatic escalations** permits configured escalation rules to run; the switch does not create rules. The policy dialog has no escalation-rule editor. Automatic actions depend on the configured rules, actions and targets. The workspace's **Escalate** action is a separate staff action, not a replacement for the automatic rule configuration.
+
+## Read retained results
+
+Use **SLA analytics → Retained SLA history** to inspect retained response and resolution evidence separately. Access requires `reports.view` or `analytics.view.tickets`, together with current access to the tickets.
+
+The report distinguishes completed obligations, pending work, overdue work, cancelled obligations and unknown evidence. Compliance counts only completed, required obligations whose retained evidence can be evaluated. If results are limited to a returned subset, the report identifies that limit.
+
+These results describe retained evidence at read time. They do not reconstruct every past policy or calendar version, and missing historical outcomes are not estimated.
+
+## Resolve common problems
+
+| Message or symptom | What to check |
+| --- | --- |
+| A ticket has no SLA clock | Check its applicable service terms. Imported work and work predating lifecycle tracking do not receive reconstructed clocks. |
+| A reply has not stopped the displayed response clock | Check that it was a customer-visible staff comment, rather than an internal note, customer reply or system acknowledgement. The recorded response fact and the displayed clock can refresh at different times; reload after the next monitor update. |
+| Resuming does not restart the clock | The current status may still have **Pauses SLA** enabled. |
+| A deadline differs from elapsed wall time | Check the retained calendar, time zone, holidays, pauses and priority multiplier. |
+| A policy edit has not changed an existing ticket | Existing clocks retain their attached service terms. Review new work to verify the changed policy. |
+| Automatic escalation has not run | Check that it is enabled and has an applicable configured rule. Review its configured actions, targets and recorded outcome; do not assume that enabling the switch creates an action. |
