@@ -1,0 +1,59 @@
+---
+title: Import tickets from CSV
+description: Map source statuses to configured choices, preview outcomes and review an operational ticket import.
+---
+
+# Import tickets from CSV
+
+Use **Settings → Service Management → Import tickets** (`/settings/tickets/import`) to create operational work from a CSV file. Map source statuses explicitly to your organisation's configured vocabulary before previewing or importing.
+
+> **Awaiting rollout.** The mapped CSV import screen and retained mapping evidence described here are awaiting application rollout. Documentation publication does not establish availability in your deployment.
+
+## Before you start
+
+You must be current active staff with `tickets.manage` or `settings.manage`. Your current client scope still applies to import and history. Rolling back an import through **Import history** requires `tickets.manage`.
+
+Choose one work-item type per import: ticket, incident, service request, change or problem. Have an applicable configured priority and service-catalogue category ready. Configure any missing choices before beginning; the importer does not create statuses for you.
+
+Use comma-separated UTF-8, up to 8 MiB, 5,000 rows and 500 distinct source statuses. The encoded import request must also fit within 16 MiB; split larger files into smaller imports.
+
+Prepare a `.csv` file with these exact header names:
+
+| Header | Use |
+| --- | --- |
+| `title` | Required ticket title. |
+| `description` | Optional description. |
+| `status` | Source status to map; missing values also require a mapping. |
+| `legacyNumber` | Optional source reference. |
+| `createdAt` | Optional source creation date and time. |
+| `updatedAt` | Optional source update date and time. |
+| `resolvedAt` | Optional source resolution date and time. |
+| `closedAt` | Optional source closure date and time. |
+
+Supply known source dates, preferably with an explicit time-zone offset. If `createdAt` is omitted, creation uses the import time. If `updatedAt` is omitted, it uses the resulting creation time. Missing resolution and closure dates remain unknown; completion dates are not inferred from the mapped status. Do not treat a substituted creation date as recovered historical evidence.
+
+## Map, preview and import
+
+1. Open **Import tickets** and choose the work-item type.
+2. Select **CSV file** and choose the required **Priority** and **Category** defaults from your organisation's choices. Legacy numbers are retained; rows with matching legacy numbers are skipped.
+3. Map every distinct source status to an active status applicable to the selected type. Map **Missing status** too if any row has no source value. Target labels show the configured name and category. No source value is assigned a guessed default status.
+4. Choose **Preview import**. Review ready, failed and skipped counts, row refusal messages and the source-to-target mapping evidence. Previewing does not create tickets.
+5. Correct the file, defaults or mappings as necessary and preview again.
+6. Choose **Import ready rows** to create the accepted work explicitly. Failed rows can be rejected while valid rows are created; skipped rows are not created. Review the final outcome rather than assuming the entire file imported.
+7. Open **Import history** to inspect the batch and its retained source statuses, selected type, target status identity/name, category and row outcomes.
+
+Importing rechecks your access, the configured choices and the previewed outcomes. If the configuration or duplicate outcomes have changed, the preview is stale: preview again before importing. A refused stale preview creates no tickets. Later configuration renames do not rewrite the batch's retained mapping evidence.
+
+Use **Previous rows** and **Next rows** to inspect longer previews. Choose **Refresh choices** after changing Settings, or **Retry import choices** if the choices could not load. If the import result cannot be confirmed, check **Import history** before preparing another import; do not assume that a connection error means nothing was created.
+
+## Completed history and recovery
+
+Configured final statuses can represent completed source work. Resolution requirements still apply: this CSV screen has no resolution-code or explanation fields. If a row is refused for missing completion evidence, import it into an appropriate unfinished status and resolve it with evidence, or ask an administrator to review the type's [resolution requirements](./ticket-statuses#configure-resolution-evidence). Disabling a requirement does not invent missing historical evidence.
+
+Importing does not reconstruct transition history, RFC reviews, approvals, SLA clocks or satisfaction surveys. A mapped status is a recorded import value, not proof that an approval occurred.
+
+Rollback is separate from preview or correction. In **Import history**, rollback can delete only the tickets created by that batch which still have no later activity or protected evidence. If any ticket has been used, rollback refuses the batch and reports blocked references; it does not partially delete the batch. Review the refusal and retained work before deciding how to correct it.
+
+## Operational import or historical archive?
+
+The historical archive at `/settings/tickets/migration` retains source records, history and attachment evidence. Its **Import retained records** and **Acknowledge archive cutover** actions do not create operational tickets or shut down a source system. Archive cancellation retains evidence; it is not the operational import rollback described above. Choose the journey that matches your intended outcome.
