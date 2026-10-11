@@ -1,0 +1,108 @@
+---
+title: Adopt imported tickets
+description: Link an existing CSV-imported ticket to reviewed source evidence without replacing its current work.
+---
+
+Adoption links an existing CSV-imported ticket or incident to an explicitly selected
+source identity. A different administrator reviews the source comparison, current
+ticket and current readers before the link is created. The existing ticket number,
+text, conversation, files, authorship and current work are preserved.
+
+> **Awaiting application rollout.** These controls are awaiting application rollout.
+> Publishing this guide does not establish availability in your organisation.
+> Check with your platform operator before following these steps.
+
+## Access and preparation
+
+Use active staff accounts with **Settings management**, **Ticket management**,
+**View all tickets** and **Edit all tickets**, with no assigned client restriction.
+The reviewer must be a different currently authorised person. Creating an adoption
+link does not require ticket creation permission. Portal accounts and API keys
+cannot administer adoption.
+
+Prepare the [reviewed migration plan](./ticket-migration-plans) and a complete,
+unchanged [evidence reconciliation](./ticket-migration-evidence) for the latest
+export. The source record must be selected as open, with available required files.
+The existing target must have one successful CSV import row in a batch that has
+not been rolled back. Its current type, client, requester, assignment, queue,
+status, priority and category must match the reviewed destinations.
+
+Adoption supports ordinary tickets and incidents. Imported backlog keeps **no SLA
+clocks**. A target with an SLA snapshot or tracking cannot be adopted. Your
+organisation's configured statuses and destinations remain authoritative.
+
+## Compare and propose an existing target
+
+1. Open **Settings → Service Management → Adopt imported tickets**.
+2. Enter the **Reviewed plan UUID**, **Selected source record identity** and
+   **Complete evidence reconciliation UUID** from your retained plan and report.
+3. Optionally enter a **Current ticket number search**, then select **Find CSV
+   candidates**. Use the previous and next controls to inspect additional pages.
+4. Select **Inspect current ticket** to examine its current workspace, including
+   conversation, files and activity. Compare it with your source evidence. A title,
+   email address or ticket number alone does not establish source identity.
+5. Select **Draft explicit adoption** for the exact candidate. Complete
+   `comparisonReason` and `currentAudience.reason` in **Exact adoption JSON**.
+   Explain the identity comparison and acknowledge the ticket's current authorised
+   readers, including requester and company-scope portal readers where applicable.
+   You may instead load a prepared JSON file through **Adoption JSON file**;
+   the file must be at most 1 MiB.
+6. Enter an **Action reason** and select **Preview existing-target adoption**.
+   Compare the retained source core with **Existing current ticket**, inspect
+   the destinations and activity inventory, and review the source file inventory.
+7. Select **Record adoption proposal**. Keep the confirmed proposal UUID and
+   command UUID for review and recovery.
+
+The source title and description can differ from current ticket text. Adoption
+preserves current work and never replaces it with source text. A CSV receipt does
+not prove the ticket is untouched. The activity token tracks observed changes
+after these controls were introduced; it is not a historical activity count.
+
+## Independent review and linking
+
+1. Sign in as a different authorised administrator.
+2. On **Adopt imported tickets**, enter the **Adoption proposal UUID** and select
+   **Inspect current adoption**. Alternatively, enter the **Registered source
+   UUID** and select **Load adoption proposals**.
+3. Inspect the source comparison, current reader acknowledgement, pinned mapping
+   plan, source files, current ticket snapshot and activity inventory. Open the
+   native workspace to examine existing work.
+4. Enter an **Action reason**, then select **Approve exact adoption** or
+   **Reject adoption**. A changed baseline prevents approval; inspect a fresh
+   proposal rather than approving old evidence.
+5. After approval, inspect the current adoption again and select **Link existing
+   target** when it is available. Execution rechecks the reviewed baseline.
+
+A successful result confirms the retained source link. It creates no replacement
+ticket, allocates no ticket number and edits no native ticket field. Historical
+observations and source files remain restricted migration evidence; they do not
+become native comments, attachments, approvals or SLA facts.
+
+The native ticket's **Check retained source evidence** action lets current
+migration administrators open its retained adoption proposal. Ordinary ticket
+access alone does not grant access to source evidence.
+
+## Reconciliation and recovery
+
+- Select **Retain adoption reconciliation** to keep a report of the current
+  link and target. **Load retained adoption reports** shows earlier execution,
+  cancellation and reconciliation results. Later work changes readiness without
+  rewriting an earlier report.
+- If a preview, review or execution becomes stale, inspect current work and
+  prepare a new proposal where necessary. Do not overwrite current work to force
+  an old proposal to pass.
+- If a response is unreadable or lost, keep its **Command UUID**. With the original
+  account, select **Look up adoption command** or **Retry exact adoption command**.
+  New writes and editing pause while a command remains unconfirmed. Do not create
+  a replacement command to guess whether the original succeeded.
+- Only the proposer can **Cancel pending adoption**, once. A completed link cannot
+  be cancelled or freed for reuse. Completed links prevent native deletion and
+  CSV batch rollback from silently removing retained migration identity.
+- If access changes, the screen clears restricted payloads and refuses further
+  work. Restore current authority and use **Recheck adoption access** before
+  recovering with the original account and command UUID.
+
+Adoption does not certify historical completeness, rebuild policy decisions,
+change imported SLA rules, approve final handover or shut down your source system.
+Final reconciliation, operational routing, new-intake verification and independent
+handover remain separate steps.
