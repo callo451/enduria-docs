@@ -52,6 +52,8 @@ Configured final statuses can represent completed source work. Resolution requir
 
 Importing does not reconstruct transition history, RFC reviews, approvals, SLA clocks or satisfaction surveys. A mapped status is a recorded import value, not proof that an approval occurred.
 
+See [Read analytics after a ticket import](./ticket-import-analytics) for creation and backlog counts, observed Enduria completions and unknown measurements after import. Imported snapshots do not establish a complete history for duration or outcome calculations.
+
 Rollback is separate from preview or correction. In **Import history**, rollback can delete only the tickets created by that batch which still have no later activity or protected evidence. If any ticket has been used, rollback refuses the batch and reports blocked references; it does not partially delete the batch. Review the refusal and retained work before deciding how to correct it.
 
 ## Operational import or historical archive?
