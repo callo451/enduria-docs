@@ -1,0 +1,87 @@
+---
+title: Find ticket settings
+description: Choose ticket administration tools by task while keeping their existing configuration and review rules.
+---
+
+# Find ticket settings
+
+Use the task groups in **Settings → Service Management** to find the controls
+you need. Everyday tools open directly; migration has its own workspace.
+
+> **Awaiting application rollout.** The grouped ticket settings and tab guidance
+> described here are awaiting application rollout. Your deployment may show the
+> same tools in a flat list. Documentation publication does not establish availability.
+
+## Before you start
+
+You need **Manage settings** (`settings.manage`) to change core ticket settings.
+Transition, resolution and numbering administration also require organisation-wide
+staff access; portal and client-bound accounts cannot manage those controls.
+Queues, service-level targets and other tools retain their own view and management
+permissions. Available links depend on your current permissions and organisation
+mode; each tool still checks access before reading or saving.
+
+## Choose an administration task
+
+1. Open **Settings** and expand **Service Management**, or use its section on
+   **Settings Home**.
+2. Choose the group and tool for your task below.
+3. Review the current configuration and use that tool's existing save or review
+   controls. Opening a group or tab changes no configuration.
+4. Use **Search settings** to find a tool by name. Search results and saved links
+   still open the original screens directly.
+
+### Ticket lifecycle and classification
+
+Open **Tickets** and choose the tab that matches your task:
+
+- **Statuses**: define your team's status names, meanings, applicability and
+  starting statuses.
+- **Priorities**: define priority levels and the work-item types that can use them.
+- **Transitions**: configure allowed status changes by work-item type.
+- **Resolution**: configure the outcomes and explanations required when completing work.
+- **Numbering**: configure future ticket numbers; existing numbers and historical
+  references stay unchanged.
+
+Follow [ticket statuses and completion rules](./ticket-statuses) and
+[ticket numbering](./ticket-numbering) for the configuration steps and refusal recovery.
+
+### Routing and service levels
+
+- **Queues**: configure ticket queues and their routing and assignment rules.
+- **Service-level targets**: manage [service-level policies, business hours and
+  escalation targets](./service-level-targets).
+
+### Requests and responses
+
+- **Service Catalog**: manage service offerings, catalogue categories and request templates.
+- **Ticket Templates**: manage reusable forms, change plans and standard changes.
+- **Canned Responses**: manage reusable replies.
+- **CSAT**: configure [customer satisfaction surveys](./customer-satisfaction).
+
+### Change governance
+
+- **Changes**: configure change authorization, authorities, lifecycle mappings
+  and standard models.
+- **Maintenance and freezes**: manage scoped maintenance intervals and freezes.
+
+These remain separate governed controls. A transition rule or navigation link
+does not replace change authorization or grant an approval.
+
+### Migration and retained evidence
+
+Open **Ticket migration** for occasional source transfers, imported backlog and
+historical evidence. Its [task workspace](./ticket-migration-workspace) keeps
+source preparation, activation/adoption/correction and standalone import/archive
+tools separate, including their independent review and command recovery.
+
+## If a tool is missing or a save is refused
+
+Only groups with available tools are shown. Check **Search settings** for the
+tool name; ask your administrator to check the tool's permissions and client scope
+if it remains unavailable. Search does not grant additional access.
+
+If a save or decision is refused, use the explanation from that tool and reload
+its current configuration where necessary. Task grouping does not bypass validation,
+stale comparisons or independent review. Keep an unconfirmed command's original
+recovery details and follow its tool guide before retrying.
