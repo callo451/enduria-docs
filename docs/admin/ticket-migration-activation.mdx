@@ -1,0 +1,91 @@
+---
+title: Activate reviewed ticket backlog
+description: Independently review current backlog text and activate bounded pages without SLA clocks or historical policy reconstruction.
+---
+
+# Activate reviewed ticket backlog
+
+Use **Settings → Service Management → Backlog activation** to create ordinary tickets and incidents from explicitly reviewed open source work. A different administrator approves the exact current text, destinations and source closure evidence before an administrator activates a page.
+
+> **Awaiting rollout.** Backlog activation is awaiting application rollout. Documentation publication does not establish availability in your deployment.
+
+Imported backlog receives **no SLA clocks**. Source history and files remain restricted migration evidence; they do not become operational comments, attachments, approvals or surveys. Activation does not establish routing, handover readiness or source shutdown.
+
+## Before you start
+
+Proposers, reviewers and operators need current active staff authority, no client binding and all four permissions: `settings.manage`, `tickets.manage`, `tickets.view.all` and `tickets.edit.all`. Executing or recovering an execution also requires current `tickets.create`. The reviewer must be a different person from the proposer. Portal customers and client-bound staff cannot administer activation.
+
+1. [Register the source](./ticket-migration-sources) and retain an earlier rehearsal export. [Review its destinations](./ticket-migration-plans) and [retain a complete evidence reconciliation](./ticket-migration-evidence).
+2. Perform and document your actual rehearsal. Resolve its blocking discrepancies. This workflow retains an operator's report; it cannot certify what happened in the source system.
+3. Close source writes and intake through your source system's procedures, then capture and retain a **separate final export**. Its capture must follow the rehearsal capture, and its freeze declaration must be at or before final capture. Retain the original exports and explain scope and completeness.
+4. Independently approve a final mapping plan and retain its complete current evidence reconciliation. Every final identity needs an explicit disposition, with no blocked rows. Ordinary tickets and incidents selected as open are eligible; other types and final or unknown source states remain evidence only.
+5. Confirm whether any selected source identity may already exist in Enduria, including earlier CSV imports. A possible existing target blocks creation until it can be handled through separately reviewed adoption. Never declare “none known” merely because the ticket lacks a source link or legacy number.
+
+An enabled ordinary creation approval workflow for a selected type blocks this narrow activation path. Resolve the workflow requirement through your agreed migration procedure; preview does not create or change approval settings.
+
+## Prepare current ticket text
+
+1. Open **Backlog activation** and enter **Approved final plan ID**.
+2. Choose **Load read-only draft**. Each identity page contains at most 25 selected identities. **Previous draft identities** and **Next draft identities** load additional slices of the plan. Loading another page replaces the current draft; retain and independently review each proposal before proceeding.
+3. Complete **Activation JSON**, or use **Load activation file** for prepared UTF-8 JSON of at most 1 MiB. Complete all empty IDs, classifications, attestations and reasons; the loaded draft cannot be submitted unchanged.
+4. Enter **Command reason** and choose **Preview activation proposal**. Preview writes no tickets, reserves no numbers and sends no notices.
+5. Inspect every selected record's original core, actual current ticket text, source files and optional omissions. Check **Reviewed destinations**, including the client and requester audience, and the exact rehearsal/final differences.
+6. Choose **Record activation proposal**. Keep the displayed command UUID until the command is confirmed. Retention alone does not authorise execution.
+
+Use `enduria_ticket_activation_v1` with these fields:
+
+| Field | Required content |
+| --- | --- |
+| `planId`, `reconciliationId` | Exact approved final plan and complete current evidence report IDs. |
+| `rehearsal.planId`, `rehearsal.reconciliationId` | Approved rehearsal plan and complete evidence report for the separately retained earlier export, in the same source/client scope. |
+| `rehearsal.outcome`, `rehearsal.report` | `passed` and your actual rehearsal report, at most 4,000 characters. |
+| `rehearsal.absentSelections` | One `{sourceId, reason}` for each rehearsal-selected identity absent from the final export. An empty array is valid only when no such identity is absent. Absence never implies deletion or closure. |
+| `rehearsal.discrepanciesClosedReason` | Explain how blocking rehearsal discrepancies were resolved. |
+| `freeze` | Explicit `sourceWritesClosed: true`, `sourceIntakeClosed: true` and a `completenessAttestation` describing the actual scope/cutoff. |
+| `records` | Between one and 25 unique selected identities, with the record fields below. |
+
+Each record contains:
+
+| Field | Required content |
+| --- | --- |
+| `sourceId` | Exact logical source identity selected by the final plan. |
+| `title`, `description` | Reviewed current plain text, at most 300 and 16,000 characters. Markup displays as text. Source history is not appended automatically. |
+| `disclosure` | `audience: "current_ticket_readers"` and a reason explaining disclosure to current authorised staff and requester/client portal readers, including permitted company-scope readers. Source consent is not inferred. |
+| `classification` | For an incident, current `severity` (`minor`, `major`, `critical`), `impact` and `urgency` (`low`, `medium`, `high`) plus a reason. Ordinary tickets use explicit `null`. Incident start remains unknown; activation does not publish incidents. |
+| `priorTarget` | `{kind: "none_known", reason}` after checking earlier targets, or `{kind: "candidate", ticketId, reason}` for a possible existing target. A candidate blocks creation. |
+| `legacyNumber`, `legacyReason` | An explicitly reviewed source reply number or `null`, plus a reason in either case. Identity does not automatically become a legacy number. Numbers must be unique against current and legacy ticket numbers, ignoring case. |
+
+Reasons are required and limited to 1,000 characters. The canonical proposal must also fit within 1 MiB. Split larger selections into separately reviewed proposals; changing a proposal requires a new preview and retained proposal.
+
+## Independently review the proposal
+
+1. A different administrator opens **Backlog activation**. Enter **Registered source ID** and choose **Load proposals**, then **Inspect proposal**. Alternatively, enter **Activation proposal ID** and choose **Inspect current proposal**.
+2. Follow the **Pinned final plan** link if needed. Inspect the immutable **Reviewed destinations** and all selected current payloads, disclosure reasons, classifications, prior-target declarations, legacy numbers and file omissions.
+3. Inspect the reported rehearsal, source closure and completeness attestations. Review every difference page using **Previous differences** and **Next differences**. The comparison checks identity, revision and record hash across the whole export, rather than comparing totals alone.
+4. Enter **Command reason** and choose **Approve exact activation** or **Reject activation**. A proposal has one retained independent decision. A stale or rejected proposal cannot execute.
+
+A required unavailable file blocks activation. Optional unavailable files retain their explicit reason for review. Historical file download still requires current migration administration authority.
+
+## Activate and reconcile
+
+1. Inspect the current approved proposal again with **Inspect current proposal**.
+2. Enter **Command reason** and choose **Activate next five**. Each command creates at most five pending targets atomically. No partial page is committed if validation fails.
+3. Inspect again before another page. The target report shows each exact source identity/revision, target ticket and activity token, with pending, unchanged, changed, conflicting or missing state.
+4. Use **Retain target reconciliation** to keep a new report of the captured committed state. Choose **Load retained activation reports** to inspect earlier page, cancellation and reconciliation reports.
+5. Repeat across all separately reviewed proposals. Completing a proposal covers its selected slice only; it does not establish readiness for the whole source or approve handover.
+
+Each ticket receives its reviewed tenant status, priority, category, requester and optional assignee/queue. Known source creation time is retained; unknown creation uses activation time with import provenance. Operational update time is current. No historical assignment, response, resolution, incident-start or SLA history is reconstructed. Activation sends no ticket notices or webhooks and performs no queue auto-assignment or provider action.
+
+Later ticket edits, comments, files, time entries or governed activity change readiness. The activity token detects change; it is **not a count of user actions**. An activity can produce several marks. Reports retain their original captured state and must be checked again before readiness decisions.
+
+An authorised migration administrator can use **Check retained source evidence** in the native ticket workspace, then **Open retained activation proposal**. That lookup requires both current ticket-read authority and migration administration authority, with unchanged exact client binding. Ordinary ticket readers do not gain historical archive access.
+
+## Recovery and cancellation
+
+After an unreadable or lost response, keep the command UUID. Use **Look up activation command** with the original account, or **Retry exact activation command** while the original request remains pending. Reuse the exact UUID and body; do not submit a replacement command to guess whether a page committed. Editing and new writes are paused while the result is unconfirmed. Execution recovery also checks current ticket creation authority.
+
+If source evidence, destinations, permissions, ordinary approval configuration or the final plan changes, inspect again and resolve the blocker. Never remove a client binding, weaken a file requirement or invent source facts to pass validation. A newer export requires a newly reviewed final plan and activation proposal.
+
+Only the proposer can choose **Cancel future pages**. Cancellation stops pending pages and retains already issued tickets, source links and reports. It does not delete targets, free identities for another creation or reverse source shutdown. Retained source links protect issued targets from deletion and earlier CSV rollback.
+
+Existing-target adoption, governed corrections and independently reviewed operational handover are separate steps. Keep actual routing and new-intake tests, source shutdown and application rollout under your operator procedures.
