@@ -1,0 +1,79 @@
+---
+title: Register ticket migration sources
+description: Retain source account identities, declared export manifests and recoverable command results.
+---
+
+# Register ticket migration sources
+
+Use **Settings → Service Management → Migration sources** (`/settings/tickets/migration-sources`) to register a source account and retain a manifest of its exported ticket identities and hashes. This gives administrators a stable reference for planning a broader migration.
+
+> **Awaiting rollout.** Migration sources is awaiting application rollout. Documentation publication does not establish availability in your deployment.
+
+Recording a manifest retains declarations. It does not read the source system, verify exported bytes, create operational tickets, map users, start SLA clocks or approve source handover. Keep the original export and its preparation evidence separately.
+
+## Before you start
+
+You must be current active staff with no client binding and all four permissions: `settings.manage`, `tickets.manage`, `tickets.view.all` and `tickets.edit.all`. These requirements apply to lists, previews, recording and command recovery. Portal customers and client-bound staff cannot administer migration sources.
+
+Agree stable **Provider key** and **Account key** values with the person preparing the export. Use letters, numbers, periods, underscores, colons or hyphens, beginning with a letter or number; each key is at most 160 characters. Keys and source record/revision identities are case-sensitive. Use an account identifier, never a credential or connection string.
+
+## Register the account
+
+1. Open **Migration sources** and find **Register a source**.
+2. Enter **Source name**, **Provider key** and **Account key**.
+3. If this account owns an existing historical archive namespace, enter its exact identifier in **Archive namespace (optional)**. Leave it empty otherwise. Explain how the account and optional namespace were identified in **Registration reason**.
+4. Choose **Register source**. Keep the displayed command UUID while the request is in progress.
+5. After confirmation, find the source under **Registered sources** and copy its retained UUID for the manifest.
+
+A provider/account pair and an archive namespace can each be registered only once within your organisation. Registering a namespace declares its provenance; matching its spelling does not verify vendor origin or change existing archive content. Source names, account identity and namespace bindings cannot be edited or removed through this screen. Check them before registering; report an incorrect binding to your migration owner rather than creating an alternate account key to bypass it.
+
+## Prepare the manifest
+
+The person preparing the export must supply JSON in the `enduria_ticket_manifest_v1` format. **Use manifest template** inserts an example with the selected source UUID. Replace every example identity, hash, byte count, date and scope statement with actual export declarations before previewing.
+
+The manifest contains:
+
+| Field | What to supply |
+| --- | --- |
+| `sourceInstanceId` | The registered source UUID. |
+| `clientId` | One active client UUID in your organisation, or explicit `null` for organisation work. |
+| `export.snapshotKey` | Stable export identity. |
+| `export.capturedAt` | Export capture date/time with an explicit timezone. |
+| `export.frozenAt` | Declared source freeze date/time, or explicit `null` when none is declared. A freeze cannot follow capture. |
+| `export.scope` | A description of what the export includes. |
+| `packages` | Package identities, SHA-256 hashes, declared encoded byte counts and record declarations. |
+| Each record | Stable `sourceId`, `revisionId` and lowercase SHA-256 `recordHash`. |
+
+Each package also has `packageId`, lowercase SHA-256 `packageHash`, `encodedBytes` and `records`. Supply identities and hashes only; payloads, attachment bytes and extra fields are refused.
+
+Use at most 200 packages and 5,000 records in one manifest. Each package can declare at most 25 records and 1 MiB of encoded bytes; the combined declared package size is at most 200 MiB. The manifest request itself must fit within 2 MiB. Do not repeat a package identity or source record identity within one manifest.
+
+## Preview, record and inspect
+
+1. Paste the prepared JSON into **Manifest JSON** and enter **Recording reason**.
+2. Choose **Preview manifest**. Review the record/package counts, declared byte count and manifest hash. Preview writes no manifest evidence.
+3. Resolve any conflicting identities with the export preparer. A retained source record cannot change client binding; a retained revision cannot change its hash. An actual new source revision must have its own revision identity.
+4. When the preview says **Ready to record declarations**, choose **Record manifest**. Keep the displayed command UUID until the result is confirmed.
+5. Under **Retained manifests**, choose **Inspect manifest**. Check the recorded client, export scope, capture/freeze declaration, source record/revision identities and hashes. Use **Previous records** and **Next records** for longer manifests.
+
+Recording rechecks your current access, the active client and retained revision conflicts. If the preview has changed, nothing is recorded: preview again before recording. Unchanged source revisions can appear in later manifests; changed content requires a new revision. Recording does not establish that an export is complete or that its declared hashes match actual bytes.
+
+Use **Previous sources**, **Next sources**, **Previous manifests** and **Next manifests** for longer lists. **Refresh lists** retries unavailable lists.
+
+## Recover an uncertain result
+
+If a response is lost or unreadable, the screen shows **Result unconfirmed** and keeps the original command UUID and payload. Registration and recording controls remain locked for that unresolved command.
+
+1. Keep the command UUID before leaving or reloading the page. The screen does not retain the unsent/retry payload across reloads.
+2. In **Recover a command**, enter that UUID and choose **Look up command**. Only the original operator, with current migration access, can recover its receipt.
+3. A confirmed receipt identifies the retained source and, for recording, the manifest. Inspect that result before proceeding.
+4. If the result is not found, the original request may still be in progress. While the original page remains open, **Retry exact command** resends the same UUID and payload safely. Do not substitute a new UUID or edit the payload for a retry.
+5. If you left the page, recover the original UUID first. If no receipt can be recovered, ask your migration owner to reconcile the original request before preparing another command.
+
+An exact retry returns the original retained result. Reusing a UUID for another action, another payload or another operator is refused. Loss of access prevents recovery too; restore authorised access and reload before checking again. A connection error is not proof that nothing was recorded.
+
+## Choose the appropriate migration journey
+
+[Import tickets from CSV](./ticket-imports) creates operational tickets with explicit source-status mappings. The historical archive at `/settings/tickets/migration` retains source records, history and attachment evidence. Migration sources records identities and manifest declarations separately from both journeys; it does not automatically adopt existing imports or reconcile archive bytes.
+
+None of these actions shuts down or changes routing in the source system. Agree freeze, reconciliation and handover responsibilities separately before changing live operations.
