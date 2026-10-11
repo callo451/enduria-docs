@@ -1,0 +1,68 @@
+---
+title: Review ticket migration mappings
+description: Retain explicit backlog destinations and an independent mapping decision before activation.
+---
+
+# Review ticket migration mappings
+
+Use **Settings → Service Management → Migration plans** to retain explicit destination choices for a recorded source manifest. A different authorised administrator reviews the immutable proposal before those mappings can be used in later migration work.
+
+> **Awaiting rollout.** Migration plans is awaiting application rollout. Documentation publication does not establish availability in your deployment.
+
+Approving mappings does not create tickets, verify source files, approve unseen ticket text, start SLA clocks or confirm source handover. Imported backlog receives no SLA clocks. Historical authors remain source identities; mapping a requester or assignee never creates an account or grants permissions.
+
+## Before you start
+
+Both proposer and reviewer must be current active staff with no client binding and all four permissions: `settings.manage`, `tickets.manage`, `tickets.view.all` and `tickets.edit.all`. Portal customers and client-bound staff cannot administer plans. The reviewer must be a different person from the proposal's creator.
+
+First [register the source and record its manifest](./ticket-migration-sources). Keep the exported source files and preparation evidence. Agree which source work is genuinely open, which completed work stays historical, and who may read the future ticket text.
+
+Plans cover ticket and incident backlog only. Every manifest identity needs a **select**, **block** or **exclude** disposition with a reason. Select at most 200 records per plan; a manifest can have up to 5,000 identities. Separate plans may select different slices, but each plan still declares the complete manifest set. A JSON plan file and its request must fit within 2 MiB.
+
+## Prepare the proposal
+
+1. Open **Migration plans**, enter **Recorded manifest ID**, and choose **Load blocked template**. Every identity starts blocked, so missing decisions cannot accidentally select work.
+2. Verify the exact `clientId` and explain it in `clientReason`. An organisation-only manifest uses an explicit `null`; never substitute another client or remove a client binding to make a mapping pass.
+3. Give the proposal a descriptive `name`. Leave `supersedesId` as `null` for a new proposal. To correct a retained proposal, enter its plan ID as `supersedesId`; the new revision must retain the source and client.
+4. Use **Find existing destinations** to search the manifest's tenant/client scope. Choose **Destination kind** and **Planned work type**, then **Find destinations**. Copy an explicitly chosen ID into the plan. Suggestions are not approved mappings: preview checks eligibility.
+5. Edit **Plan JSON**, or choose **Load plan file** to load prepared UTF-8 JSON. Keep every source identity exactly once. Explain exclusions and unresolved mappings rather than deleting those records.
+6. Enter **Recording reason**, choose **Preview plan**, and check the selected, blocked, excluded and invalid counts and plan hash.
+7. Resolve invalid destinations before recording. Choose **Record plan revision** when the preview permits it. Keep the displayed command UUID until confirmation.
+
+Preview is read-only. Recording retains the proposal and destination labels, including blocked rows; it does not approve the plan. No selected row can use a guessed fallback requester, default client or newly seeded status.
+
+### Selected-record fields
+
+The top-level format is `enduria_ticket_plan_v1`. Replace a blocked record with a selected record containing these fields:
+
+| Field | Required choice |
+| --- | --- |
+| `sourceId`, `disposition`, `reason` | Exact manifest identity, `select`, and the selection reason. |
+| `ticketType`, `sourceState` | `ticket` or `incident`, and `open` only when the source work is known to be unfinished. Unknown or completed work stays blocked/excluded. |
+| `sourceReferences` | Source requester identity plus source assignee/queue identities and status/priority/category labels. The keys are `requester`, `assignee`, `queue`, `status`, `priority`, `category`; unavailable assignee/queue/priority/category references use explicit `null`. These never grant Enduria access. |
+| `requesterId` | Existing active staff, or an active portal customer belonging to the exact mapped client. Staff client ceilings and current ticket-read access apply. |
+| `assignee` | Object with `id` and `reason`. Choose existing active staff with the permitted client scope and ticket-read access, or explicit `null` with an unassigned reason. Portal customers cannot be assignees. |
+| `queue` | Object with `id` and `reason`. Choose an active queue applicable to the planned work type, or explicit `null` with an unqueued reason. |
+| `statusId`, `priorityId`, `categoryId` | Existing active applicable status and priority, and an active service-catalogue category. A status must be non-final in an open, in-progress or on-hold category. Approval stages are not backlog destinations. |
+| `disclosure` | Object with `audience: "current_ticket_readers"` and a `reason` acknowledging future staff/customer visibility. Actual payload text needs its own review before activation. |
+
+Unselected records contain only `sourceId`, `disposition` (`block` or `exclude`) and `reason`. Names, email addresses and source roles are not automatic account associations. Organisation status, priority and category names remain configurable.
+
+## Review and decide independently
+
+1. The different reviewer opens **Retained plans and independent review** and chooses **Inspect plan**.
+2. Check the exact client decision, plan hash and every record/destination page with **Previous records** and **Next records**. Confirm source references, reasons, exclusions, requester/assignee scope and future text audience.
+3. Choose **Check review readiness**. Approval is unavailable for blocked rows, changed destinations, the proposal creator, superseded revisions or an existing decision.
+4. Enter **Decision reason** and choose **Approve mappings** or **Reject plan**. Keep the command UUID until confirmation.
+
+A decision is retained once. Approval covers that mapping revision only. Later target renames, retirement, account rebinding or access changes require rechecking before execution; an old approval does not grant continuing access. Retained labels and prior decisions remain evidence.
+
+## Recover or correct a problem
+
+- **Invalid destination:** check current configuration, work-type applicability, account activity, client binding and ticket-read access. Use explicit null/reason choices for unassigned or unqueued work. Block unresolved records; do not substitute the importing administrator as requester.
+- **Changed preview or destinations:** preview again before recording. If already recorded, prepare a successor with `supersedesId` and obtain a new independent review. Retained revisions cannot be edited. A parent can have only one successor.
+- **Unconfirmed result:** keep the UUID shown under **Command recovery**, choose **Look up command**, or **Retry exact command** while it remains pending. Editing and new writes pause until recovery. Do not create a replacement UUID after a lost response. After leaving the page, use the retained UUID to look up the result; pending request text is not saved by this page.
+- **Access changed:** restore the appropriate current staff authority through normal administration, then **Check access again**. Historic involvement or a source role never widens current permissions.
+- **Already decided or superseded:** inspect the retained outcome or successor. A new UUID cannot create a second decision or rewrite prior evidence.
+
+Keep [operational CSV imports](./ticket-imports) and the historical archive at `/settings/tickets/migration` separate. This planning workflow does not automatically adopt existing imports, publish archived conversations or shut down a source system.
