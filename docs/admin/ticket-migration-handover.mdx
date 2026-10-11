@@ -1,0 +1,158 @@
+---
+title: Confirm performed ticket handover
+description: Retain real rehearsal, routing and intake checks for independent confirmation of a ticket source transfer.
+---
+
+> **Awaiting application rollout.** Performed handover confirmation is awaiting
+> application rollout. Documentation publication does not establish availability
+> in your Enduria deployment.
+
+Use **Settings → Service Management → Ticket migration → Confirm performed
+handover** to compare your actual source transfer evidence and obtain confirmation
+from a different administrator. The retained record brings together the earlier
+rehearsal, frozen final export, selected tickets and performed intake checks.
+
+Confirmation records what was reviewed at that point in time. Enduria does not
+change your source routing, shut down the source or reverse routing for you.
+Imported backlog keeps **no SLA clocks**.
+
+## Required access
+
+Recording, reading, reviewing and recovering handover commands require current
+active unbound staff with `settings.manage`, `tickets.manage`, `tickets.view.all`
+and `tickets.edit.all`. Portal customers and client-bound staff cannot administer
+this transfer. A different authorised administrator confirms or rejects the
+proposal; only its proposer can cancel it while it is pending.
+
+## Prepare the actual transfer
+
+1. Retain and independently review the earlier rehearsal's
+   [mapping plan](./ticket-migration-plans) and complete
+   [evidence reconciliation](./ticket-migration-evidence). Perform the rehearsal
+   in a disposable environment and keep its execution report, SHA-256, findings
+   and discrepancy dispositions.
+2. Freeze and capture the final source export. Retain its evidence and reviewed
+   plan. Complete [activation](./ticket-migration-activation) or
+   [adoption](./ticket-migration-adoption) for all selected targets and resolve any
+   [corrections](./ticket-migration-corrections).
+3. Inventory the source's mailbox, portal, staff web, API, integration and other
+   intake paths. Perform the agreed routing work, then test real intake in the
+   intended tenant, client and channel. Record actual times with an explicit
+   timezone, for example `2026-10-12T09:00:00+11:00`.
+4. After **all** intake checks, record and independently approve a fresh
+   [selected-ticket baseline](./ticket-migration-reconciliation). Earlier
+   approval does not cover later checks or intervening ticket activity.
+5. Keep manual recovery instructions for each path, including how to account for
+   new requests, replies and other work received meanwhile.
+
+The earlier and final exports must belong to the same source and client scope.
+The earlier plan can have been superseded by the final plan. The comparison
+checks exact source identities, revisions, hashes and final dispositions. Give
+every selected rehearsal identity absent from the final export its own reason.
+
+The environment, execution report, findings, external inventory and performed
+routing times are your attestations. Enduria checks retained records and actual
+native intake separately; attaching a declaration does not prove that external
+work happened.
+
+## Prepare and compare the handover
+
+1. Open **Confirm performed handover** and expand **Prepare performed handover
+   evidence**.
+2. Under **Choose the final selected baseline**, select the **Registered source**,
+   use **Load selected-ticket baselines**, and choose the final comparison.
+   Inspect its pinned reconciliation if necessary. Its retained approval must
+   still be current.
+3. Under **Retain the earlier performed rehearsal**, use **Load rehearsal plans**
+   and **Load rehearsal evidence reports** to select the earlier reviewed
+   records. Check the plan name and identifier, especially when plans have the
+   same name. Fill in the performed rehearsal details and any absent selection
+   reasons.
+4. Under **Declare and check the intake paths**, acknowledge your completed
+   external inventory and enter its reason. Use **Add named intake path** for
+   each path, up to 20 in total. Give each a name, kind, disposition reason,
+   expected destination and manual recovery instructions.
+5. For an included path, enter the actual routing start/completion and intake
+   check times. Use **Find actual new-intake tickets** and select the actual new
+   request in the declared channel. Imported or migration-linked backlog cannot
+   serve as this new-intake evidence.
+6. For a mailbox path, use **Load registered mailboxes** to select its registered
+   account and complete all five mail checks described below. Every active
+   registered mailbox needs an explicit included or excluded disposition.
+7. For an excluded path, retain its reason and recovery instructions. It certifies
+   no successful routing or intake test. Do not omit a path simply because you
+   are excluding it.
+8. Enter **Record action reason** and choose **Compare performed handover**.
+   Resolve the visible blockers, inspect the paged identity comparison, then
+   choose **Record handover proposal**.
+
+The result is a pending immutable proposal. Recording does not confirm the
+handover. If current work, mappings, mailbox inputs, processing evidence or
+authority changes, compare again before recording.
+
+## Check every included mailbox
+
+An included mailbox must be active, use IMAP, have current healthy connection
+evidence and have successfully polled after routing. Select actual processing
+records for five distinct checks:
+
+| Check | Expected actual outcome |
+| --- | --- |
+| New intake | A new email ticket in the intended tenant and client, matching the path's selected new-intake ticket. |
+| Matched late reply | A comment on the intended existing ticket from a recognised participant. |
+| Ambiguous thread refusal | A quarantined message refused because its ticket references are ambiguous; no ticket or comment is certified. |
+| Unmatched old reference | A new email ticket retaining an unmatched old reference. |
+| Unverified participant reply | An internal comment retaining its unverified sender classification. |
+
+Use the outcome finders in the path card and enter each performed check time.
+The checks must use distinct processing records under the mailbox configuration
+actually used by successful polling. A reply also needs its original comment
+poll attribution to match that processing attempt.
+
+An old comment replayed during a newer poll does not establish a fresh sender
+authentication check. Legacy records with unknown context cannot certify a
+successful test. Perform a fresh check instead. Never weaken sender policy merely
+to make handover evidence pass.
+
+## Independently review and confirm
+
+1. A different authorised administrator opens the retained handover under
+   **Inspect and independently confirm**. Use **Load source handovers**, or enter
+   its **Retained handover UUID** and choose **Inspect current handover**.
+2. Check the pinned source, client, final manifest and selected baseline. Expand
+   **Performed rehearsal and path declarations** to inspect the execution report,
+   findings, path dispositions, routing times, individual mail check times and
+   recovery instructions.
+3. Use **Review identity comparison**, **Review paths**, **Review mailboxes** and
+   **Review selected targets** to page through the retained evidence. Follow the
+   ticket links to inspect actual current work. Reinspect if the review becomes
+   stale.
+4. Enter **Review action reason**. Choose **Confirm performed handover** only when
+   the current prerequisites and performed evidence match. Choose **Reject
+   handover proposal** when the claim should not be confirmed.
+
+The result is one retained independent decision. Confirmation does not create
+additional tickets, reconstruct historical policy or certify application rollout.
+Changing a confirmed proposal requires a new record; the original remains retained.
+
+## Check later readiness and recover
+
+Use **Retain current handover readiness** and **Load retained handover readiness**
+to retain and inspect later point-in-time reports. New ticket work, configuration
+changes, processing changes or lost authority can make current readiness stale.
+The original performed-handover confirmation remains retained.
+
+After an unreadable or lost action result:
+
+1. Keep the displayed unconfirmed command UUID and action. Editing and new writes
+   are paused, including after access is restored.
+2. With the original account, use **Look up handover command**. If the exact frozen
+   request remains on the screen, **Retry exact handover command** reuses it.
+3. If permission changes, protected details are cleared but the recovery identity
+   remains visible. Restore the required current authority and confirm that
+   original command before starting another action.
+4. After a confirmed receipt, inspect the current handover before another action.
+
+Only the proposer can use **Cancel pending handover** before a decision. Cancellation
+does not undo routing or received work. Before any separate manual reversal,
+reconcile the requests, replies and other work received since the transfer.
