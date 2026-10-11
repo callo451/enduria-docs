@@ -1,0 +1,81 @@
+---
+title: Manage ticket migration
+description: Choose the right migration task and review current work without losing retained evidence or command recovery.
+---
+
+:::info Awaiting application rollout
+The ticket migration workspace and task-focused review layout are awaiting
+application rollout. Documentation publication does not establish availability
+in your Enduria deployment.
+:::
+
+Open **Settings → Service Management → Ticket migration** to choose the task you
+need. The workspace brings migration tools together while keeping source evidence,
+operational imports and current ticket work separate. Each tool checks its own
+current prerequisites; the overview does not confirm a migration or handover.
+
+## Choose the right task
+
+| Your task | Open | What to prepare |
+| --- | --- | --- |
+| Register a source and retain its export declaration | [Migration sources](./ticket-migration-sources) | Explicit source/account identity and a normalised manual export |
+| Retain and verify original revisions, packages and files | [Migration evidence](./ticket-migration-evidence) | The inspected package and its recorded manifest |
+| Choose current clients, people and tenant destinations | [Migration plans](./ticket-migration-plans) | Recorded manifest, explicit identity dispositions and a different reviewer |
+| Create selected ordinary-ticket or incident backlog | [Backlog activation](./ticket-migration-activation) | Reviewed plan, complete evidence, rehearsal, frozen final export and source-closure attestations |
+| Link an existing successful CSV ticket without replacing it | [Adopt imported tickets](./ticket-migration-adoption) | Reviewed plan/evidence and an explicitly compared CSV target |
+| Correct reviewed current text, priority or category | [Correct migrated tickets](./ticket-migration-corrections) | Existing source link, current plan/evidence and independent before/after review |
+| Import operational CSV rows or inspect earlier outcomes | [Import tickets](./ticket-imports) and **Ticket import history** | Explicit source-status mappings and retained row outcomes |
+| Keep historical evidence separately | **Ticket migration archive** | Historical package validation and reconciliation |
+
+Activation and adoption are different choices for a target. Adoption preserves
+existing current work; activation creates a new selected target. A standalone CSV
+import does not automatically register a source transfer. A historical archive
+does not create operational tickets. Imported backlog keeps **no SLA clocks**.
+
+## Access and navigation
+
+The workspace shows only tools allowed by your current permissions and scope.
+Standalone import/history follow their existing ticket or settings management
+access; the archive requires settings management. Governed source transfer,
+mapping, evidence, activation, adoption and correction require current active
+unbound staff with `settings.manage`, `tickets.manage`, `tickets.view.all` and
+`tickets.edit.all`. Portal customers and client-bound staff cannot administer
+those governed transfer tasks. Each guide states its full requirements.
+
+1. Open **Ticket migration** and choose the appropriate task card.
+2. Complete that tool's explicit prerequisites and inspect its preview or retained
+   comparison before writing or deciding.
+3. Use **Ticket migration** at the top of a tool to return to the overview, or
+   expand **Choose another migration task** to navigate directly.
+4. Use **Search settings** to find a specific authorised tool by name. Saved
+   links and existing tool URLs continue to open their original screens.
+
+## Review a retained proposal
+
+Opening a retained activation, adoption or correction shows its review task with
+new-proposal tools collapsed. Inspecting an existing proposal on the same screen
+also brings its review task into focus.
+
+1. Inspect the actual current payload or before/after comparison, destinations,
+   source evidence, current readers and any blockers.
+2. Enter the visible **Review action reason** and use the available independent
+   decision or execution control. Opening a review never grants decision authority.
+3. Expand **Propose a new activation**, **Propose a new adoption** or **Propose a
+   new correction** only when preparing another proposal. Collapsing this section
+   keeps your draft and command state on the current screen.
+
+The original preview, independent review and execution rules still apply. An
+activation/adoption approval is separate from execution; correction approval
+applies the safe-field change immediately. Follow the specific guide for the
+operation you are reviewing.
+
+## Recover and continue safely
+
+If a result is unconfirmed, keep the original command UUID and use that tool's
+lookup or exact retry with the original account. Expanding or collapsing proposal
+tools does not release the pause on new writes. Do not navigate away with an
+unrecorded UUID or create a replacement command to guess the outcome.
+
+Changed current work or source evidence requires fresh review. Retained reports
+remain available in the same tool. Routing, new intake, independent handover,
+source-system shutdown and application rollout remain separate operator activities.
