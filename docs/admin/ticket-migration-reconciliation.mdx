@@ -1,0 +1,125 @@
+---
+title: Reconcile selected tickets
+description: Independently review an exact selected ticket baseline before a separate manual source handover.
+---
+
+Compare the tickets selected by a reviewed migration plan with their retained
+source evidence and current Enduria work. A different administrator reviews the
+comparison. Approval preserves the tickets and their original migration receipts.
+
+> **Awaiting application rollout.** These controls are awaiting application rollout.
+> Documentation publication does not establish availability in your deployment.
+> Check with your platform operator before following these steps.
+
+## Access and prerequisites
+
+Use active staff accounts with **Settings management**, **Ticket management**,
+**View all tickets** and **Edit all tickets**, with no assigned client restriction.
+The reviewer must be a different currently authorised person. Portal customers
+and API keys cannot administer this workflow. Ticket creation permission is not
+required.
+
+Prepare the latest independently approved, unchanged
+[migration plan](./ticket-migration-plans) for the exact source and client scope,
+and a complete, unchanged [evidence reconciliation](./ticket-migration-evidence).
+The plan selects ordinary tickets or incidents, with every identity explicitly
+selected or excluded. Every selected identity needs an existing
+[activation](./ticket-migration-activation) or
+[adoption](./ticket-migration-adoption) link and available required files.
+
+Current ticket status, assignment, queue, conversations and other legitimate work
+may have changed since the original migration. Review that current work as a new
+baseline. A ticket completed normally in Enduria does not need reopening for this
+comparison. Client, requester, work-item type, import origin and current reader
+access must still match the supported scope. Imported backlog keeps **no SLA clocks**.
+
+## Compare and record the selected set
+
+1. Open **Settings → Service Management → Ticket migration → Reconcile selected
+   tickets**. Expand **Prepare a selected-set comparison** if it is collapsed.
+2. Choose the **Registered source**, then select **Load source plans**. Choose
+   the **Reviewed mapping plan** and inspect its manifest and client scope.
+   Use the source and plan page controls when your records are on another page.
+3. Select **Load plan evidence reports** and choose the **Evidence reconciliation**.
+   A report described as **Complete when recorded** still needs a current check.
+4. Enter the **Comparison reason** and **Current work review reason**. Acknowledge
+   that you have reviewed current ticket work separately from the original source
+   evidence. Enter the **Record action reason**.
+5. Select **Compare selected tickets**. Inspect identity, disposition and link
+   totals, blockers, and **Selected identities and linked tickets**. Open the
+   linked tickets when investigating their current work.
+6. Resolve every blocker, then compare again. Select **Record selected comparison**
+   only after reviewing the current selected work. Keep the returned comparison
+   UUID for the independent reviewer.
+
+The preview creates no ticket and changes no operational work. Recording refuses
+a changed preview. Missing links, changed source evidence, required unavailable
+files, invalid target scope or reader access, and incomplete inventories prevent
+recording. Use the source, evidence, plan, activation, adoption or correction tool
+appropriate to the problem; reconciliation never silently repairs it.
+
+## Independently review and decide
+
+1. Sign in as a different authorised administrator. Use **Load source comparisons**
+   for the selected source, or enter the **Retained comparison UUID** and select
+   **Inspect current comparison**.
+2. Check the exact scope, comparison reason, current work acknowledgement and
+   current eligibility. Select **Review selected targets**, **Review
+   outside-selection links** and **Review declared dispositions**.
+3. Inspect current ticket text, status, priority and category alongside retained
+   source and file inventory. Expand **Identity, origin and activity evidence**
+   when investigating the original link, correction references or current
+   activity inventory. **Review correction references** pages through applied
+   corrections; the target summary shows the exact count and a bounded reference
+   sample. Use **Previous review detail** and **Next review detail**
+   to review the whole selected set.
+4. Enter the **Review action reason**. Select **Approve selected comparison** or
+   **Reject selected comparison** when the corresponding control is available.
+5. Inspect the current comparison again after the command is confirmed. Use
+   **Retain current readiness report** to retain a later point-in-time check, and
+   **Load retained readiness reports** to inspect those records.
+
+Only the proposer can **Cancel pending comparison**, and only before a decision.
+Rejection and cancellation change no ticket. An approved comparison can become
+stale after later activity, changed evidence or configuration, or lost operator
+or reader authority. Its original decision remains retained. A new current
+baseline requires a new comparison and independent review.
+
+If review detail changes while you are paging, inspect the current comparison
+again. The tool refuses to mix detail from different baselines. The activity
+token detects later changes, including an edit that is subsequently reverted;
+it is not a count of user actions.
+
+## Understand outside-selection links
+
+A successor plan can explicitly exclude an identity that already has a linked
+Enduria ticket. **Review outside-selection links** shows those links with their
+retained plan dispositions and reasons. Their tickets remain operational; this
+comparison does not certify, close, unlink or delete them.
+
+An undeclared or ambiguously scoped extra link blocks the comparison. Absence
+from an export never implies deletion or completion. A current plan must still
+declare its manifest identities; investigate absent or changed source identities
+through the source and plan workflow rather than assuming an exclusion.
+
+Approval covers only the chosen selected set. Outside-selection work and routing
+exceptions still need explicit handling in the separate operator handover.
+
+## Recover an unconfirmed result
+
+After an unreadable or lost result, keep the original command UUID. New writes
+remain paused on the screen.
+
+1. Use the original account and enter the **Command UUID**.
+2. Select **Look up selected-set command** and inspect the retained result.
+3. If the same pending command needs recovery, use **Retry exact selected-set
+   command**. Keep its original UUID and request; do not create a replacement to
+   guess the outcome.
+4. Once confirmed, inspect the current comparison before another action.
+
+Current permissions apply to lookup and replay too. Restore appropriate access
+before recovering through the original account if it has been revoked.
+
+This comparison does not perform a source freeze, change routing, establish real
+new intake or customer replies, deploy Enduria, or shut down the source system.
+Those remain separate operator activities and evidence.
