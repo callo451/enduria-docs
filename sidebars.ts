@@ -17,7 +17,7 @@ const sidebars: SidebarsConfig = {
     {type: 'doc', id: 'admin/overview', label: 'Administration overview'},
     'admin/users-and-permissions', 'admin/branding', 'admin/ticket-administration', 'admin/ticket-statuses', {type: 'category', label: 'Ticket migration', link: {type: 'doc', id: 'admin/ticket-migration-workspace'}, items: [
       'admin/ticket-migration-sources', 'admin/ticket-migration-evidence', 'admin/ticket-migration-plans',
-      'admin/ticket-migration-activation', 'admin/ticket-migration-adoption', 'admin/ticket-migration-corrections', 'admin/ticket-migration-reconciliation', 'admin/ticket-migration-handover',
+      'admin/ticket-migration-activation', 'admin/ticket-migration-adoption', 'admin/ticket-migration-corrections', 'admin/ticket-migration-reconciliation', 'admin/ticket-migration-handover', 'admin/ticket-migration-exceptions',
       'admin/ticket-imports', 'admin/ticket-import-analytics',
     ]}, 'admin/ticket-numbering', 'admin/service-level-targets', 'admin/customer-satisfaction',
     {type: 'category', label: 'Email', link: {type: 'doc', id: 'admin/email/overview'}, items: [

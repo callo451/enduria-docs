@@ -1,0 +1,171 @@
+---
+title: Review ticket handover exceptions
+description: Record a migration issue and independently review an explicit response while preserving original handover evidence.
+---
+
+> **Awaiting application rollout.** Handover exception recording and response
+> review are awaiting application rollout. Documentation publication does not
+> establish availability in your Enduria deployment.
+
+Use **Settings → Service Management → Ticket migration → Review handover
+exceptions** when an issue is discovered after an independently confirmed ticket
+handover. Keep the original handover, the observed issue and each response decision
+as separate evidence. A response can acknowledge the issue for separate handling
+or propose an explicitly manual routing reversal.
+
+Approval changes no source routing, mailbox configuration, ticket, assignment or
+SLA clock. It records no performed reversal. Retain actual performed actions and
+independent verification separately in your operational process. Source shutdown
+and application rollout remain separate responsibilities. Imported backlog keeps
+**no SLA clocks**.
+
+## Required access
+
+Recording, reading, reviewing and recovering these commands require current
+active unbound staff with `settings.manage`, `tickets.manage`, `tickets.view.all`
+and `tickets.edit.all`. Portal customers and client-bound staff cannot administer
+this workflow. A response reviewer must differ from that response's proposer.
+The original issue proposer alone can cancel the exception before any response
+decision. Naming an external operator grants no Enduria access.
+
+Any currently authorised administrator can propose a response revision. If the
+original author leaves or loses access, another administrator can continue the
+response process, with fresh independent review.
+
+## Record the observed issue
+
+1. Open an independently [confirmed performed handover](./ticket-migration-handover)
+   and choose **Record or review a handover exception**. Alternatively, open
+   **Review handover exceptions**, choose the **Registered source**, use
+   **Load source handovers**, select the retained handover and choose
+   **Check handover confirmation**.
+2. Expand **Record a handover exception**. Under **Record the observed issue**,
+   choose the **Issue classification** and give the **Actual detection time
+   (UTC)**, **Observed issue** and **Operational impact**. Classification describes
+   the migration issue; it does not change your ticket statuses or priorities.
+3. If relevant, expand **Optional related existing tickets**, search a ticket
+   number or title, and select up to 20 existing records. References create no
+   incident and change no existing ticket work.
+4. Give the **Record action reason** and choose **Record exception**.
+5. After the command is confirmed, choose **Inspect current exception**. The
+   record pins the original source, client, final manifest and independent
+   handover confirmation. Inspect its issue, impact and intervening-work coverage.
+
+The detection time must describe a performed observation, not a future event.
+Use **Load handover exceptions** to find earlier issues for the same handover.
+**Open a retained exception by reference** is available when you already have
+its UUID.
+
+## Choose and compare the response
+
+1. Inspect the current exception and expand **Prepare a response revision**.
+2. Under **Response choice**, select either **Record the issue for separate
+   handling** or **Propose a manual routing reversal**. Give the
+   **Response explanation**.
+3. For a manual reversal proposal, complete the operator attestations, original
+   path instructions, current mailbox dispositions and changed-work dispositions
+   described below. Leave uncertainty explicit until it has been resolved.
+4. Give the **Response action reason** and choose **Compare response evidence**.
+   Read the coverage and every blocker. An incomplete proposal can be retained
+   for review, but cannot approve a manual reversal.
+5. Choose **Record response revision**. Another authorised administrator must
+   inspect that exact revision before deciding.
+
+A log-only response can retain an issue when interval coverage is unknown. Its
+acknowledgement certifies no routing, reconciliation or history continuity.
+
+### Account for manual reversal scope
+
+Keep every original path named and preserve its included or excluded scope.
+Original exclusions stay excluded; expanding routing requires separate
+operational authorisation. For each path, give the manual action or retained
+exclusion, intended destination, responsible operator, verification method and
+recovery instructions. Included paths also need an ordered intended execution
+window in UTC.
+
+Account for every currently registered local mailbox and every observed changed
+identity. State whether each belongs to this migration, sits outside this reversal
+scope with a reason, or remains unresolved. A changed-work disposition also needs
+the retained work location, manual reconciliation owner and instructions. These
+locations and responsibilities are operator attestations. They do not copy,
+replay, delete, merge or compensate work.
+
+Changed-work forms and retained review are paged. Inspect all pages, including
+work outside the selected backlog. The same identity in different observation
+domains counts separately. A deleted record can remain in the observation
+inventory without its historical content being available. Current client or
+channel alone cannot establish the record's earlier scope after a move.
+
+### Understand interval coverage
+
+New handover confirmations retain a forward observation baseline. Earlier
+confirmations without that baseline remain readable but have **legacy unknown**
+coverage; no historical interval is manufactured. A fresh performed-handover
+proposal and independent confirmation can establish a new forward interval,
+while the earlier unknown interval remains explicitly unresolved.
+
+Manual reversal approval requires complete current coverage and dispositions for
+all observed changes. More than 200 changed identities, an oversized inventory,
+missing evidence or unresolved entries make coverage incomplete. Use a separately
+scoped operational process when the supported bounds cannot cover the work.
+
+Observation counts cannot prove uninterrupted history. A restore or other history
+discontinuity requires separate reconciliation of the missing interval. Record
+the uncertainty and establish a new forward baseline; an acknowledgement cannot
+certify the missing period. External routing inventories and continuity remain
+operator attestations, even when the Enduria comparison is complete.
+
+## Review independently
+
+1. A different authorised administrator opens the retained exception and inspects
+   **Review response independently**. New issue and response preparation tools
+   collapse so the review stays in focus.
+2. Inspect the exact revision, response explanation, current coverage, original
+   path instructions, mailbox dispositions and every changed-work page. Current
+   comparison and retained approval are separate facts.
+3. Give the **Independent review reason**, then choose **Approve response** or
+   **Reject response**. Approval is unavailable when current evidence or authority
+   has changed, the revision was replaced, or required coverage is incomplete.
+4. Use **Retain current response comparison** to keep a later point-in-time
+   comparison. Use **Load response revisions** and **Load retained comparisons**
+   to inspect earlier evidence.
+
+At most one active approved manual reversal response can cover the whole handover.
+Log-only responses can coexist. New ticket work or mailbox changes can make
+current readiness unavailable without rewriting the original approval.
+
+## Replace or cancel a proposal
+
+A newer pending response revision closes the earlier review token. The older
+revision stays visible and cannot later be approved.
+
+Replacing an approved response requires two separate decisions. Record the
+replacement revision first; the existing approval remains current. An authorised
+reviewer different from both response proposers inspects the replacement and uses
+**Supersede unexecuted approval** to retire the earlier approval. The replacement
+then needs a fresh independent **Approve response** decision. Supersession does
+not authorise the replacement or reverse any performed action.
+
+The original issue proposer can use **Cancel undecided exception** before any
+response decision. Cancellation retains the issue and its revisions. An approved,
+rejected or cancelled record is never edited or erased.
+
+## Recover an unconfirmed result
+
+1. Keep the displayed original command UUID and use the original account.
+2. After access is restored, open **Recover an exception command** and choose
+   **Look up exception command** for that UUID.
+3. If the exact original request remains available, **Retry exact exception
+   command** safely repeats that request. Do not create a replacement UUID while
+   the original result remains unconfirmed.
+4. Once the matching receipt is confirmed, inspect the current exception before
+   another action.
+
+Editing and new writes stay paused while the result is unconfirmed. Losing
+authority clears sensitive screen data; it does not grant receipt access. Restore
+current migration administration authority before recovering with the original
+account.
+
+If a comparison changed, inspect the current evidence and record a new response
+revision rather than approving the stale token. If another manual reversal response
+is already approved, reconcile that retained plan before proposing competing routing.
