@@ -1,0 +1,49 @@
+---
+title: Read analytics after a ticket import
+description: Understand imported snapshots, unknown measurements and observed Enduria completions.
+---
+
+# Read analytics after a ticket import
+
+Use **Analytics → Tickets** (`/analytics/tickets`) to review operational work after a CSV import. Imported work contributes to creation and backlog counts, while incomplete source history stays outside measured response, assignment, resolution and outcome denominators.
+
+> **Awaiting rollout.** The imported-history classification described here is awaiting application rollout. Documentation publication does not establish availability in your deployment.
+
+## Before you start
+
+Use a staff account with `tickets.view.all`, or both `reports.view` and `tickets.view.own`. Your ticket access still controls the rows: without `tickets.view.all`, only work you requested or hold is included; a client-bound account remains limited to its client. A report permission does not grant access to additional tickets.
+
+This guide describes [operational CSV imports](./ticket-imports). Records retained only in the historical migration archive are not operational tickets and do not enter these figures.
+
+**Tickets** covers tickets, service requests, changes and problems. Review incident imports under **Analytics → Incidents & problems** (`/analytics/incidents`); the same incomplete-history rule applies to their fact-based measurements.
+
+## Review the figures
+
+1. Open **Analytics → Tickets** and select the period you want to examine.
+2. Apply the required client or queue filter. Compare figures using the same period and scope.
+3. Read the measured population and any **unknown** or **pending** caption alongside each duration or outcome figure. A dash with **nothing measured** means there is no measured value; it is not a zero-minute duration or a zero-percent result.
+4. On desktop, hover over a figure to read its definition. Use the explanations below when reviewing the figures on a touch device.
+5. If an imported ticket is completed in Enduria later, review the period containing that observed completion separately from its source creation period.
+
+| Figure | How imported work contributes |
+| --- | --- |
+| Creation count | Uses the ticket's retained creation date. A supplied source date is retained; an omitted date uses import time. Older imports may have unknown date provenance. |
+| Backlog | Uses the ticket's current status and your organisation's configured final statuses. An imported final snapshot is not open backlog. |
+| Resolution count | An initial imported final snapshot does not count as an observed Enduria completion. A later observed transition into a final status counts in that period. Moving between final statuses does not add another completion. |
+| First response and time to assign | Imported history is unknown and excluded from the measured population, even if the source supplied a response date or the ticket arrived assigned. |
+| Time to resolve, reopen rate, first-contact resolution and reassignment rate | When a later observed completion places an imported ticket in the period, its incomplete history remains unknown and excluded from the measured denominator. |
+| SLA attainment | Imported backlog receives no Enduria SLA clock. Work without a clock remains unknown in the applicable SLA population. |
+
+**Unknown** means the necessary history is incomplete. **Pending** means a complete-history item is still awaiting the relevant outcome, such as a first reply or assignment. Unknown imports do not become pending merely because a source date is absent.
+
+For example, one Enduria ticket with a measured 30-minute first reply and one imported snapshot with a supplied 10-minute source response produce a 30-minute measured result with one unknown. The source observation is not averaged into the result.
+
+## Explain differences and recover
+
+An imported ticket can display a retained source resolution date while adding nothing to the observed resolution count. These are different facts: the retained date records a source observation; the count records an observed Enduria completion. Reopening and later completing it in Enduria can add an observed completion, but does not recover its missing earlier history.
+
+Later replies, assignments or status changes do not make imported history complete in this release. Source response dates and reopen counts do not prove a full timeline. Do not reimport or edit dates merely to remove an unknown caption.
+
+If counts differ from expectations, check the period, client and queue filters, your current ticket access, the import outcome in **Import history**, and your organisation's configured statuses. Configuration renames do not rewrite retained completion history. Work created before lifecycle capture began can also remain unknown.
+
+Import rollback is available only for a batch whose created tickets still have no later activity or protected evidence. Follow the [import recovery guidance](./ticket-imports#completed-history-and-recovery) when a batch needs correction; analytics classification does not provide a separate rollback or source-system shutdown action.
