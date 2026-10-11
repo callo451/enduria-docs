@@ -1,10 +1,10 @@
 ---
 title: Review ticket handover exceptions
-description: Record a migration issue and independently review an explicit response while preserving original handover evidence.
+description: Review a handover response and retain actual performed manual reversal facts separately from approval.
 ---
 
 > **Awaiting application rollout.** Handover exception recording and response
-> review are awaiting application rollout. Documentation publication does not
+> review and performed-fact recording are awaiting application rollout. Documentation publication does not
 > establish availability in your Enduria deployment.
 
 Use **Settings → Service Management → Ticket migration → Review handover
@@ -14,8 +14,9 @@ as separate evidence. A response can acknowledge the issue for separate handling
 or propose an explicitly manual routing reversal.
 
 Approval changes no source routing, mailbox configuration, ticket, assignment or
-SLA clock. It records no performed reversal. Retain actual performed actions and
-independent verification separately in your operational process. Source shutdown
+SLA clock. It records no performed reversal. Use the separate performed-facts step
+to retain what actually happened. Linked recovery approval and independent
+verification are forthcoming; use your separate manual operational process. Source shutdown
 and application rollout remain separate responsibilities. Imported backlog keeps
 **no SLA clocks**.
 
@@ -166,6 +167,49 @@ authority clears sensitive screen data; it does not grant receipt access. Restor
 current migration administration authority before recovering with the original
 account.
 
-If a comparison changed, inspect the current evidence and record a new response
-revision rather than approving the stale token. If another manual reversal response
-is already approved, reconcile that retained plan before proposing competing routing.
+Before performed evidence is retained, a changed comparison requires inspecting
+the current evidence and recording a new response revision before approval. If
+another manual reversal response is already approved, reconcile that retained plan
+before proposing competing routing. After performed evidence is retained, ordinary
+revision and supersession are unavailable; use your separate manual operational
+process until linked recovery approval is available.
+
+## Retain performed manual reversal facts
+
+Retain what already happened against a historically approved manual response.
+This step does not execute routing or independently verify a result. It permits
+partial, failed and unknown facts, including after the original actors leave,
+configuration changes or the approval is superseded.
+
+1. Inspect the appropriate retained response revision. Choose **Inspect performed
+   reversal evidence** beneath its historical approval.
+2. In **Retain performed manual reversal facts**, enter the actual episode summary
+   and authorisation circumstances. Describe known continuity or its uncertainty.
+   Give an external report reference and SHA-256 when available, or explain their
+   absence. Enduria does not fetch the reference.
+3. Expand each original path, including excluded paths. Record its actual outcome,
+   action and destination where known. Give actual start/end times in UTC, or leave
+   them unavailable with a reason. Do not substitute an intended execution window.
+4. Identify the actual executor. Search **Known tenant staff identity** for an
+   existing staff person; inactive identities can be retained. Alternatively choose
+   **External or unresolved identity**, retaining any known name/reference and why
+   an enforceable identity is unavailable. Naming someone grants no access.
+5. State whether the action matched the plan, describe the comparison/deviations,
+   and retain the work's location and manual reconciliation responsibility/instructions.
+6. Give the **Performed record reason**. Choose **Compare performed evidence** and
+   inspect the fresh observation and uncertainties. Choose **Record performed facts**.
+7. After the command is confirmed, inspect the response and performed episode again.
+   Recover an unreadable result using the original command UUID and account as
+   described above. Do not issue a new command to repeat a manual action.
+
+Only one immutable episode can be recorded for a response. Recording closes further
+execution under that approval and ordinary supersession; the original approval and
+reserved handover plan remain. Late facts against a superseded approval do not
+reactivate it or take another plan's reserved slot. The retained observation is a
+point-in-time comparison, not proof that external routing succeeded.
+
+**Linked recovery approval and independent verification are not yet available.**
+Performed facts remain unverified. Partial, failed, not-performed or unknown results
+need your separate manual operational process. Retaining uncertain facts is not
+permission to repeat routing or compensate tickets, and does not establish source
+shutdown or application rollout.
