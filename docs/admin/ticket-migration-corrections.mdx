@@ -1,0 +1,102 @@
+---
+title: Correct migrated tickets
+description: Independently review current text, priority and category corrections while retaining original migration evidence.
+---
+
+Propose a bounded current correction to a migrated ticket or incident, then have a
+different administrator review and apply it. The original source link and migration
+receipts remain unchanged. Current conversation, files, identity and lifecycle are
+preserved.
+
+> **Awaiting application rollout.** These controls are awaiting application rollout.
+> Publishing this guide does not establish availability in your organisation.
+> Check with your platform operator before following these steps.
+
+## Access and supported corrections
+
+Use active staff accounts with **Settings management**, **Ticket management**,
+**View all tickets** and **Edit all tickets**, with no assigned client restriction.
+The reviewer must be a different currently authorised person. Ticket creation
+permission is not required. Portal accounts and API keys cannot administer corrections.
+
+The target must already have a retained [activation](./ticket-migration-activation)
+or [adoption](./ticket-migration-adoption) link. Prepare the latest independently
+approved [migration plan](./ticket-migration-plans) and complete, unchanged
+[evidence reconciliation](./ticket-migration-evidence). The source identity must
+remain selected as an open ordinary ticket or incident, with available required files.
+
+You can correct current title, description, priority and category. Use reviewed
+tenant destination IDs for priority or category changes. Text-only corrections
+preserve evolved priority and category values. The correction cannot change client,
+requester, type, assignment, queue, status, resolution or incident classification.
+Imported backlog keeps **no SLA clocks**, including after a priority correction.
+
+A target governed by required ordinary-ticket approval, or an enabled non-none
+ordinary approval policy for its type, cannot use this correction path. Use its
+normal approval-governed process; migration review does not replace that policy.
+
+## Compare and propose current changes
+
+1. Open the ticket workspace and select **Check retained source evidence**, then
+   **Propose current correction**. This opens the exact retained link. You can also
+   open **Settings → Service Management → Correct migrated tickets** and enter the
+   **Retained source link UUID**.
+2. Enter the **Current reviewed plan UUID** and **Complete evidence reconciliation
+   UUID**, then select **Draft explicit correction**.
+3. Complete **Exact correction JSON** with only the safe fields you intend to change
+   under `changes`: `title`, `description`, `priorityId` or `categoryId`. Remove
+   fields you are not changing. Complete `comparisonReason` and
+   `currentAudience.reason`, acknowledging current authorised ticket readers,
+   including requester and permitted company-scope portal readers.
+4. Alternatively, load a prepared UTF-8 JSON file through **Correction JSON file**.
+   The file must be at most 1 MiB.
+5. Enter an **Action reason**, then select **Preview current correction**. Compare
+   **Current ticket before correction** with **Proposed current values**. Inspect
+   the source link, mappings, current activity and source file inventory. Open
+   **Inspect current ticket work** to examine conversation and other live work.
+6. Select **Record correction proposal**. Keep its confirmed proposal UUID and
+   command UUID for independent review and recovery.
+
+At least one proposed safe field must differ from the current ticket. A new source
+revision never automatically changes an operational ticket. Original source text,
+observations and files remain restricted evidence; they are not replayed as current
+comments, attachments, decisions or historical service-level results.
+
+## Independent review and immediate application
+
+1. Sign in as a different authorised administrator.
+2. On **Correct migrated tickets**, select **Load correction proposals**, or enter
+   the **Correction proposal UUID** and select **Inspect current correction**.
+3. Inspect the exact before/after comparison, reader acknowledgement, pinned mapping
+   plan, original link, source files and current activity. Check the live workspace.
+4. Enter an **Action reason**, then select **Approve and apply correction** or
+   **Reject correction**. Approval applies the native correction in the same command.
+5. Inspect the current correction again. The applied receipt records its native
+   baseline; **Load retained correction reports** shows later retained comparisons.
+
+Source, mapping, authority or current work changes prevent stale approval. Later
+conversation or other activity can stale the baseline even when visible field values
+are unchanged. Inspect fresh work and propose a new correction. Previous receipts
+remain available and are never rewritten.
+
+## Recovery and limits
+
+If a command response is unreadable or lost, keep its UUID and use the original
+account. **Look up correction command** confirms the retained result. When available,
+**Retry exact correction command** uses the frozen request while editing and new
+writes remain paused. A confirmed application is not applied again.
+
+Only the proposer can **Cancel pending correction**, before any decision or
+application. Cancellation does not remove a ticket, free its source identity or
+undo current work. An applied correction needs a new reviewed correction to change
+its supported fields again.
+
+Required missing source files, changed destinations, identity/client/requester drift,
+ineligible current readers, approval governance or an SLA snapshot/tracking record
+block correction. Resolve the underlying issue and review a fresh proposal; do not
+replace, merge or force-delete the target to evade retained evidence.
+
+**Retain current correction report** records a native comparison. Final selected-set
+reconciliation, real routing/intake checks and independent manual handover remain
+separate. These controls never shut down the source system or establish application
+rollout.
