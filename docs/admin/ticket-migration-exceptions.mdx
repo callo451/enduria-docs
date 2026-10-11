@@ -1,10 +1,11 @@
 ---
 title: Review ticket handover exceptions
-description: Review a handover response and retain actual performed manual reversal facts separately from approval.
+description: Review handover responses, retain actual reversal facts and independently approve linked future recovery instructions.
 ---
 
 > **Awaiting application rollout.** Handover exception recording and response
-> review and performed-fact recording are awaiting application rollout. Documentation publication does not
+> review and performed-fact recording are awaiting application rollout. Linked
+> recovery controls also await application rollout. Documentation publication does not
 > establish availability in your Enduria deployment.
 
 Use **Settings → Service Management → Ticket migration → Review handover
@@ -15,8 +16,9 @@ or propose an explicitly manual routing reversal.
 
 Approval changes no source routing, mailbox configuration, ticket, assignment or
 SLA clock. It records no performed reversal. Use the separate performed-facts step
-to retain what actually happened. Linked recovery approval and independent
-verification are forthcoming; use your separate manual operational process. Source shutdown
+to retain what actually happened. Linked recovery approval records separately
+reviewed future instructions; independent verification remains forthcoming.
+Source shutdown
 and application rollout remain separate responsibilities. Imported backlog keeps
 **no SLA clocks**.
 
@@ -26,6 +28,9 @@ Recording, reading, reviewing and recovering these commands require current
 active unbound staff with `settings.manage`, `tickets.manage`, `tickets.view.all`
 and `tickets.edit.all`. Portal customers and client-bound staff cannot administer
 this workflow. A response reviewer must differ from that response's proposer.
+For linked recovery, the reviewer must differ from both the original response
+proposer and the recovery proposer. The recovery proposer must still hold current
+migration administration access when the new proposal is approved.
 The original issue proposer alone can cancel the exception before any response
 decision. Naming an external operator grants no Enduria access.
 
@@ -172,7 +177,8 @@ the current evidence and recording a new response revision before approval. If
 another manual reversal response is already approved, reconcile that retained plan
 before proposing competing routing. After performed evidence is retained, ordinary
 revision and supersession are unavailable; use your separate manual operational
-process until linked recovery approval is available.
+process or the separately reviewed linked recovery workflow below. New instructions
+never overwrite the earlier actual facts.
 
 ## Retain performed manual reversal facts
 
@@ -208,8 +214,83 @@ reserved handover plan remain. Late facts against a superseded approval do not
 reactivate it or take another plan's reserved slot. The retained observation is a
 point-in-time comparison, not proof that external routing succeeded.
 
-**Linked recovery approval and independent verification are not yet available.**
-Performed facts remain unverified. Partial, failed, not-performed or unknown results
-need your separate manual operational process. Retaining uncertain facts is not
-permission to repeat routing or compensate tickets, and does not establish source
-shutdown or application rollout.
+**Independent verification is not yet available.** Performed facts remain
+unverified. Partial, failed, not-performed or unknown results need explicit future
+handling. Retaining uncertain facts is not permission to repeat routing or
+compensate tickets, and does not establish source shutdown or application rollout.
+
+## Propose linked future recovery
+
+Use linked recovery when the retained performed episode belongs to the current
+reserved manual response. Late facts for an already superseded response cannot
+take another plan's reservation. Keep the earlier episode visible while reviewing
+future instructions.
+
+1. Inspect the original approved response and choose **Inspect performed reversal
+   evidence**. Read its retained actual outcomes and uncertainty first.
+2. Choose **Inspect linked recovery**. Enduria checks the original episode and
+   current reserved response. If that response no longer owns the reservation,
+   inspect the current exception and plan before taking further action.
+3. Expand **Prepare linked recovery proposal** and choose **Prepare current recovery
+   draft**. This reads the current inventory and starts a draft; it performs no
+   manual action. **Refresh current inventory and reset draft** deliberately replaces
+   the current draft with a fresh empty form.
+4. Give the **Future recovery explanation** and **Handling earlier uncertainties**.
+   Under **Handling retained actual outcomes**, account for every original path,
+   including excluded paths. Choose **Retain completed work**, **Continue remaining
+   work**, **Use a separate manual process** or **Unresolved**. Give an explanation,
+   retained actual work location, reconciliation owner and instructions for each.
+5. Complete the **Future manual response** using the original path scope, intended
+   action/window, operator attestations, current mailbox dispositions and every
+   changed-work page. Earlier actual times or outcomes remain unchanged. Do not
+   repeat an uncertain action merely because a new proposal exists.
+6. Give the **Recovery proposal reason**, then choose **Compare recovery proposal**.
+   Inspect the original handover interval, current coverage and all blockers.
+   An unresolved proposal can be retained when its required explanations are
+   complete; it cannot be approved.
+7. Choose **Record recovery proposal**. After command confirmation, inspect the
+   original performed episode and **Inspect linked recovery** again. The latest
+   proposal appears under **Review linked recovery independently**.
+
+Recording creates no replacement response and releases no reserved plan. A newer
+recovery proposal makes earlier undecided reviews obsolete while retaining their
+evidence. Use **Retained recovery proposals → Load recovery proposals** to inspect
+earlier revisions.
+
+## Review linked recovery independently
+
+1. Another currently authorised administrator opens the original exception,
+   inspects its approved response and performed episode, and chooses
+   **Inspect linked recovery**.
+2. Read **Review linked recovery independently**: the exact proposal, earlier
+   uncertainty handling, retained actual-outcome handling and proposed future
+   response. Inspect every mailbox and changed-work page, including work outside
+   the selected backlog.
+3. Give the **Independent recovery review reason**. Choose **Approve linked recovery**
+   or **Reject linked recovery**. Approval is unavailable if the reviewer matches
+   either proposer, the current recovery proposer loses access, the comparison
+   changes, required coverage is incomplete or handling remains unresolved.
+4. After approval is confirmed, choose **Inspect current exception**. The exact
+   replacement response and its independent approval become current together.
+   The original response, performed episode and uncertainties remain retained.
+
+Approval transfers the handover's single reserved manual plan to the exact
+replacement. It approves only future manual instructions, performs no routing and
+certifies no earlier result. A pending ordinary response revision is retained but
+becomes obsolete when the governed replacement advances beyond it.
+
+Rejection creates no replacement and leaves the original reservation intact.
+Prepare a new proposal if different future instructions are needed. Historical
+authors leaving does not prevent a different currently authorised proposer and
+independent reviewer from continuing this process.
+
+If work or configuration changes during review, inspect the current evidence
+and prepare a fresh proposal. If the result is unreadable, recover the original
+command UUID with the original account before issuing another command. The
+receipt identifies the original episode, recovery proposal/decision and exact
+replacement reference; it is not evidence that any manual action succeeded.
+
+A later performed episode against the approved replacement needs its own retained
+facts and separately reviewed recovery, if required. Earlier episodes are never
+reopened, rewritten or automatically compensated. Independent verification,
+source-system operations and application rollout remain separate.
