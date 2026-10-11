@@ -1,0 +1,118 @@
+---
+title: Retain and reconcile ticket migration evidence
+description: Verify original source revisions and files against a recorded export manifest, with retained reconciliation reports.
+---
+
+# Retain and reconcile ticket migration evidence
+
+Use **Settings → Service Management → Migration evidence** to retain original source revisions and historical files, then check which declared export packages are verified. This gives administrators a durable evidence record before separately reviewing operational backlog activation.
+
+> **Awaiting rollout.** Migration evidence is awaiting application rollout. Documentation publication does not establish availability in your deployment.
+
+Retention does not create tickets, operational attachments or comments. Historical transitions, approval decisions, SLA observations and surveys remain source evidence; they do not become Enduria policy decisions or clocks. Imported backlog receives no SLA clocks. Source routing and shutdown remain separate operator actions.
+
+## Before you start
+
+You must be current active staff with no client binding and all four permissions: `settings.manage`, `tickets.manage`, `tickets.view.all` and `tickets.edit.all`. Portal customers and client-bound staff cannot administer or download this evidence. Ordinary ticket-read permission does not grant archive access.
+
+First [register your migration source](./ticket-migration-sources). Prepare the exported text and files, retaining a stable source record identity and a revision identity for each actual revision. Use the exact registered source ID and client scope. Organisation-wide packages use explicit `null` for the client; never remove a client binding to make validation pass. Keep the original export and preparation records: verified packages do not establish that the source export itself was complete.
+
+## Prepare and inspect a package
+
+1. Open **Migration evidence**. Enter **Registered source ID** and **Client ID**, or leave the client field empty for an organisation-wide package.
+2. Choose **Load blank package** for the source/client envelope. Its empty `records` array needs original records before inspection. Alternatively, choose **Load evidence file** for prepared UTF-8 JSON.
+3. Edit **Evidence JSON** using the fields below. Keep source text as plain text and unknown values explicit. Include each original file or its unavailable disposition.
+4. Choose **Inspect declarations**. Check record, observation, file and unavailable counts and the complete **Package declaration**. Inspection writes no evidence or manifest.
+5. Copy that complete declaration into the export manifest's `packages` array in **Migration sources**. Complete export scope/capture/freeze declarations, preview and record the manifest, then keep its returned manifest ID.
+
+Each package permits at most 25 records, 250 historical observations, 250 file declarations and 50 retained files. Each record permits at most 100 observations, 50 file declarations, ten retained files and 25 relationships. The loaded JSON file and canonical encoded package must each fit within 1 MiB, including base64 bytes. Split larger exports before recording a manifest. A manifest permits at most 200 packages, 5,000 identities and 200 MiB of declared encoded package bytes.
+
+### Package fields
+
+Use `enduria_ticket_evidence_v1` with your actual exported values:
+
+```json
+{
+  "format": "enduria_ticket_evidence_v1",
+  "sourceInstanceId": "YOUR_REGISTERED_SOURCE_UUID",
+  "clientId": null,
+  "packageId": "P1",
+  "records": [{
+    "sourceId": "T-1042",
+    "revisionId": "R1",
+    "core": {
+      "title": "Original source title",
+      "description": "Original source description as plain text",
+      "ticketType": "ticket",
+      "sourceState": "open",
+      "createdAt": null,
+      "updatedAt": null,
+      "sourceReferences": {
+        "requester": null, "assignee": null, "queue": null,
+        "status": null, "priority": null, "category": null
+      },
+      "classification": {"severity": null, "impact": null, "urgency": null}
+    },
+    "observations": [],
+    "files": [],
+    "relationships": [],
+    "archiveReference": null
+  }]
+}
+```
+
+Replace the source UUID placeholder. Package, record, revision, observation and file identities use ASCII letters, numbers, dots, underscores, colons and hyphens, start with a letter or number, and contain at most 160 characters. Record identities are unique within a package; observation/file identities are unique within their record.
+
+| Field | Meaning |
+| --- | --- |
+| `core.title`, `core.description` | Original plain text, limited to 300 and 16,000 characters respectively. Title is required. Markup is displayed as text. |
+| `core.ticketType` | `ticket`, `incident`, `service_request`, `change`, `problem` or explicit `unknown`. Evidence may retain any type without making it eligible for activation. |
+| `core.sourceState` | `open`, `final` or explicit `unknown`, based on source evidence. |
+| `core.createdAt`, `core.updatedAt` | Valid timestamps with an explicit time-zone offset, or `null` when unknown. A known updated time cannot precede a known creation time. |
+| `core.sourceReferences` | Source requester, assignee and queue identities plus status, priority and category labels. Each may be `null` when unavailable. These are source references, not Enduria destinations. |
+| `core.classification` | Nullable source severity, impact and urgency labels; these do not set Enduria classifications. |
+| `observations` | Items with `sourceId`, `kind`, nullable `occurredAt`, nullable `author` and plain-text `text` of at most 16,000 characters. Kinds: `note`, `transition`, `approval`, `sla`, `survey`, `resolution`, `other`. Unknown authors/times remain unknown. |
+| `relationships` | Items with `kind` (`asset`, `ci`, `parent`, `related`) and `sourceId`. Source labels do not create operational relationships. |
+| `archiveReference` | `null`, or an exact original historical archive `batchId`, `recordId` and `recordHash`. The source must have that archive namespace registered, and record identity/client scope must agree. Original cancellation does not erase retained evidence. |
+
+### File dispositions
+
+Every `files` item has a stable `sourceId`, explicit `required` boolean, `reason` and `disposition`. A required unavailable file blocks future activation; retaining a package does not override that requirement.
+
+| Disposition | Additional fields |
+| --- | --- |
+| `retained` | `filename`, source `contentType`, exact canonical `base64` bytes and lowercase hexadecimal SHA-256 `sha256` matching the decoded bytes. |
+| `missing`, `excluded`, `unsupported` | Nullable `filename`, `contentType`, `expectedSha256`, `expectedBytes`. No base64 bytes. Explain the unavailability; unknown expected values remain `null`. |
+
+Filenames are at most 160 characters and cannot contain path separators or control characters. Source content types are labels, not a guarantee of safe content. Historical files download as attachments; this workflow never renders source HTML/SVG or converts files into operational ticket attachments.
+
+## Retain against the recorded manifest
+
+1. Under **Retain against recorded manifest**, enter **Recorded manifest ID** and **Recording reason**.
+2. Choose **Preview retention**. Check the hash, counts and required/optional unavailable files. Preview checks the complete package ID, digest, encoded size and source/revision/hash set against the recorded manifest.
+3. Resolve disagreements with the export preparer. Equal counts do not make different identities valid. Never change retained bytes under the same revision identity.
+4. Choose **Retain evidence package** when available. Keep the displayed command UUID until confirmation.
+5. Choose **Load retained packages**, then **Inspect package**. Use **Previous records** and **Next records** for every revision. **Download original file** checks downloaded bytes against the retained size and digest.
+
+Identical revisions can appear in later packages without duplicating original evidence. Changed revisions need new revision identities and manifest declarations. Old revisions, original bytes and omissions remain immutable. If a client becomes inactive, authorised staff can still read evidence and recover committed commands; new retention requires an active client.
+
+## Reconcile declared packages
+
+1. Keep the manifest selected, enter **Recording reason**, and choose **Preview reconciliation**.
+2. Check verified/expected packages, records in unavailable packages, retained files and both unavailable-file counts.
+3. Choose **Retain reconciliation** to preserve the report, including an incomplete progress report when useful.
+4. Choose **Load retained reports**, then **Inspect report**. Use **Previous report details** and **Next report details** for all package states and unavailable identities.
+5. After retaining another package, preview and retain a new report. An older report says **Retained index has changed** when appropriate; it remains the original report.
+
+**All declared packages are verified** means the packages in this manifest are retained and match their declarations. Required unavailable files still block future activation; optional omissions remain visible. Source completeness, approved mappings, independent review of operational text, current access and handover remain separate checks. The report does not attest to them.
+
+## Recover a command or resolve a refusal
+
+- **Preview changed:** inspect current source/client/manifest state and preview again. A stale preview writes no evidence.
+- **Already retained:** inspect the package or recover its original command. A new UUID cannot retain the same manifest package again.
+- **Result unconfirmed:** keep its UUID before leaving. Editing and new writes pause. In **Recover a command**, choose **Look up command** with the original operator account and current access. While the original page remains open, **Retry exact command** safely resends the same UUID and payload. Do not create a replacement UUID after a lost or unreadable response.
+- **Page reloaded:** pending request text is not saved. Recover the original UUID first. If no receipt is available, have the migration owner reconcile the original request before preparing a replacement.
+- **Access changed:** restore authorised current staff access through normal administration, then **Check access again**. Historical involvement does not grant access.
+- **Package invalid or too large:** correct explicit fields, obtain missing export evidence, or split before declaration. A missing-file declaration is not verified file bytes.
+
+Continue with [reviewed destination mappings](./ticket-migration-plans) separately. [Operational CSV import](./ticket-imports) and the original historical archive remain separate journeys; this workflow does not automatically adopt existing imports or shut down the source system.

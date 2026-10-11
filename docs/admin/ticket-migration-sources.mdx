@@ -78,4 +78,6 @@ An exact retry returns the original retained result. Reusing a UUID for another 
 
 [Import tickets from CSV](./ticket-imports) creates operational tickets with explicit source-status mappings. The historical archive at `/settings/tickets/migration` retains source records, history and attachment evidence. Migration sources records identities and manifest declarations separately from both journeys; it does not automatically adopt existing imports or reconcile archive bytes.
 
+Use [Migration evidence](./ticket-migration-evidence) to inspect actual package declarations, retain matching original revisions/files and record package reconciliation reports. This does not establish source completeness or activate tickets.
+
 None of these actions shuts down or changes routing in the source system. Agree freeze, reconciliation and handover responsibilities separately before changing live operations.
