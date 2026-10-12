@@ -1,12 +1,16 @@
 ---
 title: Review ticket handover exceptions
-description: Review handover responses, retain actual reversal facts and independently approve linked future recovery instructions.
+description: Review handover responses, retain actual reversal facts, approve future recovery instructions and independently verify performed evidence.
 ---
 
 > **Awaiting application rollout.** Handover exception recording and response
 > review and performed-fact recording are awaiting application rollout. Linked
 > recovery controls also await application rollout. Documentation publication does not
 > establish availability in your Enduria deployment.
+
+> **Awaiting application delivery and rollout.** Independent performed verification
+> and the explicit no-executor choice described below are not yet delivered.
+> Confirm their availability in your deployment before using those steps.
 
 Use **Settings → Service Management → Ticket migration → Review handover
 exceptions** when an issue is discovered after an independently confirmed ticket
@@ -17,7 +21,8 @@ or propose an explicitly manual routing reversal.
 Approval changes no source routing, mailbox configuration, ticket, assignment or
 SLA clock. It records no performed reversal. Use the separate performed-facts step
 to retain what actually happened. Linked recovery approval records separately
-reviewed future instructions; independent verification remains forthcoming.
+reviewed future instructions. Independent performed verification records a separate
+decision against original facts and current evidence; it never repeats an action.
 Source shutdown
 and application rollout remain separate responsibilities. Imported backlog keeps
 **no SLA clocks**.
@@ -31,6 +36,9 @@ this workflow. A response reviewer must differ from that response's proposer.
 For linked recovery, the reviewer must differ from both the original response
 proposer and the recovery proposer. The recovery proposer must still hold current
 migration administration access when the new proposal is approved.
+For performed verification, the reviewer must differ from the verification-case
+proposer, performed recorder and every actual staff executor. The case proposer
+must still have current migration administration access at successful confirmation.
 The original issue proposer alone can cancel the exception before any response
 decision. Naming an external operator grants no Enduria access.
 
@@ -200,6 +208,10 @@ configuration changes or the approval is superseded.
    existing staff person; inactive identities can be retained. Alternatively choose
    **External or unresolved identity**, retaining any known name/reference and why
    an enforceable identity is unavailable. Naming someone grants no access.
+   For an excluded path that was not performed, choose **No executor — excluded
+   path was not performed** and give the reason. This choice requires unavailable
+   actual action, destination and start/end times. Do not use it for an included or
+   executed path, and do not invent an executor for an action that never occurred.
 5. State whether the action matched the plan, describe the comparison/deviations,
    and retain the work's location and manual reconciliation responsibility/instructions.
 6. Give the **Performed record reason**. Choose **Compare performed evidence** and
@@ -214,9 +226,10 @@ reserved handover plan remain. Late facts against a superseded approval do not
 reactivate it or take another plan's reserved slot. The retained observation is a
 point-in-time comparison, not proof that external routing succeeded.
 
-**Independent verification is not yet available.** Performed facts remain
-unverified. Partial, failed, not-performed or unknown results need explicit future
-handling. Retaining uncertain facts is not permission to repeat routing or
+The original observation remains **unverified when retained**, even if a separate
+independent confirmation is recorded later. Partial, failed, not-performed or
+unknown results on an included path need explicit future handling. Retaining
+uncertain facts is not permission to repeat routing or
 compensate tickets, and does not establish source shutdown or application rollout.
 
 ## Propose linked future recovery
@@ -294,3 +307,91 @@ A later performed episode against the approved replacement needs its own retaine
 facts and separately reviewed recovery, if required. Earlier episodes are never
 reopened, rewritten or automatically compensated. Independent verification,
 source-system operations and application rollout remain separate.
+
+## Prepare verification evidence
+
+Use verification to review one exact retained episode of an independently approved
+manual response. Read the original instructions, actual facts and uncertainties
+first. A current response must own the reserved scope before a new case can be
+prepared; old evidence cannot take a later response's reservation.
+
+1. Inspect the retained approved response and choose **Inspect performed reversal
+   evidence**. Beneath the original episode, choose **Inspect independent verification**.
+2. Read the separate confirmation and current-readiness summary. Expand **Prepare
+   verification evidence** and choose **Prepare current verification draft**.
+   **Refresh verification inventory and reset draft** replaces the draft with a
+   fresh empty form; it changes no routing or work.
+3. Give the **Verification explanation**. Under **Original path evidence**, expand
+   each original path and explain its **Verification evidence for this original
+   path**. Original path names, included/excluded scope and execution facts stay fixed.
+4. Under **Mailbox effects**, review every page and give explicit effect evidence
+   for every original/current mailbox identity. Choose **Configuration unchanged**,
+   **Observed approved change**, **Outside this migration scope** or **Unresolved
+   effect**. An observed approved change needs the **Exact approved mailbox path**.
+   Enduria offers only original included paths bound to that exact account.
+5. Under **Intervening work**, review every changed identity from the original
+   handover interval. Choose its **Changed work scope** and give scope/disposition
+   evidence, retained location, reconciliation owner and instructions. Deleted or
+   unavailable content stays unavailable; today's client or channel does not prove
+   an earlier source scope.
+6. Give the **Verification record reason** and choose **Compare verification
+   evidence**. Read the coverage and all blockers. Choose **Record verification case**.
+   Incomplete evidence can be retained for review, but cannot be confirmed.
+7. After command confirmation, inspect the current exception and original episode
+   again, then choose **Inspect independent verification**. The latest case appears
+   under **Review performed verification independently**.
+
+Configuration fingerprints describe observed state. They do not authorise a change
+or replace the approved action/destination and actual execution evidence. An
+included web path cannot establish an approved mailbox effect; an included mailbox
+cannot be reclassified outside the migration to avoid review. Unresolved effects,
+missing identities or incomplete interval coverage block successful confirmation.
+
+Verification cannot fill in unknown original times, executor identities, outcomes,
+continuity or report references. A later performed recovery needs its own retained
+episode and independent verification; it does not make an earlier unknown episode
+successful. Excluded paths that were not performed remain exclusions.
+
+## Review performed verification independently
+
+1. Another currently authorised, independent administrator opens the original
+   exception and performed episode, then chooses **Inspect independent verification**.
+2. Read **Review performed verification independently**: the exact case revision,
+   explanation, original-path evidence, current comparison and blockers. Expand
+   **Inspect current comparison pages** and inspect the paths, mailboxes and work
+   pages. Mailbox comparisons include approved/current fingerprints and the exact
+   retained path binding; work comparisons retain each disposition and responsibility.
+3. Give the **Independent verification review reason**. Choose **Confirm performed
+   verification** or **Reject verification case**. Confirmation is unavailable for
+   a non-independent account, superseded case, changed evidence, lost proposer
+   access, unresolved original facts or incomplete required coverage.
+4. After command confirmation, inspect the episode and independent verification
+   again. Successful confirmation is retained separately from the original
+   performed observation. Only one successful confirmation can stand for an episode.
+
+Rejection preserves the original facts and reservation. A fresh case can be prepared
+if the immutable original facts support it. A newer case makes an earlier undecided
+review obsolete while retaining its evidence. Use **Retained verification cases →
+Load verification cases** to inspect earlier revisions.
+
+## Understand confirmation and current readiness
+
+**Independent confirmation retained** means an independent decision was recorded
+against that episode and comparison at the time. **Current evidence still matches
+that confirmation** is a separate, fresh observation. Later ticket/mail/configuration
+changes, including a change that was reverted, can make current readiness unavailable
+without rewriting the earlier confirmation. Historical actors leaving alone does
+not erase retained facts or confirmation; current readers still need administrator
+access.
+
+Further execution under the performed response remains closed after confirmation.
+Verification releases no reservation and changes no routing, ticket, assignment,
+SLA clock or source shutdown. Use separately reviewed linked recovery for new
+future instructions when needed.
+
+If a write result is unreadable, preserve the original command UUID and recover it
+with the original account using **Recover an exception command**. New writes stay
+paused until that result is confirmed. After access loss, protected forms are
+cleared; restore current access and look up the original UUID before continuing.
+The receipt binds the original episode, case/decision and evidence fingerprints;
+it does not establish application rollout or completion of source-system operations.
