@@ -7,7 +7,7 @@ description: Configure assistance, reviewed ticket suggestions, access, and usag
 
 Control which assistance your team can use and review proposed changes before they run.
 
-> **Availability:** The revised classification controls and action-state labels described here are awaiting application rollout. Until rollout is confirmed, your screen may show older labels. The central agent workspace and broader module automation are planned separately.
+> **Availability:** The revised classification controls, action-state labels and shared ticket/knowledge access rules described here are awaiting application rollout. Until rollout is confirmed, your screen may show older labels. The central agent workspace and broader module automation are planned separately.
 
 ## Before you start
 
@@ -31,6 +31,8 @@ Suggestions do not change the ticket's type, category, priority, queue, assignee
 ## Review proposed actions
 
 Read [Using AI assistance](../product/ai-assistance.mdx) for the review steps. A proposal must use current configured vocabulary and your current permissions. AI approval does not replace a separate required ticket approval: if that review is required, create the request through its ordinary workflow.
+
+Ticket investigation requires the appropriate ticket-view permission. Creating a general ticket requires `tickets.create`; creating an incident requires `tickets.createIncident`. Knowledge retrieval requires `kb.view` and the article's category access. These permissions do not grant access to other modules. Portal assistance uses the current requester's ticket scope and customer-visible published knowledge, including client audiences.
 
 ## Limits and retained evidence
 
