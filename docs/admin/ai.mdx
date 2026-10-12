@@ -1,0 +1,47 @@
+---
+title: AI settings
+description: Configure assistance, reviewed ticket suggestions, access, and usage limits.
+---
+
+# AI settings
+
+Control which assistance your team can use and review proposed changes before they run.
+
+> **Availability:** The revised classification controls and action-state labels described here are awaiting application rollout. Until rollout is confirmed, your screen may show older labels. The central agent workspace and broader module automation are planned separately.
+
+## Before you start
+
+Open **Settings → Artificial Intelligence**. Viewing configuration requires `ai.config.view`; saving requires `ai.config.edit`. The settings navigation is available to administrators. Staff use of Copilot also requires `ai.copilot.use`, an allowed role, and the relevant permissions for the records or actions requested.
+
+Your operator must configure an AI provider for this deployment. The **Models** tab shows the configured provider and model tiers. Tenant settings choose tiers; they do not supply provider credentials.
+
+## Enable ticket suggestions
+
+1. Configure active priorities for the work-item types your team uses and active, unrestricted service-catalogue categories. Automatic suggestions currently omit categories restricted to selected customers or staff.
+2. Open the **Features** tab and enable **Enable Smart Classification**.
+3. Enable **Suggest Classification on New Tickets**.
+4. Select **Save Configuration**.
+5. Open a newly created ticket. If classification succeeds and the ticket remains unchanged while it is generated, its workspace shows **AI suggestion awaiting review**.
+6. Review the category, priority and confidence. Use the ordinary ticket fields to apply appropriate changes.
+
+Suggestions do not change the ticket's type, category, priority, queue, assignee or status automatically. Confidence is a guide for review, not permission to execute a change. If the ticket changes during generation, a stale suggestion is discarded.
+
+**Enable Auto-Resolution** is unavailable. Matching knowledge or offering an answer does not confirm that an issue is resolved. **Auto-Generate on Ticket Resolve** is also unavailable; use the supported manual article-drafting workflow instead.
+
+## Review proposed actions
+
+Read [Using AI assistance](../product/ai-assistance.mdx) for the review steps. A proposal must use current configured vocabulary and your current permissions. AI approval does not replace a separate required ticket approval: if that review is required, create the request through its ordinary workflow.
+
+## Limits and retained evidence
+
+Use **Security** to configure request limits and log retention. Mandatory action decisions and scheduled delivery claims are kept separately from ordinary expiring telemetry so retrying an old operation cannot repeat its effect. This release does not provide automatic content purging for those retained decisions.
+
+## Common problems
+
+| Problem | Next step |
+| --- | --- |
+| Configuration cannot load | Select **Retry**. Ask an administrator to check your configuration permissions if it persists. |
+| No classification suggestion appears | Check feature settings, active categories and applicable priorities, provider availability, and request limits. A changed ticket may require a new manual investigation. |
+| Proposal is unavailable or expired | Start a new proposal with current information. Do not reuse a decision from another account. |
+| A separate ticket approval is required | Use ordinary ticket creation and its configured review. |
+| The assistant fails to respond | Retry the response or contact your operator. Check the action's current status before asking for another change. |

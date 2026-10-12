@@ -9,7 +9,7 @@ const sidebars: SidebarsConfig = {
       {type: 'category', label: 'Asset management', link: {type: 'doc', id: 'product/assets'}, items: [
         'product/asset-imports', 'product/asset-lifecycle', 'product/asset-approvals',
       ]},
-      'product/projects', 'product/knowledge-base', 'product/customer-portal',
+      'product/projects', 'product/knowledge-base', 'product/customer-portal', 'product/ai-assistance',
     ]},
     'troubleshooting',
   ],
@@ -19,7 +19,7 @@ const sidebars: SidebarsConfig = {
     {type: 'category', label: 'Email', link: {type: 'doc', id: 'admin/email/overview'}, items: [
       'admin/email/outbound', 'admin/email/inbound', 'admin/email/troubleshooting',
     ]},
-    'admin/integrations', 'admin/storage',
+    'admin/integrations', 'admin/storage', 'admin/ai',
   ],
   apiSidebar: [
     {type: 'doc', id: 'api/overview', label: 'API overview'},
