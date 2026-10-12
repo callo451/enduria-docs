@@ -46,4 +46,16 @@ Later replies, assignments or status changes do not make imported history comple
 
 If counts differ from expectations, check the period, client and queue filters, your current ticket access, the import outcome in **Import history**, and your organisation's configured statuses. Configuration renames do not rewrite retained completion history. Work created before lifecycle capture began can also remain unknown.
 
+## Recover an unavailable report
+
+> **Awaiting rollout.** The unavailable-report message and **Try again** control described here are awaiting application rollout.
+
+If the ticket, incident, SLA or overview screen shows **figures unavailable**, the report has failed to load. Treat its figures as unavailable; a failed report does not establish an empty workload or zero measured outcomes. During a retry, loading placeholders replace the previous report.
+
+1. Keep the period, client and queue filters you intended to review, then select **Try again**.
+2. Wait for the loading indicator to finish. Read the figures only after the report loads successfully.
+3. If the report remains unavailable, record the screen, time, selected period and filters, then contact your deployment administrator. Self-hosted operators can follow [ticket reporting verification and recovery](../self-hosting/upgrades#ticket-reporting-verification-and-recovery).
+
+Use the ticket queue to inspect current work while the report is unavailable. Reimporting tickets, changing retained dates or removing an unknown caption is not a reporting repair.
+
 Import rollback is available only for a batch whose created tickets still have no later activity or protected evidence. Follow the [import recovery guidance](./ticket-imports#completed-history-and-recovery) when a batch needs correction; analytics classification does not provide a separate rollback or source-system shutdown action.

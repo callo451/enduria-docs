@@ -19,3 +19,5 @@ Keep multiple restore points, encrypt backup media, restrict access, and store a
 ## Test recovery
 
 Regularly restore into an isolated environment, start a compatible Enduria release, run health checks, and verify representative tenant data and attachments. Record the achieved recovery time and the newest recovered transaction so you can compare them with your recovery objectives.
+
+Include a tenant-scoped ticket report in the restored-environment check. If figures remain unavailable, follow [ticket reporting verification and recovery](./upgrades#ticket-reporting-verification-and-recovery) for releases that include it. Preserve unknown history and the imported backlog's no-SLA-clock rule during recovery.
