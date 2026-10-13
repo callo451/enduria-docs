@@ -7,13 +7,24 @@ description: Configure assistance, reviewed ticket suggestions, access, and usag
 
 Control which assistance your team can use and review proposed changes before they run.
 
-> **Availability:** The revised classification controls, action-state labels, usage controls and shared module access rules described here are awaiting application rollout. Until rollout is confirmed, your screen may show older labels. The central agent workspace and broader module automation are planned separately.
+> **Availability:** The central agent, revised classification controls, usage controls and shared module access rules described here are awaiting application rollout. Until rollout is confirmed, your screen may show older labels. Broader module automation remains planned separately.
 
 ## Before you start
 
-Open **Settings → Artificial Intelligence** using an active staff account with no client binding. Viewing configuration and recent activity requires `ai.config.view`; saving requires `ai.config.edit`. The settings navigation is available to administrators. Staff use of Copilot also requires `ai.copilot.use`, an allowed role, and the relevant permissions for the records or actions requested.
+Open **Settings → Artificial Intelligence** using an active staff account with no client binding. Viewing configuration and recent activity requires `ai.config.view`; saving requires `ai.config.edit`. The settings navigation is available to administrators. Staff use of the Agent requires `ai.copilot.use`, an allowed role, and the relevant permissions for the records or actions requested.
 
 Your operator must configure an AI provider for this deployment. The **Models** tab shows the configured provider and model tiers. Tenant settings choose tiers; they do not supply provider credentials.
+
+## Enable the shared staff Agent
+
+1. Open the **Features** tab and select **Enable Agent**.
+2. Choose a suitable context window.
+3. Select **Save Configuration**.
+4. Ask an eligible staff member to open **Agent** from the sidebar or bottom button and submit a question.
+
+The panel, expanded workspace, briefing questions and record shortcuts share one conversation. Staff do not choose separate module assistants. Their ordinary record permissions still apply, and proposed ticket actions need a separate human decision. The existing Copilot permission key remains the access requirement.
+
+Use the **Security** tab's usage profile to choose a starting limit. See [Using AI assistance](../product/ai-assistance) for saved drafts, context, stopping and checking action outcomes. Portal assistance has its own portal controls and requester limits.
 
 ## Enable ticket suggestions
 
@@ -47,7 +58,7 @@ Staff assistance uses the relevant module permissions in addition to AI access. 
 | Service catalogue | `catalog.view`, active items and the customer's current audience where applicable |
 | Ticket analytics | `tickets.view.all` or `tickets.view.own`; totals retain the account's ticket scope |
 
-AI Search can return bounded charts and tables. A truncated group list does not mean the remaining records are absent. SLA reports keep response and resolution outcomes separate; missing clocks remain unknown. Asset analyses count active register records by default. An asset's configured status and operational state are separate facts.
+The Agent can return charts and tables with a limited number of results. A shortened group list does not mean the remaining records are absent. SLA reports keep response and resolution outcomes separate; missing clocks remain unknown. Asset analyses count active register records by default. An asset's configured status and operational state are separate facts.
 
 Communication drafts prepare text for review. They do not send emails or notifications. Classification and queue guidance apply no changes. Catalogue guidance opens the selected service's normal request form; it does not submit a service request or bypass required fields and approvals.
 

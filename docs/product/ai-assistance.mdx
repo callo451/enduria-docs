@@ -7,11 +7,37 @@ description: Ask for help, review suggestions, and distinguish proposals from co
 
 Use AI assistance to investigate work and prepare changes that you can review. The available records and actions depend on your account, permissions, and your administrator's feature settings.
 
-> **Availability:** The action-state labels, reviewed classification behavior and shared module access rules described here are awaiting application rollout. The planned central agent panel and expanded workspace are not included in this increment.
+> **Availability:** The central agent, revised action-state labels and shared module access rules described here are awaiting application rollout. Your current service may still show the older Copilot and AI Search screens.
 
 ## Ask for help
 
-Staff can use **AI Copilot**, **AI Search**, or the AI briefing conversation when enabled. Describe the record or question clearly, check cited information, and review any proposed action. An answer is guidance; it does not establish that a ticket is resolved or a change has been completed.
+Staff use one **Agent** when enabled for their account. Open it from the sidebar or the **Agent** button at the bottom of a staff page. AI briefing questions and record shortcuts enter this same conversation. Existing AI Search links open the expanded agent workspace.
+
+1. Open **Agent** and describe what you need in **Message the agent**.
+2. Select **Send**, or press Enter. Use Shift+Enter for a new line.
+3. Check the returned sources and any **Review required** action.
+4. Select **Expand agent workspace** when you need more space. Your conversation, draft and selected context stay with you.
+
+An answer is guidance; it does not establish that a ticket is resolved or a change has been completed. There is no need to choose a different assistant for each module.
+
+## Keep your work when moving between pages
+
+**Close agent panel** hides the panel while keeping the same conversation. Changing staff pages or moving between the panel and workspace does not start a new request. Drafts save automatically; wait for **Draft saved** before reloading the browser. If a draft cannot save, its text stays in the current app session so you can try again.
+
+Use **Conversations** to choose a recent saved conversation. **New conversation** starts a separate task without changing earlier proposals. The agent shows the latest 20 requests in a conversation; start a new conversation when it asks you to continue there. Older AI Search records are not converted into new agent conversations.
+
+Use **Stop response** to stop new generation calls and disconnect the streamed answer. A provider call already sent may still finish. Stopping does not reverse an applied action or cancel a pending review. After an interrupted or lost response, select **Check saved status** before starting another request. A retry of the same saved submission does not automatically send the model request again.
+
+Earlier response details may be withheld when a source changes or becomes unreadable. Current retained action outcomes can still appear. Ask a fresh question for up-to-date guidance.
+
+## Add a record to your next request
+
+1. Open a ticket, active asset, accessible project or published knowledge article.
+2. Select its **Ask agent** control.
+3. Check the named record and select **Add context**.
+4. Add your question and select **Send**.
+
+Context applies to the next request. It does not change the target of an existing proposal. Select **Remove** to clear the next request's context, or **Dismiss** to ignore a suggested record or question. If there is already a draft, a suggested question is offered for you to add rather than replacing your text.
 
 Use a complete ticket number or record ID when asking about one ticket. Use keywords when searching. Ticket details include a bounded recent conversation, so open the linked ticket for its complete history.
 
@@ -21,7 +47,7 @@ Knowledge answers use published articles available to your account. Drafts and p
 
 ## Investigate across modules
 
-Use AI Search for questions about accessible projects, assets and ticket analytics. Use a complete project number or code, or an exact asset tag, serial number or record ID, when asking for one record. Use search keywords to find candidates first if you do not know the exact identifier. Open the cited workspace to inspect the complete record.
+Use the Agent for questions about accessible projects, assets and ticket analytics. Use a complete project number or code, or an exact asset tag, serial number or record ID, when asking for one record. Use search keywords to find candidates first if you do not know the exact identifier. Open the cited workspace to inspect the complete record.
 
 Project membership and management permissions determine which projects can appear. Project financial information needs a separate budget-view permission. Asset investigation returns selected register and reported device facts; it does not run repairs, move custody or restore an archived asset. Active assets are used by default.
 
@@ -31,7 +57,7 @@ If specialist assistance prepares an email or notification, review the text your
 
 ## Review a proposed change
 
-1. Look for **Review required** and **Review proposed action before execution** in the response.
+1. Look for **Review required** and **Review proposed action** in the response. A completed action uses **View action outcome**.
 2. Open the review link using the same account that requested the action.
 3. Check the destination record and every saved field, including whether a note is internal or public.
 4. Select **Approve action** to execute the saved proposal, or **Reject** to leave it unexecuted.
