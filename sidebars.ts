@@ -19,7 +19,7 @@ const sidebars: SidebarsConfig = {
     {type: 'category', label: 'Email', link: {type: 'doc', id: 'admin/email/overview'}, items: [
       'admin/email/outbound', 'admin/email/inbound', 'admin/email/troubleshooting',
     ]},
-    'admin/integrations', 'admin/storage', 'admin/ai',
+    'admin/integrations', 'admin/storage', 'admin/ai', 'admin/agent-access',
   ],
   apiSidebar: [
     {type: 'doc', id: 'api/overview', label: 'API overview'},

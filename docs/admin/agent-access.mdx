@@ -1,0 +1,69 @@
+---
+title: Agent access
+description: Prepare and review bounded access policies for agents, with retained publication and revocation history.
+---
+
+# Agent access
+
+Prepare a policy that states which modules, actions and records an agent may use. Keep saved drafts separate from published access, and review the exact scope before publishing.
+
+> **Availability:** Agent access administration is awaiting application rollout. This increment prepares and retains policies. New external-agent connection setup, credentials and execution of reviewed actions are not yet available. Publishing a policy does not connect an agent or enable new MCP tools.
+
+## Before you start
+
+Open **Settings → Agent access** using an active staff account with no client binding. Viewing requires `ai.connections.view`; creating, editing, disabling and revoking require `ai.connections.manage`; publishing additionally requires `ai.connections.publish`. Manage and publish permissions do not imply view permission.
+
+Your account also needs the permissions for each module action you select. Client names require `clients.view` in an MSP organisation. Delegate names require `users.view`; only active staff accounts without a client binding appear. These selectors omit customer accounts and records from other organisations.
+
+If the page is missing after an upgrade, ask the administrator responsible for roles to check the three agent-access permissions. Existing roles require explicit review and reconciliation; custom roles are not expanded automatically.
+
+## Create a disabled connection
+
+1. Enter a **Connection name** that identifies the intended agent or automation.
+2. Choose its **Identity**. A delegated connection also requires a listed staff delegate. The type and delegate are fixed when the connection is created.
+3. Select **Create disabled connection**.
+
+The connection has no published policy and starts disabled. Its initial draft grants no record scope. No credential is issued.
+
+## Choose and save access
+
+1. Select the connection from the list.
+2. Choose an **Access mode**: **Disabled**, **Read only**, or **Read + reviewed proposals**. Automatic effects are unavailable. Required domain approvals still apply when reviewed execution becomes available.
+3. Use **Tickets only**, **Assets only**, or **All available modules** as a starting point, then check the individual actions. Read-only mode permits read actions only. All selection freezes the currently publishable actions; later additions are not automatically included in an existing publication.
+4. Choose whether internal records are included, select the permitted clients, and set any client exclusions. Exclusions take precedence. An enabled policy needs internal records or at least one selected client.
+5. Select only the sensitive field families needed: project financial facts, asset purchase details, directory email addresses or internal knowledge. A field selection does not replace the relevant module permission.
+6. Set the per-run call, output-byte and time bounds. Choose an **Expiry (your local time)** within the next 366 days.
+7. Select **Save draft**.
+
+Saving changes the draft revision. It does not change the published policy. **Discard edits** reloads the saved draft. If another administrator saved first, reload the connection and review their changes before saving again.
+
+## Review and publish
+
+1. Save any edits, then select **Review saved draft**.
+2. Inspect the connection type and delegate, mode, selected and excluded clients, internal record access, actions, sensitive fields, expiry and bounds. If your current permissions do not disclose a name, the retained identifier appears instead.
+3. Enter a **Publication reason**.
+4. Select **Publish reviewed policy**.
+
+The exact reviewed policy becomes a retained, numbered publication. If the saved revision or preview has changed, publication is refused; reload and review again. **Inspect published access** shows the publication separately from the editable draft. **Current policy authority** reflects current permissions, expiry and connection status; a retained publication alone does not guarantee usable authority.
+
+Later policy reductions narrow authority for work bound to an older publication. A later expansion does not enlarge that older publication's ceiling. Loss of an owner's, publisher's or delegate's required authority, an unavailable selected client, expiry, disabling or revocation can prevent use. Connection runtime and pending-work enforcement are still awaiting their subsequent release.
+
+## Disable or revoke
+
+1. Open the connection and select **Disable connection** or **Revoke connection**.
+2. Enter a reason and confirm the named action in the dialog.
+
+Disabling retains the connection and its evidence; a new reviewed publication can activate it again. Revocation is permanent: create a new connection if access is needed later. Published policies and decision history remain available for inspection. The page shows up to 50 recent publications and events and indicates when more history exists.
+
+## Common problems
+
+| Problem | Next step |
+| --- | --- |
+| Access records fail to load | Select **Reload**. Check current agent-access permissions if the error persists. |
+| An action is unavailable | Check the relevant module permission and access mode. Read-only excludes drafts and proposals. |
+| A client or delegate is missing | Check active status, account scope and client/directory visibility. Lists show at most 1,000 choices and indicate truncation. |
+| Saving or publication reports a conflict | Reload the connection, inspect the saved draft and obtain a new preview. |
+| Current authority is unavailable | Check the connection status, expiry, selected clients and current owner, publisher and delegate permissions. |
+| The agent cannot connect after publication | New connection setup is not available in this increment. The existing MCP endpoint keeps its dedicated-key authentication and ticket operations. |
+
+For staff assistance and provider settings, see [AI settings](ai.mdx) and [Using AI assistance](../product/ai-assistance.mdx).
