@@ -62,7 +62,7 @@ The Agent can return charts and tables with a limited number of results. A short
 
 Communication drafts prepare text for review. They do not send emails or notifications. Classification and queue guidance apply no changes. Catalogue guidance opens the selected service's normal request form; it does not submit a service request or bypass required fields and approvals.
 
-These staff capabilities do not expand the existing MCP endpoint. Its dedicated keys still support the documented ticket operations. [Agent access](agent-access.mdx) prepares separately reviewed module/action policies and is awaiting rollout; new external connections and broader automation remain planned.
+Existing dedicated MCP keys keep their documented ticket operations. Published service-connection keys provide registered module reads through [Agent access](agent-access.mdx); this setup is awaiting rollout. Reviewed connection commands, delegated sign-in and broader automation remain planned separately.
 
 ## Review an external agent's ticket proposal
 
@@ -79,7 +79,7 @@ New proposals expire after at most 30 minutes, or sooner if the proposing key ex
 
 If a decision response is lost, retry the same decision or select **Reload proposal** to inspect its recorded outcome before asking the client for another proposal. The client must reuse its request key for retries of the same fields. Different fields require a new request key and review. If the proposing key was revoked, approval is refused; an authorised reviewer can still inspect and reject or cancel the saved intent.
 
-Read-only MCP keys can search bounded organisation-wide ticket summaries; they cannot prepare proposals. The existing MCP tools do not provide asset actions, assignment, remote remediation or OAuth connection setup. An operator must enable and configure the endpoint before an external client can connect.
+Read-only dedicated ticket keys can search bounded organisation-wide ticket summaries; they cannot prepare proposals. Those ticket tools do not provide asset actions, assignment, remote remediation or OAuth connection setup. Service keys use the separately published module and client scope in [Agent access](agent-access.mdx). An operator must enable and configure the endpoint before an external client can connect.
 
 ## Limits and retained evidence
 

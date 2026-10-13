@@ -7,7 +7,7 @@ description: Prepare and review bounded access policies for agents, with retaine
 
 Prepare a policy that states which modules, actions and records an agent may use. Keep saved drafts separate from published access, and review the exact scope before publishing.
 
-> **Availability:** Agent access administration is awaiting application rollout. This increment prepares and retains policies. New external-agent connection setup, credentials and execution of reviewed actions are not yet available. Publishing a policy does not connect an agent or enable new MCP tools.
+> **Availability:** Agent access administration and service-connection keys described here are awaiting application rollout. Keys provide registered reads after access is published. Execution of reviewed actions, delegated sign-in and automation remain separate planned capabilities. Publishing a policy alone does not connect an agent.
 
 ## Before you start
 
@@ -46,11 +46,41 @@ Saving changes the draft revision. It does not change the published policy. **Di
 
 The exact reviewed policy becomes a retained, numbered publication. If the saved revision or preview has changed, publication is refused; reload and review again. **Inspect published access** shows the publication separately from the editable draft. **Current policy authority** reflects current permissions, expiry and connection status; a retained publication alone does not guarantee usable authority.
 
-Later policy reductions narrow authority for work bound to an older publication. A later expansion does not enlarge that older publication's ceiling. Loss of an owner's, publisher's or delegate's required authority, an unavailable selected client, expiry, disabling or revocation can prevent use. Connection runtime and pending-work enforcement are still awaiting their subsequent release.
+Later policy reductions narrow authority for work bound to an older publication. A later expansion does not enlarge that older publication's ceiling. Loss of an owner's, publisher's or delegate's required authority, an unavailable selected client, expiry, disabling or revocation can prevent use. Service keys and requests also keep their original access ceilings. Enforcement for durable business work remains a separate release.
 
 Publication also retains the publisher's and any delegate's authority at review time. Later role changes cannot silently turn an older policy's access from own records into all records. Current record visibility is checked for the required people as well as the selected client scope. If an older policy becomes unavailable after an upgrade, check current authority and expiry, then review and publish a fresh saved draft; an older publication's authority is never reconstructed from today's broader roles.
 
-## Disable or revoke
+## Connect an external agent with a service key
+
+You need both manage and publish permissions and the selected module permissions to create or revoke keys. Your operator must enable the MCP endpoint, and your organisation's API access must be enabled. A key also retains its creator's original permissions; later permission increases do not enlarge that key's access.
+
+1. Choose a connection created with the **External service agent** identity and publish its reviewed access.
+2. In **Connect an agent**, select **Copy address**.
+3. Enter a **Key name**, choose **Key expires** within the published access period, and select **Standard** or **Lower usage**.
+4. Select **Create connection key**, then **Copy key**. Save it in your agent's secure credential settings before selecting **Done saving key**.
+5. Configure the agent to use the copied MCP address and the key as an HTTP Bearer token. Keep the key out of the address.
+6. Ask the agent to list its tools and perform an allowed read. The available tools reflect the connection's modules, client scope and current permissions.
+
+The endpoint uses Streamable HTTP with JSON responses. Use a client that accepts a Bearer token; browser sign-in through delegated OAuth is not available yet. Existing dedicated ticket keys keep their original ticket-only access. A service key cannot be used as a REST API key, and it cannot execute a reviewed action in this release.
+
+The secret is shown once. If the response is lost, select **Refresh keys** and check whether the key was created. Repeating the same saved creation cannot show its secret again. Revoke an unsaved key before deliberately creating a replacement.
+
+Existing keys retain their original grant. Publish broader access and create a new key when expansion is intended. A reduced or disabled policy immediately restricts new reads; a result becoming unreadable while it is retrieved is withheld.
+
+### Choose a usage profile
+
+Standard permits up to 30 requests a minute and 500 an hour per key. Lower usage permits 10 a minute and 100 an hour. Each key has up to three simultaneous request slots. Shared organisation limits also apply, and each request must finish within its retained deadline, up to 60 seconds or the shorter published duration. These limits count MCP requests, including setup and tool discovery; they are separate from AI model usage.
+
+Each connection may have five active keys. The screen shows all active keys and recent history, up to 25 keys. A connection retains at most 250 issued keys; create a new reviewed connection when that retained limit is reached.
+
+### Revoke one key
+
+1. Find the key in **Connection keys** and select **Revoke key**.
+2. Check its name, enter a reason, and confirm **Revoke key**.
+
+New calls are refused. Revocation does not reverse earlier actions. To replace a working key, create and configure another within the active-key limit, verify it, then revoke the old key.
+
+## Disable or revoke a connection
 
 1. Open the connection and select **Disable connection** or **Revoke connection**.
 2. Enter a reason and confirm the named action in the dialog.
@@ -66,6 +96,8 @@ Disabling retains the connection and its evidence; a new reviewed publication ca
 | A client or delegate is missing | Check active status, account scope and client/directory visibility. Lists show at most 1,000 choices and indicate truncation. |
 | Saving or publication reports a conflict | Reload the connection, inspect the saved draft and obtain a new preview. |
 | Current authority is unavailable | Check the connection status, expiry, selected clients and current owner, publisher and delegate permissions. |
-| The agent cannot connect after publication | New connection setup is not available in this increment. The existing MCP endpoint keeps its dedicated-key authentication and ticket operations. |
+| The agent cannot connect after publication | Check the service identity, MCP address, saved Bearer key, API enablement, expiry and current authority. Delegated sign-in and automation are not available yet. |
+| The key secret was not saved | Select **Refresh keys**. Revoke the unsaved key and deliberately create a replacement; its secret cannot be retrieved. |
+| A request limit is reached | Wait before retrying. Check the selected usage profile and whether other requests are still running. |
 
 For staff assistance and provider settings, see [AI settings](ai.mdx) and [Using AI assistance](../product/ai-assistance.mdx).

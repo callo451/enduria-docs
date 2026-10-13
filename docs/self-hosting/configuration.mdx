@@ -21,3 +21,15 @@ Keep deployment configuration outside the container image and source repository.
 Restart the affected service after changing environment values. Validate `/api/health`, sign-in, and one representative background job after material configuration changes.
 
 Refer to the release's example environment file and deployment configuration for the complete variable list; supported variables can change between releases.
+
+## Enable MCP service connections
+
+> **Availability:** Scoped service keys are awaiting application rollout. Existing dedicated ticket keys keep their original access.
+
+1. Set `MCP_ENABLED=true` for the application service.
+2. Set `MCP_PUBLIC_URL` to its public root address, for example `https://support.example.com/`. Do not include `/api/mcp`, credentials, a query or a fragment.
+3. Use HTTPS and configure the reverse proxy to preserve the public Host header. HTTP is accepted only for loopback testing.
+4. Restart the application service and verify normal sign-in and `/api/health`.
+5. Ask an authorised administrator to publish service access and create a key through [Agent access](../admin/agent-access.mdx). Organisation API access must remain enabled.
+
+The administrator copies the complete MCP address from that screen. Clients authenticate each request with a Bearer key. JSON Streamable HTTP is supported; GET event streams and delegated OAuth sign-in are not available in this increment. MCP reads do not require Enduria to call an AI model provider.
