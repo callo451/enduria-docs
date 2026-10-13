@@ -7,7 +7,7 @@ description: Configure assistance, reviewed ticket suggestions, access, and usag
 
 Control which assistance your team can use and review proposed changes before they run.
 
-> **Availability:** The revised classification controls, action-state labels and shared ticket/knowledge access rules described here are awaiting application rollout. Until rollout is confirmed, your screen may show older labels. The central agent workspace and broader module automation are planned separately.
+> **Availability:** The revised classification controls, action-state labels and shared module access rules described here are awaiting application rollout. Until rollout is confirmed, your screen may show older labels. The central agent workspace and broader module automation are planned separately.
 
 ## Before you start
 
@@ -33,6 +33,25 @@ Suggestions do not change the ticket's type, category, priority, queue, assignee
 Read [Using AI assistance](../product/ai-assistance.mdx) for the review steps. A proposal must use current configured vocabulary and your current permissions. AI approval does not replace a separate required ticket approval: if that review is required, create the request through its ordinary workflow.
 
 Ticket investigation requires the appropriate ticket-view permission. Creating a general ticket requires `tickets.create`; creating an incident requires `tickets.createIncident`. Knowledge retrieval requires `kb.view` and the article's category access. These permissions do not grant access to other modules. Portal assistance uses the current requester's ticket scope and customer-visible published knowledge, including client audiences.
+
+## Control module access
+
+Staff assistance uses the relevant module permissions in addition to AI access. Staff accounts bound to a client must use their supported portal assistance; the staff AI surfaces do not provide tenant-wide access for those accounts.
+
+| Information requested | Required scope |
+| --- | --- |
+| Asset register and reported device facts | `assets.view` for unbound staff |
+| Directory profiles | `users.view`; profiles exclude credentials and permission overrides |
+| Projects | `projects.view.all`, managed projects through `projects.view.own`, or member projects through `projects.view.assigned` |
+| Project financial facts | Accessible project plus `projects.budget.view` |
+| Service catalogue | `catalog.view`, active items and the customer's current audience where applicable |
+| Ticket analytics | `tickets.view.all` or `tickets.view.own`; totals retain the account's ticket scope |
+
+AI Search can return bounded charts and tables. A truncated group list does not mean the remaining records are absent. SLA reports keep response and resolution outcomes separate; missing clocks remain unknown. Asset analyses count active register records by default. An asset's configured status and operational state are separate facts.
+
+Communication drafts prepare text for review. They do not send emails or notifications. Classification and queue guidance apply no changes. Catalogue guidance opens the selected service's normal request form; it does not submit a service request or bypass required fields and approvals.
+
+These staff capabilities do not expand the existing MCP endpoint. Its dedicated keys still support the documented ticket operations. Per-module external-agent grants and broader automation remain planned.
 
 ## Limits and retained evidence
 
