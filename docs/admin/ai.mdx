@@ -53,6 +53,23 @@ Communication drafts prepare text for review. They do not send emails or notific
 
 These staff capabilities do not expand the existing MCP endpoint. Its dedicated keys still support the documented ticket operations. [Agent access](agent-access.mdx) prepares separately reviewed module/action policies and is awaiting rollout; new external connections and broader automation remain planned.
 
+## Review an external agent's ticket proposal
+
+> **Availability:** The revised MCP review, cancellation and stale outcomes are awaiting application rollout. Existing saved proposals retain their original approval and rejection flow.
+
+An external MCP client can prepare a general support ticket and return a review link. Its dedicated key cannot approve or create the ticket. Review requires an active staff account with no client binding and both `tickets.create` and `tickets.view.all`. It does not require Copilot to be enabled.
+
+1. Open the returned Enduria review link and sign in with your staff account.
+2. On **Review ticket proposal**, check the title, description, priority and category. You will become the ticket requester and be recorded as its creator and approver.
+3. Select **Approve and create ticket**, **Reject**, or, for a new proposal, **Cancel proposal**.
+4. Read the recorded status. An **executed** result includes a link to the created ticket. Rejection and cancellation create no ticket.
+
+New proposals expire after at most 30 minutes, or sooner if the proposing key expires. Current staff permissions, key authority, API enablement and configured ticket choices are checked again at approval. If relevant configuration changed, the proposal becomes **stale** and no ticket is created. Request a fresh proposal and review its updated fields. A required ordinary ticket approval must still use the normal ticket workflow.
+
+If a decision response is lost, retry the same decision or select **Reload proposal** to inspect its recorded outcome before asking the client for another proposal. The client must reuse its request key for retries of the same fields. Different fields require a new request key and review. If the proposing key was revoked, approval is refused; an authorised reviewer can still inspect and reject or cancel the saved intent.
+
+Read-only MCP keys can search bounded organisation-wide ticket summaries; they cannot prepare proposals. The existing MCP tools do not provide asset actions, assignment, remote remediation or OAuth connection setup. An operator must enable and configure the endpoint before an external client can connect.
+
 ## Limits and retained evidence
 
 Use **Security** to configure request limits and log retention. Mandatory action decisions and scheduled delivery claims are kept separately from ordinary expiring telemetry so retrying an old operation cannot repeat its effect. This release does not provide automatic content purging for those retained decisions.
