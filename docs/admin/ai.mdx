@@ -7,11 +7,11 @@ description: Configure assistance, reviewed ticket suggestions, access, and usag
 
 Control which assistance your team can use and review proposed changes before they run.
 
-> **Availability:** The revised classification controls, action-state labels and shared module access rules described here are awaiting application rollout. Until rollout is confirmed, your screen may show older labels. The central agent workspace and broader module automation are planned separately.
+> **Availability:** The revised classification controls, action-state labels, usage controls and shared module access rules described here are awaiting application rollout. Until rollout is confirmed, your screen may show older labels. The central agent workspace and broader module automation are planned separately.
 
 ## Before you start
 
-Open **Settings → Artificial Intelligence**. Viewing configuration requires `ai.config.view`; saving requires `ai.config.edit`. The settings navigation is available to administrators. Staff use of Copilot also requires `ai.copilot.use`, an allowed role, and the relevant permissions for the records or actions requested.
+Open **Settings → Artificial Intelligence** using an active staff account with no client binding. Viewing configuration and recent activity requires `ai.config.view`; saving requires `ai.config.edit`. The settings navigation is available to administrators. Staff use of Copilot also requires `ai.copilot.use`, an allowed role, and the relevant permissions for the records or actions requested.
 
 Your operator must configure an AI provider for this deployment. The **Models** tab shows the configured provider and model tiers. Tenant settings choose tiers; they do not supply provider credentials.
 
@@ -72,7 +72,24 @@ Read-only MCP keys can search bounded organisation-wide ticket summaries; they c
 
 ## Limits and retained evidence
 
-Use **Security** to configure request limits and log retention. Mandatory action decisions and scheduled delivery claims are kept separately from ordinary expiring telemetry so retrying an old operation cannot repeat its effect. This release does not provide automatic content purging for those retained decisions.
+Set a usage profile to keep AI activity within your team's limits:
+
+1. Open the **Security** tab.
+2. In **AI usage limits**, choose **Standard** or **Lower usage**. Lower usage allows shorter requests and fewer simultaneous calls.
+3. Select **Save Configuration**.
+4. Use **Recent AI activity → Refresh activity** to check recent requests.
+
+These limits cover staff assistance, portal help and background AI work. A request may make several model calls, including retries. Increasing a limit affects new requests; a running request keeps its original ceiling. Reductions apply before its next model call. Separate **Request limits** control how often people can start AI requests.
+
+Recording caption batches share one request budget. If a batch reaches a limit, no caption changes from the refused batch are saved. Use a smaller batch where supported, or ask your administrator to adjust the limits. When knowledge AI is disabled, basic captions can still be prepared. Review captions before publishing.
+
+Open **Advanced limits and cost estimates** only when you need individual limits or a cost estimate. Tokens measure the amount of text processed. A call limit of 0 pauses new calls. Enter input and output prices per million tokens for the models shown, select **Use entered prices**, then **Save Configuration**. Prices use the displayed currency. A price of 0 must be an explicit choice; an unknown price is left unavailable.
+
+The optional **Estimated hourly cost limit** uses your entered prices. It is an estimate, not an invoice; provider discounts and additional charges may differ. If a required price is missing, or unpriced calls remain in the last hour, new calls pause until the cost limit can be checked. Leave the amount blank to use the other usage limits without an estimated cost limit.
+
+**Recent AI activity** shows up to 25 requests. **Response finished** means the AI response ended; it does not mean a proposed ticket change ran. Check the action's own review. **Usage unavailable** keeps a cautious allowance against the limit until confirmed usage arrives. **Cost unavailable** means no compatible price is recorded. Neither means zero usage or free service. The **Support reference** can help your operator investigate a request without sharing conversation text.
+
+Use the remaining **Security** controls for log retention. Mandatory action decisions, model-call evidence and scheduled delivery claims are kept separately from ordinary expiring activity logs. This release does not provide automatic content purging for those retained records.
 
 ## Common problems
 
@@ -83,3 +100,5 @@ Use **Security** to configure request limits and log retention. Mandatory action
 | Proposal is unavailable or expired | Start a new proposal with current information. Do not reuse a decision from another account. |
 | A separate ticket approval is required | Use ordinary ticket creation and its configured review. |
 | The assistant fails to respond | Retry the response or contact your operator. Check the action's current status before asking for another change. |
+| A usage limit pauses AI | Check recent activity and wait for the hourly allowance to recover, or adjust your limits. Avoid repeatedly submitting the same action. |
+| A cost limit pauses AI | Check prices for every configured model and whether recent requests have unavailable prices. Wait for those calls to leave the hourly window, or clear the estimated cost limit while keeping other usage limits. |
