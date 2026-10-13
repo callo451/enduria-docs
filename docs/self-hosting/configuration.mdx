@@ -32,4 +32,4 @@ Refer to the release's example environment file and deployment configuration for
 4. Restart the application service and verify normal sign-in and `/api/health`.
 5. Ask an authorised administrator to publish service access and create a key through [Agent access](../admin/agent-access.mdx). Organisation API access must remain enabled.
 
-The administrator copies the complete MCP address from that screen. Clients authenticate each request with a Bearer key. JSON Streamable HTTP is supported; GET event streams and delegated OAuth sign-in are not available in this increment. MCP reads do not require Enduria to call an AI model provider.
+The administrator copies the complete MCP address from that screen. Clients authenticate each request with a Bearer key. JSON Streamable HTTP is supported; GET event streams and delegated OAuth sign-in are not available in this increment. Allowed reads and preparation of reviewed ticket changes do not require Enduria to call an AI model provider. A signed-in staff reviewer approves changes in Enduria; the Bearer key cannot make that decision.

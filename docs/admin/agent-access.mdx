@@ -7,7 +7,7 @@ description: Prepare and review bounded access policies for agents, with retaine
 
 Prepare a policy that states which modules, actions and records an agent may use. Keep saved drafts separate from published access, and review the exact scope before publishing.
 
-> **Availability:** Agent access administration and service-connection keys described here are awaiting application rollout. Keys provide registered reads after access is published. Execution of reviewed actions, delegated sign-in and automation remain separate planned capabilities. Publishing a policy alone does not connect an agent.
+> **Availability:** Agent access administration, service keys and reviewed ticket actions described here are awaiting application rollout. Delegated sign-in and automation remain planned separately. Publishing a policy alone does not connect an agent.
 
 ## Before you start
 
@@ -28,7 +28,7 @@ The connection has no published policy and starts disabled. Its initial draft gr
 ## Choose and save access
 
 1. Select the connection from the list.
-2. Choose an **Access mode**: **Disabled**, **Read only**, or **Read + reviewed proposals**. Automatic effects are unavailable. Required domain approvals still apply when reviewed execution becomes available.
+2. Choose an **Access mode**: **Disabled**, **Read only**, or **Read + reviewed proposals**. Ticket proposals need a separate human decision. Any other required approvals still apply.
 3. Use **Tickets only**, **Assets only**, or **All available modules** as a starting point, then check the individual actions. Read-only mode permits read actions only. All selection freezes the currently publishable actions; later additions are not automatically included in an existing publication.
 4. Choose whether internal records are included, select the permitted clients, and set any client exclusions. Exclusions take precedence. An enabled policy needs internal records or at least one selected client.
 5. Select only the sensitive field families needed: project financial facts, asset purchase details, directory email addresses or internal knowledge. A field selection does not replace the relevant module permission.
@@ -46,7 +46,7 @@ Saving changes the draft revision. It does not change the published policy. **Di
 
 The exact reviewed policy becomes a retained, numbered publication. If the saved revision or preview has changed, publication is refused; reload and review again. **Inspect published access** shows the publication separately from the editable draft. **Current policy authority** reflects current permissions, expiry and connection status; a retained publication alone does not guarantee usable authority.
 
-Later policy reductions narrow authority for work bound to an older publication. A later expansion does not enlarge that older publication's ceiling. Loss of an owner's, publisher's or delegate's required authority, an unavailable selected client, expiry, disabling or revocation can prevent use. Service keys and requests also keep their original access ceilings. Enforcement for durable business work remains a separate release.
+Later policy reductions narrow authority for work bound to an older publication. A later expansion does not enlarge that older publication's ceiling. Loss of an owner's, publisher's or delegate's required authority, an unavailable selected client, expiry, disabling or revocation can prevent use. Service keys, requests and ticket proposals also keep their original access limits.
 
 Publication also retains the publisher's and any delegate's authority at review time. Later role changes cannot silently turn an older policy's access from own records into all records. Current record visibility is checked for the required people as well as the selected client scope. If an older policy becomes unavailable after an upgrade, check current authority and expiry, then review and publish a fresh saved draft; an older publication's authority is never reconstructed from today's broader roles.
 
@@ -61,11 +61,11 @@ You need both manage and publish permissions and the selected module permissions
 5. Configure the agent to use the copied MCP address and the key as an HTTP Bearer token. Keep the key out of the address.
 6. Ask the agent to list its tools and perform an allowed read. The available tools reflect the connection's modules, client scope and current permissions.
 
-The endpoint uses Streamable HTTP with JSON responses. Use a client that accepts a Bearer token; browser sign-in through delegated OAuth is not available yet. Existing dedicated ticket keys keep their original ticket-only access. A service key cannot be used as a REST API key, and it cannot execute a reviewed action in this release.
+The endpoint uses Streamable HTTP with JSON responses. Use a client that accepts a Bearer token; browser sign-in through delegated OAuth is not available yet. Existing dedicated ticket keys keep their original ticket-only access. A service key cannot be used as a REST API key. An external agent can prepare allowed ticket proposals; a signed-in staff reviewer makes the change.
 
 The secret is shown once. If the response is lost, select **Refresh keys** and check whether the key was created. Repeating the same saved creation cannot show its secret again. Revoke an unsaved key before deliberately creating a replacement.
 
-Existing keys retain their original grant. Publish broader access and create a new key when expansion is intended. A reduced or disabled policy immediately restricts new reads; a result becoming unreadable while it is retrieved is withheld.
+Existing keys retain their original grant. Publish broader access and create a new key when expansion is intended. A reduced or disabled policy restricts new reads and approvals of saved proposals; unreadable results are withheld.
 
 ### Choose a usage profile
 
@@ -79,6 +79,24 @@ Each connection may have five active keys. The screen shows all active keys and 
 2. Check its name, enter a reason, and confirm **Revoke key**.
 
 New calls are refused. Revocation does not reverse earlier actions. To replace a working key, create and configure another within the active-key limit, verify it, then revoke the old key.
+
+## Review an external agent's change
+
+Select **Read + reviewed proposals** and the ticket actions you need before publishing access and creating a key. Available actions are support-ticket or incident creation, status, priority or category, assignment and notes. The key cannot approve its own proposal.
+
+1. Ask the agent to prepare the change and open the returned review link in Enduria.
+2. Sign in with an active staff account without a client binding. You need all-ticket view permission and the permission to make the proposed change.
+3. On **Review proposed action**, check the destination ticket, **Before this change**, client, proposed fields and note visibility.
+4. Select **Approve action**, **Reject**, or **Cancel proposal**.
+5. Check the recorded status and open the ticket to verify the result.
+
+Approval records you as the person making the change. For a new ticket or incident, you are also the requester. Creation chooses the reviewed client or your organisation; other ticket links and fields use separate ordinary workflows.
+
+Proposals expire after at most 30 minutes, or earlier when the key or published access expires. Changed records, retired choices or reduced access can make a proposal **stale**. No change runs in that case; request a fresh proposal. Required ticket and change approvals still apply.
+
+If saved ticket or client details are no longer available, approval is disabled. Reject or cancel the proposal and request a fresh one. Revoking a key stops approval of its pending changes; an eligible human can still close the saved review.
+
+After a lost response, select **Reload proposal** or retry the same decision to inspect the saved outcome. Ask the external client to keep the same request key when retrying exactly the same proposal. New fields need a new request key and review. Retrying a completed decision does not apply the change again.
 
 ## Disable or revoke a connection
 
