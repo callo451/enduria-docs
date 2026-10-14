@@ -103,14 +103,6 @@ After classification is applied, a suitably authorised staff member may see **Re
 
 Existing ownership is preserved. If no supported unambiguous destination is available, or the ticket, queue, member access or policy changes, route the ticket through its ordinary fields. A completed routing decision does not run twice. The routing window ends within 30 minutes of classification being applied; opening or preparing another review does not extend it. See [routing setup and recovery](../admin/agent-access.mdx#review-routing-after-classification). This capability is awaiting rollout.
 
-## Label tickets for a quality check
-
-An administrator may ask you to label a triage dataset. You need all-ticket view/edit and Agent access view permission, an active staff account with no client restriction, and you must be a different person from whoever captured it.
-
-Open **Settings → Agent access → Check triage quality**, choose the dataset and select **Label ticket**. Read its source, choose the expected category and priority or mark it as needing manual triage, confirm that you labelled independently, then select **Save label**. AI suggestions are hidden in this flow. Before sealing, **Review label** lets you correct an answer while retaining its earlier version. Your label does not edit the ticket. After a lost response, reload the saved dataset before retrying.
-
-Dataset preparation, model evaluation and frozen comparison are awaiting rollout. Sealing fixes the final labels before an authorised administrator starts an evaluation; labelling itself sends no model request and changes no ticket. Comparisons use a separate holdout kept out of model tuning. Independent quality certification and automatic promotion remain planned. See the [dataset guide](../admin/agent-access.mdx#prepare-a-triage-quality-dataset) for setup, sealing and changed-source recovery.
-
 ## Customer portal assistance
 
 When enabled, the portal shows a **Support assistant** button; your organisation may give it another name. Open it, describe the issue, and select **Send**. It can help find information available to your account and prepare your own support-ticket proposal. Open its review link and check the details before approving.

@@ -7,7 +7,7 @@ description: Prepare and review bounded access policies for agents, with retaine
 
 Prepare a policy that states which modules, actions and records an agent may use. Keep saved drafts separate from published access, and review the exact scope before publishing.
 
-> **Availability:** Agent access administration, service keys, reviewed ticket actions, built-in ticket triage, model trials and frozen comparisons described here are awaiting application rollout. Delegated sign-in and automatic triage changes remain planned separately. Publishing external service access alone does not connect an agent.
+> **Availability:** Agent access administration, service keys, reviewed ticket actions and built-in ticket triage described here are awaiting application rollout. Delegated sign-in and automatic triage changes remain planned separately. Publishing external service access alone does not connect an agent.
 
 ## Before you start
 
@@ -149,53 +149,6 @@ An enabled, supported matching routing rule takes precedence, with lower rule pr
 Routing never replaces an existing queue or assignee. A manual ticket edit, changed classification vocabulary, changed queue settings, ineligible assignee or reduced access can invalidate the review. Queue visibility is retained when editing category mappings. A new routing review supersedes older pending routing reviews, while classification decisions stay separate. The routing window ends 30 minutes after classification was applied, or earlier when the published policy expires. If it is unavailable or expired, use ordinary ticket editing. After a lost response, reload the saved review or retry the same decision; completed routing does not assign twice.
 
 This workflow and the queue category picker are awaiting application rollout. Unattended routing and automatic classification require separate future policy and quality gates.
-
-## Prepare a triage quality dataset
-
-> **Availability:** Dataset preparation and current-model evaluation are awaiting application rollout. Independent holdout comparison and automatic promotion remain planned separately. Sealing or evaluating a dataset does not enable automatic changes.
-
-Use this optional check to prepare independent expected answers before evaluating a model. Capturing and sealing need `ai.connections.view`, `ai.connections.manage`, `ai.config.edit` and `tickets.view.all`. Labelling needs `ai.connections.view`, `tickets.view.all` and `tickets.edit.all`. Everyone must be active staff with no client restriction. The person who captures a dataset cannot label it.
-
-1. In **Settings → Agent access**, select **Check triage quality**. Publish a built-in ticket-triage workflow first if no workflow is available. Classification must be enabled, but new-ticket generation can stay off while you prepare labels.
-2. Enter a **Dataset name**, choose **Ticket type** and **Maximum tickets** (1–200), then select **Capture tickets**. The app captures the newest matching tickets or incidents within the workflow's current scope. Imports and text too long for classification are excluded. Fewer tickets may be captured when fewer match. Existing tickets are not queued for automatic triage.
-3. Ask a different eligible colleague to open the same page and select the dataset under **Recent datasets**. They select **Label ticket**, read the source and choose the expected category and priority, or select **This needs manual triage**. AI suggestions are not shown in this flow.
-4. The colleague confirms that they labelled independently and selects **Save label**. Before sealing, use **Review label** to correct a saved answer. The earlier answer remains in its history. If another person saves a newer version, reload before making a correction.
-5. Once every ticket is labelled, review the saved answers. Select **Seal dataset**, then confirm **Seal dataset**. The exact source versions and final labels are fixed. Further corrections require a new dataset.
-
-No model request runs and no ticket field changes during these steps. The dataset retains source identities and labels, while the source text is read from the ticket under current access checks. Sampled tickets are protected from deletion; close or cancel them when appropriate. Sealing is preparation for evaluation, not a model-quality result.
-
-After a lost response, use **Reload dataset** and inspect the saved labels or sealed state before retrying. If the app reports changed tickets, choices or workflow access, capture a new dataset. Changing the model, budget or confidence cutoff preserves the saved labels; those settings belong to the later evaluation. Disabling AI or classification withholds dataset details until access is restored. The original capture authority and each label reviewer's current eligibility are checked again before sealing. Start a new dataset if that authority cannot be restored appropriately.
-
-### Evaluate the configured model
-
-Evaluation needs the same staff permissions as capture and sealing. Keep AI and classification enabled; new-ticket generation can stay off. Use a small trial to check the setup before gathering a larger quality dataset.
-
-1. Open a sealed dataset. Under **Check the current model**, review the model, maximum requests and time limit. When more than one configured model is available, **Model to test** lets you choose another. A trial does not change your ticket classification setting.
-2. Select **Evaluate model**, then confirm **Start evaluation**. This sends ticket text to your configured provider. Labels stay separate from the request, and no ticket fields change.
-3. Follow the saved state from **Queued** to **Checking tickets**, then a terminal result. The time limit includes waiting for the scheduler. Use **Check saved status** after an interrupted response; do not assume the request failed.
-4. Review each suggestion, manual-triage result, failure or uncertain result. **Saved evaluations** keeps the ten most recent runs available here. A previous run's results remain associated with its original model settings.
-5. When the run ends, select **Download evaluation evidence** to retain its labels, classifications, configuration fingerprints and recorded usage. The file omits ticket text and reviewer permissions. Treat the labels and classification results as internal information.
-
-All tickets in one evaluation share its call allowance and AI usage limits. A run can contain at most 100 tickets and must fit both the workflow's and AI settings' per-run limits. If the dataset is too large, review those limits or capture a smaller dataset. A numerical quality check needs at least 100 suitable suggestions; a smaller trial helps check setup but cannot satisfy that check. Passing the numerical check makes results ready for review, not permission for automatic changes.
-
-**Stop evaluation** prevents further requests. A request already sent may finish and record usage. Interrupted attempts are not sent again; unknown usage stays unavailable rather than becoming zero. Changed sources, workflow access or model settings can stop a run or withhold its details. Check the current access and saved state before starting another evaluation. Automatic promotion and independent holdout certification are separate future steps.
-
-### Compare models on a separate holdout
-
-Use a holdout: a separate sealed dataset kept out of earlier model tuning. You need the same active staff access as model evaluation, two sealed datasets and another configured model. The administrator who freezes a comparison starts its two evaluations. No ticket fields or production model settings change.
-
-1. Open the fresh sealed dataset you intend to use as the holdout. Expand **Compare models on a separate holdout**.
-2. Choose the **Earlier calibration dataset** used for your model choices, then the **Other model**. Select **Preview comparison** and check both dataset names, their sizes and the model names.
-3. Confirm **I have kept this holdout separate from model tuning**. Select **Freeze comparison**, then confirm **Freeze comparison**. This fixes the sources, both models and the comparison rules; no provider request runs yet.
-4. Select **Run original model**, check its name and request count, then confirm **Start model run**. Do the same with **Run other model**. Each evaluation needs its own confirmation and shares its existing call, token and time limits across that whole dataset. Starting one does not extend the other's allowance.
-5. Use **Check saved comparison** after an interrupted response. Follow each model from **Not started** through its saved state. Use **Stop this evaluation** to prevent more requests for that run; stopping one does not stop the other or recall an already sent request.
-6. When both finish, inspect the result and select **Download comparison evidence**. A numerical pass means ready for independent review, not automatic promotion. Keep the download internal: it contains expected labels, classifications and usage, though it omits ticket text and reviewer permissions.
-
-The holdout must fit the evaluation allowance, with at most 100 tickets per run. A smaller comparison can check setup but cannot meet the minimum of 100 suitable holdout tickets. Failed, stopped and uncertain attempts stay in the evidence; they are not silently replaced by another try for the same frozen role.
-
-Enduria refuses recorded ticket reuse and identical recorded content across calibration and holdout. Renaming a dataset does not make its sources fresh. Once reserved, those holdout tickets cannot be used for an ordinary model trial or another comparison. Select fresh source material if the app reports overlap or an earlier attempt. These checks and your confirmation do not prove that a dataset is representative or free of prior model exposure; independent quality certification remains a separate step.
-
-Changed sources, access or model settings may prevent a frozen run from starting or withhold its details. Check the saved comparison before retrying. Restore access only where appropriate; if the frozen configuration can no longer be used, prepare a new comparison with fresh holdout tickets. Automatic changes remain off throughout this task.
 
 ## Disable or revoke a connection
 
