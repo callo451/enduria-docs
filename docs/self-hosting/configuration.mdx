@@ -53,3 +53,15 @@ You may set `AI_MODEL_REVISION` to an operator-reviewed deployment or model revi
 This optional first-release feature is awaiting rollout. Configure the fixed model revision in `AI_MODEL_REVISION` and use an engineering-reviewed supported configuration before an administrator enables [automatic categories](../admin/ai.mdx#use-automatic-categories-when-supported). Provider compatibility and a model confidence score do not establish that support. The model, provider binding, installed adapter, prompt, configured choices and relevant generation limits must match the reviewed configuration.
 
 Ordinary administrators only choose the opt-in in AI settings. Engineering evidence and its review stay internal; no customer model lab is required. If support expires or is withdrawn, new automatic effects stop. Keep reviewed suggestions available and investigate the saved state before changing configuration or retrying work. No automatic priority, assignment, routing or resolution is included.
+
+## Maintain AI history
+
+> **Availability:** Bounded conversation expiry and atomic tenant-deletion refusal are awaiting application rollout.
+
+Keep the bundled scheduler running with the application's `CRON_SECRET`. The existing `/api/cron/ai-monitoring` schedule starts daily retention work during its midnight UTC window, including when monitoring assistance is off. The administrator's **History and activity retention (days)** setting controls ordinary logs and inactive staff/portal transcripts; it defaults to 90 days.
+
+Each retention step removes up to 25 inactive conversations from each assistant and up to 500 ordinary records from each activity family. Further scheduled runs drain a backlog. Active or unrecovered model runs keep their conversations. Investigate their saved status and close or stop them through the supported assistant controls; do not delete accounting or dispatch claims to force progress. Workflow retries may finish another eligible batch safely.
+
+Minimal operation references prevent expired submissions from being admitted again. Command proposals, decisions, ticket-effect evidence, model-use records, engineering quality evidence, report objects and Workflow SDK storage have separate retained lifetimes. Configure provider, export, object-storage and backup handling separately; transcript expiry does not erase those copies.
+
+Organisation deletion now commits its database changes together or refuses them together. Retained or linked records may require operator review; a refusal deletes nothing. It does not override asset holds or other domain evidence policies. External email identity cleanup runs only after a successful database commit and is best effort. A complete retained-evidence erasure procedure remains separately governed; do not disable database guards.

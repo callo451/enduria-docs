@@ -134,7 +134,17 @@ The optional **Estimated hourly cost limit** uses your entered prices. It is an 
 
 **Recent AI activity** shows up to 25 requests. **Response finished** means the AI response ended; it does not mean a proposed ticket change ran. Check the action's own review. **Usage unavailable** keeps a cautious allowance against the limit until confirmed usage arrives. **Cost unavailable** means no compatible price is recorded. Neither means zero usage or free service. The **Support reference** can help your operator investigate a request without sharing conversation text.
 
-Use the remaining **Security** controls for log retention. Mandatory action decisions, model-call evidence and scheduled delivery claims are kept separately from ordinary expiring activity logs. This release does not provide automatic content purging for those retained records.
+### Set history and activity retention
+
+> **Availability:** Conversation expiry and the revised retention label are awaiting application rollout.
+
+1. In **Security**, set **History and activity retention (days)** to the period your organisation needs. The default is 90 days.
+2. Select **Save Configuration**.
+3. Keep the application scheduler running. Cleanup removes inactive staff Agent and portal assistant conversations and ordinary activity in batches, so a large backlog may take several runs.
+
+Conversation inactivity is measured from its last saved draft or submitted message. Active or unrecovered responses are kept until their run has been closed. Expiry removes the saved transcript, draft and source results; users start a new conversation to continue. It does not delete tickets created from a conversation.
+
+Minimal operation references remain so an expired submission cannot start the same work again. Action proposals, decisions, effect receipts, model-use records and scheduled delivery claims are kept separately. This control does not purge their content, provider records, exports or backups. Ask your operator about those retention policies.
 
 ## Common problems
 
