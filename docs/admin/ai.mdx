@@ -26,6 +26,20 @@ The panel, expanded workspace, briefing questions and record shortcuts share one
 
 Use the **Security** tab's usage profile to choose a starting limit. See [Using AI assistance](../product/ai-assistance) for saved drafts, context, stopping and checking action outcomes. Portal assistance has its own portal controls and requester limits.
 
+## Enable the portal assistant
+
+1. Open **Features → Portal assistant**.
+2. Select **Enable portal assistant** and enter an **Assistant name**.
+3. Choose whether to **Allow requesters to review and send a support request**. Leave this off if you want guidance and own-request lookups only.
+4. Select **Save portal assistant**. This saves separately from **Save Configuration**.
+5. Sign in as an eligible requester on your customer portal and open the assistant by its saved name.
+
+New portal configurations start off. Previously saved activation is preserved. The staff **Enable Agent** switch does not control the portal assistant. Both use your deployment's provider and AI usage limits. Only published customer-visible knowledge and the requester's own requests are available.
+
+When support requests are allowed, the requester selects their own messages, reviews what will be shared and explicitly sends the request. Normal permissions and ticket approvals still apply. Turning this control off prevents new AI-assisted ticket creation; requesters can still use the ordinary portal forms. See [customer portal assistance](../product/ai-assistance.mdx#customer-portal-assistance).
+
+After an interrupted save, select **Check saved status** before saving again. If another administrator changed the settings, load the current saved values and review your choices. To stop portal assistance, clear **Enable portal assistant** and save.
+
 ## Enable ticket suggestions
 
 Configure active priorities and unrestricted service-catalogue categories for the work-item types you use. You need tenant-wide AI configuration view/edit, Agent access view/manage/publish and all-ticket view permissions. Customer scope and reviewed changes need their corresponding domain permissions.
