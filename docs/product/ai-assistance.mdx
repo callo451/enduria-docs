@@ -87,7 +87,11 @@ External agents with published service access can also offer ticket review links
 
 ## Review ticket classification
 
-A ticket workspace may show **Classification is queued**, then **Preparing a classification suggestion…**, followed by **Suggested classification** with a category and priority. Review the current ticket and edit its ordinary fields as appropriate. No fields have changed automatically. Suggestions do not route, assign or resolve the ticket.
+A ticket workspace may show **Classification is queued**, then **Preparing a classification suggestion…**, followed by **Suggested classification** with a category and priority. No fields have changed automatically. Suggestions do not route, assign or resolve the ticket.
+
+If your administrator has enabled classification review and you have all-ticket view and edit access, select **Review classification**. Compare the current fields, keep the suggestion or adjust the choices, then select **Prepare classification review**. Open **Review saved classification change**, check the exact fields, and select **Approve action**, **Reject**, or **Cancel proposal**. Approval records you as the person changing the ticket. Reload the ticket after an executed change. Without this review option, use the ordinary ticket fields.
+
+A newer prepared review supersedes an older pending one. Changed tickets, retired choices or reduced access prevent the saved review from executing. After a lost response, reload the saved review and check its outcome before requesting another change. A completed decision does not apply twice. Each original suggestion can apply at most one reviewed change; later edits use the ordinary ticket workflow.
 
 If the ticket changes, its old suggestion no longer applies. A timed-out or unavailable classification asks you to review manually; do not wait for it to do the work. An older suggestion may still show **AI suggestion awaiting review** and a confidence score. Confidence is an estimate, not a verified outcome or permission to change a ticket.
 

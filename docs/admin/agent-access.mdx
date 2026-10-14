@@ -107,9 +107,23 @@ Use this workflow to suggest a category and priority for new support tickets and
 
 1. Open **Settings → Agent access** and create a connection with **Built-in ticket triage** as its **Identity**. In addition to the agent-access permissions above, the publisher needs `tickets.view.all` and `ai.config.edit`.
 2. Choose **Suggest classification**, select **Tickets only**, and choose the internal records and clients it may process. Client exclusions take precedence.
-3. Set the expiry and select **Save draft**, then **Review saved draft**. Check **Suggest classification for new tickets**, the record scope and limits. Enter the publication reason and publish.
+3. Set the expiry and select **Save draft**, then **Review saved draft**. Check **Suggest classification for new tickets**, the record scope and limits. To allow staff to prepare and approve classification changes from the suggestion, include **Review ticket classification changes**. Its publisher also needs `tickets.edit.all`. Enter the publication reason and publish.
 4. In **Settings → Artificial Intelligence**, enable classification and **Suggest Classification on New Tickets**. Both the published workflow and this setting must be enabled.
-5. Create an eligible new ticket and open its workspace. Classification is queued, then a suggestion appears when ready. Review the current ticket and edit its ordinary fields as appropriate.
+5. Create an eligible new ticket and open its workspace. Classification is queued, then a suggestion appears when ready. If classification review is published, an eligible editor can select **Review classification**. Otherwise, use the ordinary ticket fields.
+
+### Review and apply a classification
+
+You need `tickets.view.all` and `tickets.edit.all`, with an active staff account that is not restricted to a client. You do not need permission to configure AI or a service key to review a change.
+
+1. In the ticket workspace, select **Review classification**. Compare the current category and priority with the suggestion.
+2. Keep the suggested choices or choose an available priority and category. Changed choices are saved as your manual override; the original suggestion is retained separately.
+3. Select **Prepare classification review**, then **Review saved classification change**. Preparing saves the exact choices and does not edit the ticket.
+4. Check **Before this change** and the saved fields. Select **Approve action**, **Reject**, or **Cancel proposal**.
+5. Check the recorded outcome. An executed change records you as the person making it. Open or reload the ticket to see its current classification.
+
+A review expires within 30 minutes, or earlier when its published access expires. A newer prepared review supersedes older pending reviews. Each original suggestion can apply at most one reviewed change. If the ticket, available choices or permitted access changes, the saved review cannot execute; use the current ticket's ordinary editing flow. A current eligible editor can still reject or cancel a pending review after the workflow is disabled, without seeing withdrawn details.
+
+After a lost response, retry the same preparation with the same choices or select **Reload proposal** on the saved review. Check the recorded outcome before requesting another change. A completed decision does not apply twice. Adding classification review to a later publication does not grant it to suggestions captured under an older suggestion-only policy; use a future eligible ticket or ordinary editing.
 
 Only one ticket-triage workflow may be active in an organisation. Disable it before publishing a replacement. No service key is required. Earlier automation policies require a new built-in ticket-triage connection; publication does not convert them or process old tickets.
 
