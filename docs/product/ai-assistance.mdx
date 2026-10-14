@@ -95,7 +95,13 @@ A newer prepared review supersedes an older pending one. Changed tickets, retire
 
 If the ticket changes, its old suggestion no longer applies. A timed-out or unavailable classification asks you to review manually; do not wait for it to do the work. An older suggestion may still show **AI suggestion awaiting review** and a confidence score. Confidence is an estimate, not a verified outcome or permission to change a ticket.
 
-Your administrator enables **Ticket suggestions** in AI settings and chooses its eligible records. You do not need AI configuration access to review a saved suggestion. See [built-in ticket triage](../admin/agent-access.mdx#set-up-built-in-ticket-triage). This workflow is awaiting rollout; automatic classification changes remain planned separately.
+Your administrator enables **Ticket suggestions** in AI settings and chooses its eligible records. You do not need AI configuration access to review a saved suggestion. See [built-in ticket triage](../admin/agent-access.mdx#set-up-built-in-ticket-triage). This workflow is awaiting rollout. The limited automatic-category option below also requires a supported configuration and explicit administrator opt-in.
+
+### Check an automatic category update
+
+On an eligible new internal general support ticket, the workspace may say **The category was set automatically** and name the recorded category. Priority, routing, assignment and resolution were unchanged. You can edit the category in the ordinary ticket fields; an AI response does not confirm resolution.
+
+This option excludes supplied categories, touched tickets, customer tickets, incidents, historical imports, assigned work, queues, projects and required approvals. If the supported configuration becomes unavailable, use ordinary classification and reviewed suggestions. Contact your administrator if you expected an update; do not repeatedly submit the ticket to try to trigger one.
 
 ### Review a routing destination
 

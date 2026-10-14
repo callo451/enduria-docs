@@ -52,11 +52,26 @@ Configure active priorities and unrestricted service-catalogue categories for th
 
 The workflow saves separately from **Save Configuration**; no manually created agent connection or service key is needed. Saving an enabled workflow renews its access for one year. Use **Check saved status** after an interrupted response. To stop the workflow, clear **Enable ticket suggestions**, review and save. Other AI settings stay unchanged.
 
-Suggestions never change ticket fields, route work or resolve an issue automatically. Existing tickets and historical imports are excluded. Changed sources, choices, settings or access can withhold a suggestion; review manually if the model fails or cannot classify the issue. See [triage setup and recovery](agent-access.mdx#set-up-built-in-ticket-triage), [classification review](agent-access.mdx#review-and-apply-a-classification) and [routing review](agent-access.mdx#review-routing-after-classification).
+With automatic categories off, suggestions never change ticket fields, route work or resolve an issue automatically. Existing tickets and historical imports are excluded. Changed sources, choices, settings or access can withhold a suggestion; review manually if the model fails or cannot classify the issue. See [triage setup and recovery](agent-access.mdx#set-up-built-in-ticket-triage), [classification review](agent-access.mdx#review-and-apply-a-classification) and [routing review](agent-access.mdx#review-routing-after-classification).
 
-This simpler setup is awaiting rollout. Automatic classification and resolution remain unavailable unless explicitly supported by your installed release. Matching knowledge or offering an answer does not confirm resolution. **Auto-Generate on Ticket Resolve** remains unavailable; use manual article drafting.
+This setup is awaiting rollout. Automatic category updates are limited to the supported opt-in below. Automatic resolution remains unavailable. Matching knowledge or offering an answer does not confirm resolution. **Auto-Generate on Ticket Resolve** remains unavailable; use manual article drafting.
 
 Start with suggestions and reviewed changes. Inspect saved outcomes before extending the workflow to more queues or customers.
+
+## Use automatic categories when supported
+
+Review remains the default. When your configured model supports this option, an administrator who can also edit all tickets can enable a limited automatic category update.
+
+1. Open **Features → Ticket suggestions** and include **Internal tickets**.
+2. Select **Automatically set categories for new internal support tickets**.
+3. Select **Review settings**. Check the automatic-category choice, then select **Save ticket suggestions**.
+4. Check a new eligible general support ticket. Its workspace states when the category was set automatically.
+
+Only new internal general support tickets with no category supplied are eligible. The ticket must still be untouched, unassigned and outside a queue or project, with no required ticket approval. Existing tickets, customer tickets, incidents and historical imports are excluded. Priority, routing, assignment and resolution remain with staff. Staff can change the resulting category in the ordinary fields.
+
+If the option is unavailable, continue using reviewed suggestions and ask your operator which model configuration is supported. An expired or withdrawn supported configuration stops automatic updates. Changing the model, its revision, configured choices or relevant generation settings can also pause them. You do not need to run model tests or manage a certification process.
+
+To stop automatic categories while keeping suggestions, clear this option, review and save. Use **Check saved status** after an interrupted save. Enabling it later does not process old tickets. A failed or uncertain attempt is not automatically resent.
 
 ## Review proposed actions
 

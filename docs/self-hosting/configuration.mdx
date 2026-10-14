@@ -47,3 +47,9 @@ The workflow retains creation intents and provider-attempt claims. Recovery does
 New triage attempts retain a fingerprint of their model configuration. Changing that configuration during generation prevents the result from being saved. Keep a strong `BETTER_AUTH_SECRET` (or the supported `NEXTAUTH_SECRET` fallback); rotating it also invalidates in-flight configuration bindings. Model endpoint addresses and credentials are not included in this retained fingerprint metadata.
 
 You may set `AI_MODEL_REVISION` to an operator-reviewed deployment or model revision (up to 200 characters). Update it when the serving deployment changes and restart the application. This optional label helps track configuration changes. It does not verify the provider's model version or enable automatic ticket changes.
+
+### Support automatic internal-ticket categories
+
+This optional first-release feature is awaiting rollout. Configure the fixed model revision in `AI_MODEL_REVISION` and use an engineering-reviewed supported configuration before an administrator enables [automatic categories](../admin/ai.mdx#use-automatic-categories-when-supported). Provider compatibility and a model confidence score do not establish that support. The model, provider binding, installed adapter, prompt, configured choices and relevant generation limits must match the reviewed configuration.
+
+Ordinary administrators only choose the opt-in in AI settings. Engineering evidence and its review stay internal; no customer model lab is required. If support expires or is withdrawn, new automatic effects stop. Keep reviewed suggestions available and investigate the saved state before changing configuration or retrying work. No automatic priority, assignment, routing or resolution is included.

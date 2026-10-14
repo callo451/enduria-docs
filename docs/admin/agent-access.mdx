@@ -7,7 +7,7 @@ description: Prepare and review bounded access policies for agents, with retaine
 
 Prepare a policy that states which modules, actions and records an agent may use. Keep saved drafts separate from published access, and review the exact scope before publishing.
 
-> **Availability:** Agent access administration, service keys, reviewed ticket actions and built-in ticket triage described here are awaiting application rollout. Delegated sign-in and automatic triage changes remain planned separately. Publishing external service access alone does not connect an agent.
+> **Availability:** Agent access administration, service keys, reviewed ticket actions and built-in ticket triage described here are awaiting application rollout. Delegated sign-in and unattended routing remain planned separately. Publishing external service access alone does not connect an agent.
 
 ## Before you start
 
@@ -123,7 +123,7 @@ After a lost response, use **Check saved status** before retrying. If settings o
 
 If the previous owner no longer has access, the review explains that a new workflow will be owned by you. Saving disables the unavailable workflow and retains its records and drafts. Its pending work is not transferred to your authority.
 
-This simpler setup is awaiting application rollout. Until then, your installation may show the earlier separate workflow and classification switches. Automatic classification changes and unattended routing remain planned separately.
+This simpler setup is awaiting application rollout. Until then, your installation may show the earlier separate workflow and classification switches. The limited [automatic-category option](ai.mdx#use-automatic-categories-when-supported) is configured in AI settings. Unattended routing remains planned separately.
 
 ### Review and apply a classification
 
@@ -162,7 +162,7 @@ An enabled, supported matching routing rule takes precedence, with lower rule pr
 
 Routing never replaces an existing queue or assignee. A manual ticket edit, changed classification vocabulary, changed queue settings, ineligible assignee or reduced access can invalidate the review. Queue visibility is retained when editing category mappings. A new routing review supersedes older pending routing reviews, while classification decisions stay separate. The routing window ends 30 minutes after classification was applied, or earlier when the published policy expires. If it is unavailable or expired, use ordinary ticket editing. After a lost response, reload the saved review or retry the same decision; completed routing does not assign twice.
 
-This workflow and the queue category picker are awaiting application rollout. Unattended routing and automatic classification require separate future policy and quality gates.
+This workflow and the queue category picker are awaiting application rollout. Unattended routing remains planned separately. The optional automatic-category update does not provide this routing review; staff use ordinary routing fields for those tickets.
 
 ## Disable or revoke a connection
 
