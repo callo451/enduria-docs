@@ -20,7 +20,7 @@ If the page is missing after an upgrade, ask the administrator responsible for r
 ## Create a disabled connection
 
 1. Enter a **Connection name** that identifies the intended agent or automation.
-2. Choose its **Identity**. A delegated connection also requires a listed staff delegate. The type and delegate are fixed when the connection is created.
+2. Choose **External service agent** as its **Identity** to connect an agent. Other identities are labelled **not available yet**; their policies can be prepared, but they cannot connect or run work. The type and any delegate are fixed when the connection is created.
 3. Select **Create disabled connection**.
 
 The connection has no published policy and starts disabled. Its initial draft grants no record scope. No credential is issued.
@@ -28,12 +28,15 @@ The connection has no published policy and starts disabled. Its initial draft gr
 ## Choose and save access
 
 1. Select the connection from the list.
-2. Choose an **Access mode**: **Disabled**, **Read only**, or **Read + reviewed proposals**. Ticket proposals need a separate human decision. Any other required approvals still apply.
-3. Use **Tickets only**, **Assets only**, or **All available modules** as a starting point, then check the individual actions. Read-only mode permits read actions only. All selection freezes the currently publishable actions; later additions are not automatically included in an existing publication.
-4. Choose whether internal records are included, select the permitted clients, and set any client exclusions. Exclusions take precedence. An enabled policy needs internal records or at least one selected client.
-5. Select only the sensitive field families needed: project financial facts, asset purchase details, directory email addresses or internal knowledge. A field selection does not replace the relevant module permission.
-6. Set the per-run call, output-byte and time bounds. Choose an **Expiry (your local time)** within the next 366 days.
-7. Select **Save draft**.
+2. Choose an **Access mode**: **Disabled**, **Read only**, or **Read + reviewed changes**. Ticket changes need a separate human decision. Any other required approvals still apply.
+3. In **What the agent can do**, use **Tickets only**, **Assets only**, or **All available modules** as a starting point. Presets select supported actions allowed by your current permissions and access mode. Open **Customise actions** only when you need to inspect or adjust individual actions. Later additions are not automatically included in an existing publication.
+4. In **Which records the agent can access**, choose whether internal records are included, select the permitted clients, and set any client exclusions. Exclusions take precedence. An enabled policy needs internal records or at least one selected client.
+5. Choose an **Expiry (your local time)** within the next 366 days.
+6. Select **Save draft**.
+
+For ordinary setup, keep **Advanced access and limits** closed. New drafts leave sensitive fields off and include default call, output and time limits. Closing this section keeps its current values; it does not reset them. Open it when the agent needs project financial facts, asset purchase details, directory email addresses or internal knowledge, or when you need to adjust individual limits. Field selections do not replace the relevant module permissions. MCP requests finish within 60 seconds or a shorter published duration.
+
+An action labelled **Not available yet** cannot be newly selected. An older saved policy may retain such an action; remove it or choose a preset. **Human review required** means an agent can prepare that change for a person's decision. **Endpoint not enabled** means the action is supported but your operator must configure the MCP endpoint before connection.
 
 Saving changes the draft revision. It does not change the published policy. **Discard edits** reloads the saved draft. If another administrator saved first, reload the connection and review their changes before saving again.
 
@@ -44,7 +47,7 @@ Saving changes the draft revision. It does not change the published policy. **Di
 3. Enter a **Publication reason**.
 4. Select **Publish reviewed policy**.
 
-The exact reviewed policy becomes a retained, numbered publication. If the saved revision or preview has changed, publication is refused; reload and review again. **Inspect published access** shows the publication separately from the editable draft. **Current policy authority** reflects current permissions, expiry and connection status; a retained publication alone does not guarantee usable authority.
+The exact reviewed policy becomes a retained, numbered publication. If the saved revision or preview has changed, publication is refused; reload and review again. The preview identifies supported actions and any saved actions that are not available yet. **Inspect published access** shows each published action's availability separately from the editable draft. **Current policy authority** reflects current permissions, expiry and connection status; a retained publication alone does not guarantee usable authority.
 
 Later policy reductions narrow authority for work bound to an older publication. A later expansion does not enlarge that older publication's ceiling. Loss of an owner's, publisher's or delegate's required authority, an unavailable selected client, expiry, disabling or revocation can prevent use. Service keys, requests and ticket proposals also keep their original access limits.
 
@@ -82,7 +85,7 @@ New calls are refused. Revocation does not reverse earlier actions. To replace a
 
 ## Review an external agent's change
 
-Select **Read + reviewed proposals** and the ticket actions you need before publishing access and creating a key. Available actions are support-ticket or incident creation, status, priority or category, assignment and notes. The key cannot approve its own proposal.
+Select **Read + reviewed changes** and the ticket actions you need before publishing access and creating a key. Available actions are support-ticket or incident creation, status, priority or category, assignment and notes. The key cannot approve its own proposal.
 
 1. Ask the agent to prepare the change and open the returned review link in Enduria.
 2. Sign in with an active staff account without a client binding. You need all-ticket view permission and the permission to make the proposed change.
@@ -110,7 +113,7 @@ Disabling retains the connection and its evidence; a new reviewed publication ca
 | Problem | Next step |
 | --- | --- |
 | Access records fail to load | Select **Reload**. Check current agent-access permissions if the error persists. |
-| An action is unavailable | Check the relevant module permission and access mode. Read-only excludes drafts and proposals. |
+| An action is unavailable | Check its availability label, the relevant module permission and access mode. Read-only excludes changes. Actions marked **Not available yet** require a future release. |
 | A client or delegate is missing | Check active status, account scope and client/directory visibility. Lists show at most 1,000 choices and indicate truncation. |
 | Saving or publication reports a conflict | Reload the connection, inspect the saved draft and obtain a new preview. |
 | Current authority is unavailable | Check the connection status, expiry, selected clients and current owner, publisher and delegate permissions. |
