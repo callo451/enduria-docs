@@ -50,8 +50,12 @@ You may set `AI_MODEL_REVISION` to an operator-reviewed deployment or model revi
 
 ### Run confirmed model evaluations
 
-> **Availability:** Current-model evaluations are awaiting application rollout.
+> **Availability:** Model evaluations and frozen comparisons are awaiting application rollout.
 
 Apply the release migrations and keep the scheduler and Workflow SDK PostgreSQL world running. The minute scheduler includes `/api/cron/triage-evaluations`; it dispatches only evaluation runs that an authorised staff administrator has explicitly confirmed. No MCP key is needed. See [Evaluate the configured model](../admin/agent-access.mdx#evaluate-the-configured-model) for the administrator's steps.
 
 The entire dataset shares one model-run budget and deadline, including queue time. Recovery retains interrupted claims instead of sending them again. Check application, scheduler and database health if a run stays queued; do not delete claims or reset terminal cases to force another attempt. A new evaluation is a separate, explicit request. Stopping a run cannot recall a provider request already sent, and its usage may become known later. Numerical results and downloads do not certify a provider or enable automatic ticket changes.
+
+Trials can use the configured `AI_MODEL_FAST`, `AI_MODEL_SMART`, `AI_MODEL_ANALYSIS` and `AI_MODEL_BULK` options for the selected provider. Unconfigured options are omitted, and repeated model names are shown once. Choosing a trial model does not change the application's classification setting. Set and restart with the required model options before preparing a comparison; changed serving configuration can invalidate a frozen run.
+
+[Frozen comparisons](../admin/agent-access.mdx#compare-models-on-a-separate-holdout) use the same scheduler and PostgreSQL world. Freezing reserves the holdout before either model starts; each run is confirmed separately and retains its own existing limits. A stopped or uncertain role is not reset for another provider attempt. Keep that evidence and use a fresh holdout when a new comparison is needed. The outcome is measurement for review, not independent provider certification or automatic authority.
