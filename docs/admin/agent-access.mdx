@@ -150,6 +150,22 @@ Routing never replaces an existing queue or assignee. A manual ticket edit, chan
 
 This workflow and the queue category picker are awaiting application rollout. Unattended routing and automatic classification require separate future policy and quality gates.
 
+## Prepare a triage quality dataset
+
+> **Availability:** Capturing and labelling datasets is awaiting application rollout. Model comparison and automatic promotion remain planned separately. Sealing a dataset does not enable automatic changes.
+
+Use this optional check to prepare independent expected answers before evaluating a model. Capturing and sealing need `ai.connections.view`, `ai.connections.manage`, `ai.config.edit` and `tickets.view.all`. Labelling needs `ai.connections.view`, `tickets.view.all` and `tickets.edit.all`. Everyone must be active staff with no client restriction. The person who captures a dataset cannot label it.
+
+1. In **Settings → Agent access**, select **Check triage quality**. Publish a built-in ticket-triage workflow first if no workflow is available.
+2. Enter a **Dataset name**, choose **Ticket type** and **Maximum tickets** (1–200), then select **Capture tickets**. The app captures the newest matching tickets or incidents within the workflow's current scope. Imports and text too long for classification are excluded. Fewer tickets may be captured when fewer match. Existing tickets are not queued for automatic triage.
+3. Ask a different eligible colleague to open the same page and select the dataset under **Recent datasets**. They select **Label ticket**, read the source and choose the expected category and priority, or select **This needs manual triage**. AI suggestions are not shown in this flow.
+4. The colleague confirms that they labelled independently and selects **Save label**. Before sealing, use **Review label** to correct a saved answer. The earlier answer remains in its history. If another person saves a newer version, reload before making a correction.
+5. Once every ticket is labelled, review the saved answers. Select **Seal dataset**, then confirm **Seal dataset**. The exact source versions and final labels are fixed. Further corrections require a new dataset.
+
+No model request runs and no ticket field changes during these steps. The dataset retains source identities and labels, while the source text is read from the ticket under current access checks. Sampled tickets are protected from deletion; close or cancel them when appropriate. Sealing is preparation for evaluation, not a model-quality result.
+
+After a lost response, use **Reload dataset** and inspect the saved labels or sealed state before retrying. If the app reports changed tickets, choices, model settings or workflow access, capture a new dataset. It withholds old source details that no longer meet the checks. The original capture authority and each label reviewer's current eligibility are checked again before sealing. Start a new dataset if that authority cannot be restored appropriately.
+
 ## Disable or revoke a connection
 
 1. Open the connection and select **Disable connection** or **Revoke connection**.
