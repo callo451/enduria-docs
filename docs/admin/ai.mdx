@@ -28,20 +28,21 @@ Use the **Security** tab's usage profile to choose a starting limit. See [Using 
 
 ## Enable ticket suggestions
 
-1. Configure active priorities for the work-item types your team uses and active, unrestricted service-catalogue categories. Automatic suggestions currently omit categories restricted to selected customers or staff.
-2. Open the **Features** tab and enable **Enable Smart Classification**.
-3. Enable **Suggest Classification on New Tickets**.
-4. Select **Save Configuration**.
-5. Publish a **Built-in ticket triage** workflow in [Agent access](./agent-access.mdx#set-up-built-in-ticket-triage), with the eligible internal records and clients. The publisher also needs all-ticket view and AI configuration-edit permissions. Classification needs both this workflow and the AI setting above.
-6. Open a newly created eligible support ticket or incident. Its workspace shows the queue and preparation state, then **Suggested classification** if a current suggestion is available.
-7. Review the category and priority. If the published workflow includes **Review ticket classification changes**, staff with `tickets.view.all` and `tickets.edit.all` can select **Review classification**, adjust the choices, and prepare an exact change for separate approval. Otherwise, use the ordinary ticket fields. See [classification review](agent-access.mdx#review-and-apply-a-classification) for the steps and recovery rules.
-8. Optionally include **Review configured ticket routing** in the publication. Configure category mappings and assignment in **Settings → Queues**. After an approved classification, eligible staff can review the selected queue and assignee as a separate change. See [routing review](agent-access.mdx#review-routing-after-classification) for permissions, supported settings and recovery. An AI model cannot choose the assignee or replace existing ownership.
+Configure active priorities and unrestricted service-catalogue categories for the work-item types you use. You need tenant-wide AI configuration view/edit, Agent access view/manage/publish and all-ticket view permissions. Customer scope and reviewed changes need their corresponding domain permissions.
 
-Suggestions do not change the ticket's type, category, priority, queue, assignee or status automatically. Confidence is an estimate for review, not permission to execute a change. Changed sources, choices or model settings during generation make the result stale. Existing tickets and historical imports are not processed. If the model cannot choose a suitable classification, fails or times out, review manually. The workflow and these updated states are awaiting rollout.
+1. Open **Features → Ticket suggestions** and select **Enable ticket suggestions**.
+2. Choose **Internal tickets** and any **Customers** it may process.
+3. Choose whether staff can prepare reviewed classification changes. Optionally enable configured routing after classification; routing still needs its own review.
+4. Select **Review settings**, check the scope, configured model and access review date, then select **Save ticket suggestions**.
+5. Open a new eligible ticket or incident. Check its preparation state and review any suggested category and priority.
 
-**Enable Auto-Resolution** is unavailable. Matching knowledge or offering an answer does not confirm that an issue is resolved. **Auto-Generate on Ticket Resolve** is also unavailable; use the supported manual article-drafting workflow instead.
+The workflow saves separately from **Save Configuration**; no manually created agent connection or service key is needed. Saving an enabled workflow renews its access for one year. Use **Check saved status** after an interrupted response. To stop the workflow, clear **Enable ticket suggestions**, review and save. Other AI settings stay unchanged.
 
-Start with suggestions and reviewed changes. Inspect their saved outcomes before extending the workflow to more queues or customers. Use the supported workflow controls described above; automatic changes remain unavailable unless explicitly supported by your installed release.
+Suggestions never change ticket fields, route work or resolve an issue automatically. Existing tickets and historical imports are excluded. Changed sources, choices, settings or access can withhold a suggestion; review manually if the model fails or cannot classify the issue. See [triage setup and recovery](agent-access.mdx#set-up-built-in-ticket-triage), [classification review](agent-access.mdx#review-and-apply-a-classification) and [routing review](agent-access.mdx#review-routing-after-classification).
+
+This simpler setup is awaiting rollout. Automatic classification and resolution remain unavailable unless explicitly supported by your installed release. Matching knowledge or offering an answer does not confirm resolution. **Auto-Generate on Ticket Resolve** remains unavailable; use manual article drafting.
+
+Start with suggestions and reviewed changes. Inspect saved outcomes before extending the workflow to more queues or customers.
 
 ## Review proposed actions
 

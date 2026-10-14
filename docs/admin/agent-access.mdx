@@ -103,13 +103,25 @@ After a lost response, select **Reload proposal** or retry the same decision to 
 
 ## Set up built-in ticket triage
 
-Use this workflow to suggest a category and priority for new support tickets and incidents. Suggestions do not change ticket fields, assign work, send replies or resolve tickets.
+Use **Ticket suggestions** in AI settings to suggest a category and priority for future support tickets and incidents. You do not need to create a connection or key for this built-in workflow. Staff still review changes; suggestions do not assign work, send replies or resolve tickets.
 
-1. Open **Settings → Agent access** and create a connection with **Built-in ticket triage** as its **Identity**. In addition to the agent-access permissions above, the publisher needs `tickets.view.all` and `ai.config.edit`.
-2. Choose **Suggest classification**, select **Tickets only**, and choose the internal records and clients it may process. Client exclusions take precedence.
-3. Set the expiry and select **Save draft**, then **Review saved draft**. Check **Suggest classification for new tickets**, the record scope and limits. Include **Review ticket classification changes** to allow staff to prepare and approve an exact classification change; its publisher also needs `tickets.edit.all`. Include **Review configured ticket routing** for a separate routing review after classification; its publisher additionally needs `tickets.assign`, `queues.view` and `queues.assign`. Expand **Customise actions** to remove an action you do not want. Enter the publication reason and publish.
-4. In **Settings → Artificial Intelligence**, enable classification and **Suggest Classification on New Tickets**. Both the published workflow and this setting must be enabled.
-5. Create an eligible new ticket and open its workspace. Classification is queued, then a suggestion appears when ready. If classification review is published, an eligible editor can select **Review classification**. Otherwise, use the ordinary ticket fields.
+You need tenant-wide AI configuration view/edit, Agent access view/manage/publish and all-ticket view access. Enabling classification review also needs all-ticket edit. Configured routing needs ticket assignment and queue view/assignment access. Customer selection needs current customer-view access.
+
+1. Open **Settings → Artificial Intelligence → Features** and find **Ticket suggestions**.
+2. Select **Enable ticket suggestions**. Choose **Internal tickets** and, where available, expand **Customers** to select the customers it may process.
+3. Choose **Let staff prepare reviewed classification changes** if staff should prepare an exact change for separate approval. Optionally select **Offer configured routing after classification**; configure its queues in **Settings → Queues**.
+4. Select **Review settings**. Check the record scope, review options, configured model and access review date. Select **Save ticket suggestions**.
+5. Create a new eligible ticket or incident and open its workspace. Its preparation state advances to a suggestion or a recorded unavailable outcome. Review it through the steps below.
+
+The workflow saves separately from **Save Configuration**. Its activation sends no model request; future eligible tickets send their title and description to the configured AI provider. Existing tickets and historical imports are not processed. New settings do not widen an older captured suggestion's access.
+
+Saving an enabled workflow renews its access for one year. The current review date and **Saved state** appear in the card. To turn it off, clear **Enable ticket suggestions**, then review and save. This stops new work and leaves other AI settings unchanged; an already sent request may finish, but changed access can withhold its result.
+
+After a lost response, use **Check saved status** before retrying. If settings or permissions changed during review, load the current saved state and review again. A paused workflow needs its model, access or review date checked. If the app reports an unpublished draft, resolve that existing workflow in **Agent access** first. Saved customer access outside your current list or permissions cannot be silently replaced here; you can still turn the workflow off.
+
+If the previous owner no longer has access, the review explains that a new workflow will be owned by you. Saving disables the unavailable workflow and retains its records and drafts. Its pending work is not transferred to your authority.
+
+This simpler setup is awaiting application rollout. Until then, your installation may show the earlier separate workflow and classification switches. Automatic classification changes and unattended routing remain planned separately.
 
 ### Review and apply a classification
 
@@ -139,7 +151,7 @@ Routing is separate from classification. It proposes a queue and, when configure
 
 1. In **Settings → Queues**, create or edit an active queue. Choose its supported ticket types, staff members and **Assignment Method**. Under **Ticket categories**, select the categories it should handle, or deliberately configure one **Default Queue**. Select **Save queue** when editing.
 2. For member selection, enable **Auto-Assign New Tickets** and choose round robin, workload or skill matching. Skill matching uses the configured category/tag requirements, minimum skill level, match threshold and fallback. Manual assignment or a manual fallback leaves the assignee unset. Named assignees in existing routing rules must remain active members of the destination queue.
-3. Publish ticket triage with both classification review and **Review configured ticket routing** included. This affects future eligible tickets; adding routing later does not widen older captured suggestions.
+3. In **Ticket suggestions**, select **Let staff prepare reviewed classification changes** and **Offer configured routing after classification**, then review and save. This affects future eligible tickets; adding routing later does not widen older captured suggestions.
 4. Approve a new ticket's classification review, then open or reload the ticket. Staff with `tickets.view.all`, `tickets.edit.all`, `tickets.assign`, `queues.view` and `queues.assign` can select **Review routing**.
 5. Check **Destination queue**, **Assignee** and the reason. Select **Prepare routing review**, then **Review saved routing change**.
 6. Check the saved before values and destination. Select **Approve action**, **Reject**, or **Cancel proposal**. Open the ticket to verify an executed change.
