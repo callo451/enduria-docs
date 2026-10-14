@@ -32,10 +32,11 @@ Use the **Security** tab's usage profile to choose a starting limit. See [Using 
 2. Open the **Features** tab and enable **Enable Smart Classification**.
 3. Enable **Suggest Classification on New Tickets**.
 4. Select **Save Configuration**.
-5. Open a newly created ticket. If classification succeeds and the ticket remains unchanged while it is generated, its workspace shows **AI suggestion awaiting review**.
-6. Review the category, priority and confidence. Use the ordinary ticket fields to apply appropriate changes.
+5. Publish a **Built-in ticket triage** workflow in [Agent access](./agent-access.mdx#set-up-built-in-ticket-triage), with the eligible internal records and clients. The publisher also needs all-ticket view and AI configuration-edit permissions. Classification needs both this workflow and the AI setting above.
+6. Open a newly created eligible support ticket or incident. Its workspace shows the queue and preparation state, then **Suggested classification** if a current suggestion is available.
+7. Review the category and priority. Use the ordinary ticket fields to apply appropriate changes.
 
-Suggestions do not change the ticket's type, category, priority, queue, assignee or status automatically. Confidence is a guide for review, not permission to execute a change. If the ticket changes during generation, a stale suggestion is discarded.
+Suggestions do not change the ticket's type, category, priority, queue, assignee or status automatically. Confidence is an estimate for review, not permission to execute a change. Changed sources or choices make the suggestion stale. Existing tickets and historical imports are not processed. If classification fails or times out, review manually. The workflow and these updated states are awaiting rollout.
 
 **Enable Auto-Resolution** is unavailable. Matching knowledge or offering an answer does not confirm that an issue is resolved. **Auto-Generate on Ticket Resolve** is also unavailable; use the supported manual article-drafting workflow instead.
 

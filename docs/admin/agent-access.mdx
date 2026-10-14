@@ -7,7 +7,7 @@ description: Prepare and review bounded access policies for agents, with retaine
 
 Prepare a policy that states which modules, actions and records an agent may use. Keep saved drafts separate from published access, and review the exact scope before publishing.
 
-> **Availability:** Agent access administration, service keys and reviewed ticket actions described here are awaiting application rollout. Delegated sign-in and automation remain planned separately. Publishing a policy alone does not connect an agent.
+> **Availability:** Agent access administration, service keys, reviewed ticket actions and built-in ticket triage described here are awaiting application rollout. Delegated sign-in and automatic triage changes remain planned separately. Publishing external service access alone does not connect an agent.
 
 ## Before you start
 
@@ -20,7 +20,7 @@ If the page is missing after an upgrade, ask the administrator responsible for r
 ## Create a disabled connection
 
 1. Enter a **Connection name** that identifies the intended agent or automation.
-2. Choose **External service agent** as its **Identity** to connect an agent. Other identities are labelled **not available yet**; their policies can be prepared, but they cannot connect or run work. The type and any delegate are fixed when the connection is created.
+2. Choose **External service agent** as its **Identity** to connect an agent, or **Built-in ticket triage** for classification suggestions. **Delegated staff agent** is not available yet. The type and any delegate are fixed when the connection is created.
 3. Select **Create disabled connection**.
 
 The connection has no published policy and starts disabled. Its initial draft grants no record scope. No credential is issued.
@@ -101,6 +101,24 @@ If saved ticket or client details are no longer available, approval is disabled.
 
 After a lost response, select **Reload proposal** or retry the same decision to inspect the saved outcome. Ask the external client to keep the same request key when retrying exactly the same proposal. New fields need a new request key and review. Retrying a completed decision does not apply the change again.
 
+## Set up built-in ticket triage
+
+Use this workflow to suggest a category and priority for new support tickets and incidents. Suggestions do not change ticket fields, assign work, send replies or resolve tickets.
+
+1. Open **Settings → Agent access** and create a connection with **Built-in ticket triage** as its **Identity**. In addition to the agent-access permissions above, the publisher needs `tickets.view.all` and `ai.config.edit`.
+2. Choose **Suggest classification**, select **Tickets only**, and choose the internal records and clients it may process. Client exclusions take precedence.
+3. Set the expiry and select **Save draft**, then **Review saved draft**. Check **Suggest classification for new tickets**, the record scope and limits. Enter the publication reason and publish.
+4. In **Settings → Artificial Intelligence**, enable classification and **Suggest Classification on New Tickets**. Both the published workflow and this setting must be enabled.
+5. Create an eligible new ticket and open its workspace. Classification is queued, then a suggestion appears when ready. Review the current ticket and edit its ordinary fields as appropriate.
+
+Only one ticket-triage workflow may be active in an organisation. Disable it before publishing a replacement. No service key is required. Earlier automation policies require a new built-in ticket-triage connection; publication does not convert them or process old tickets.
+
+Staff, email, portal, API and proactive creation use the same eligibility rules. Historical imports, changes, problems and service requests are excluded. Classification uses current active priorities for the ticket type and active categories available organisation-wide. Configure these choices first; client-restricted categories are not used by this initial workflow.
+
+The published time limit runs from ticket creation, including time in the queue. Keep enough time for the scheduler and model to finish. A changed ticket, retired choice, reduced access, disabled workflow or expired policy prevents a result from being applied. The ticket workspace withholds an outdated suggestion. If generation fails or times out, review the ticket manually; uncertain model attempts are not automatically resent. Ordinary ticket fields remain available.
+
+Disabling the workflow stops pending work when it next checks access; a model request already sent may finish, but its result still needs current authority. Retained triage evidence protects the ticket from ordinary deletion; close or cancel it when appropriate. Ask your operator to check the scheduler if queued work does not advance.
+
 ## Disable or revoke a connection
 
 1. Open the connection and select **Disable connection** or **Revoke connection**.
@@ -117,7 +135,7 @@ Disabling retains the connection and its evidence; a new reviewed publication ca
 | A client or delegate is missing | Check active status, account scope and client/directory visibility. Lists show at most 1,000 choices and indicate truncation. |
 | Saving or publication reports a conflict | Reload the connection, inspect the saved draft and obtain a new preview. |
 | Current authority is unavailable | Check the connection status, expiry, selected clients and current owner, publisher and delegate permissions. |
-| The agent cannot connect after publication | Check the service identity, MCP address, saved Bearer key, API enablement, expiry and current authority. Delegated sign-in and automation are not available yet. |
+| The agent cannot connect after publication | Check the service identity, MCP address, saved Bearer key, API enablement, expiry and current authority. Built-in ticket triage does not use a key. Delegated sign-in is not available yet. |
 | The key secret was not saved | Select **Refresh keys**. Revoke the unsaved key and deliberately create a replacement; its secret cannot be retrieved. |
 | A request limit is reached | Wait before retrying. Check the selected usage profile and whether other requests are still running. |
 
