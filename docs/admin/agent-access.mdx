@@ -152,7 +152,7 @@ This workflow and the queue category picker are awaiting application rollout. Un
 
 ## Prepare a triage quality dataset
 
-> **Availability:** Capturing and labelling datasets is awaiting application rollout. Model comparison and automatic promotion remain planned separately. Sealing a dataset does not enable automatic changes.
+> **Availability:** Dataset preparation and current-model evaluation are awaiting application rollout. Independent holdout comparison and automatic promotion remain planned separately. Sealing or evaluating a dataset does not enable automatic changes.
 
 Use this optional check to prepare independent expected answers before evaluating a model. Capturing and sealing need `ai.connections.view`, `ai.connections.manage`, `ai.config.edit` and `tickets.view.all`. Labelling needs `ai.connections.view`, `tickets.view.all` and `tickets.edit.all`. Everyone must be active staff with no client restriction. The person who captures a dataset cannot label it.
 
@@ -165,6 +165,20 @@ Use this optional check to prepare independent expected answers before evaluatin
 No model request runs and no ticket field changes during these steps. The dataset retains source identities and labels, while the source text is read from the ticket under current access checks. Sampled tickets are protected from deletion; close or cancel them when appropriate. Sealing is preparation for evaluation, not a model-quality result.
 
 After a lost response, use **Reload dataset** and inspect the saved labels or sealed state before retrying. If the app reports changed tickets, choices or workflow access, capture a new dataset. Changing the model, budget or confidence cutoff preserves the saved labels; those settings belong to the later evaluation. Disabling AI or classification withholds dataset details until access is restored. The original capture authority and each label reviewer's current eligibility are checked again before sealing. Start a new dataset if that authority cannot be restored appropriately.
+
+### Evaluate the configured model
+
+Evaluation needs the same staff permissions as capture and sealing. Keep AI and classification enabled; new-ticket generation can stay off. Use a small trial to check the setup before gathering a larger quality dataset.
+
+1. Open a sealed dataset. Under **Check the current model**, review the model, maximum requests and time limit.
+2. Select **Evaluate model**, then confirm **Start evaluation**. This sends ticket text to your configured provider. Labels stay separate from the request, and no ticket fields change.
+3. Follow the saved state from **Queued** to **Checking tickets**, then a terminal result. The time limit includes waiting for the scheduler. Use **Check saved status** after an interrupted response; do not assume the request failed.
+4. Review each suggestion, manual-triage result, failure or uncertain result. **Saved evaluations** keeps the ten most recent runs available here. A previous run's results remain associated with its original model settings.
+5. When the run ends, select **Download evaluation evidence** to retain its labels, classifications, configuration fingerprints and recorded usage. The file omits ticket text and reviewer permissions. Treat the labels and classification results as internal information.
+
+All tickets in one evaluation share its call allowance and AI usage limits. A run can contain at most 100 tickets and must fit both the workflow's and AI settings' per-run limits. If the dataset is too large, review those limits or capture a smaller dataset. A numerical quality check needs at least 100 suitable suggestions; a smaller trial helps check setup but cannot satisfy that check. Passing the numerical check makes results ready for review, not permission for automatic changes.
+
+**Stop evaluation** prevents further requests. A request already sent may finish and record usage. Interrupted attempts are not sent again; unknown usage stays unavailable rather than becoming zero. Changed sources, workflow access or model settings can stop a run or withhold its details. Check the current access and saved state before starting another evaluation. Automatic promotion and independent holdout certification are separate future steps.
 
 ## Disable or revoke a connection
 

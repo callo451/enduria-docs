@@ -46,4 +46,12 @@ The workflow retains creation intents and provider-attempt claims. Recovery does
 
 New triage attempts retain a fingerprint of their model configuration. Changing that configuration during generation prevents the result from being saved. Keep a strong `BETTER_AUTH_SECRET` (or the supported `NEXTAUTH_SECRET` fallback); rotating it also invalidates in-flight configuration bindings. Model endpoint addresses and credentials are not included in this retained fingerprint metadata.
 
-You may set `AI_MODEL_REVISION` to an operator-reviewed deployment or model revision (up to 200 characters). Update it when the serving deployment changes and restart the application. This optional label records your assertion; it does not verify a provider's model version or certify classification quality. Model evaluation and automatic promotion remain planned separately.
+You may set `AI_MODEL_REVISION` to an operator-reviewed deployment or model revision (up to 200 characters). Update it when the serving deployment changes and restart the application. This optional label records your assertion; it does not verify a provider's model version or certify classification quality. Automatic promotion remains planned separately.
+
+### Run confirmed model evaluations
+
+> **Availability:** Current-model evaluations are awaiting application rollout.
+
+Apply the release migrations and keep the scheduler and Workflow SDK PostgreSQL world running. The minute scheduler includes `/api/cron/triage-evaluations`; it dispatches only evaluation runs that an authorised staff administrator has explicitly confirmed. No MCP key is needed. See [Evaluate the configured model](../admin/agent-access.mdx#evaluate-the-configured-model) for the administrator's steps.
+
+The entire dataset shares one model-run budget and deadline, including queue time. Recovery retains interrupted claims instead of sending them again. Check application, scheduler and database health if a run stays queued; do not delete claims or reset terminal cases to force another attempt. A new evaluation is a separate, explicit request. Stopping a run cannot recall a provider request already sent, and its usage may become known later. Numerical results and downloads do not certify a provider or enable automatic ticket changes.
