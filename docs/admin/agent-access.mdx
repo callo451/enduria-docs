@@ -107,7 +107,7 @@ Use this workflow to suggest a category and priority for new support tickets and
 
 1. Open **Settings → Agent access** and create a connection with **Built-in ticket triage** as its **Identity**. In addition to the agent-access permissions above, the publisher needs `tickets.view.all` and `ai.config.edit`.
 2. Choose **Suggest classification**, select **Tickets only**, and choose the internal records and clients it may process. Client exclusions take precedence.
-3. Set the expiry and select **Save draft**, then **Review saved draft**. Check **Suggest classification for new tickets**, the record scope and limits. To allow staff to prepare and approve classification changes from the suggestion, include **Review ticket classification changes**. Its publisher also needs `tickets.edit.all`. Enter the publication reason and publish.
+3. Set the expiry and select **Save draft**, then **Review saved draft**. Check **Suggest classification for new tickets**, the record scope and limits. Include **Review ticket classification changes** to allow staff to prepare and approve an exact classification change; its publisher also needs `tickets.edit.all`. Include **Review configured ticket routing** for a separate routing review after classification; its publisher additionally needs `tickets.assign`, `queues.view` and `queues.assign`. Expand **Customise actions** to remove an action you do not want. Enter the publication reason and publish.
 4. In **Settings → Artificial Intelligence**, enable classification and **Suggest Classification on New Tickets**. Both the published workflow and this setting must be enabled.
 5. Create an eligible new ticket and open its workspace. Classification is queued, then a suggestion appears when ready. If classification review is published, an eligible editor can select **Review classification**. Otherwise, use the ordinary ticket fields.
 
@@ -132,6 +132,23 @@ Staff, email, portal, API and proactive creation use the same eligibility rules.
 The published time limit runs from ticket creation, including time in the queue. Keep enough time for the scheduler and model to finish. A changed ticket, retired choice, reduced access, disabled workflow or expired policy prevents a result from being applied. The ticket workspace withholds an outdated suggestion. If generation fails or times out, review the ticket manually; uncertain model attempts are not automatically resent. Ordinary ticket fields remain available.
 
 Disabling the workflow stops pending work when it next checks access; a model request already sent may finish, but its result still needs current authority. Retained triage evidence protects the ticket from ordinary deletion; close or cancel it when appropriate. Ask your operator to check the scheduler if queued work does not advance.
+
+### Review routing after classification
+
+Routing is separate from classification. It proposes a queue and, when configured, an assignee using existing queue settings. The model cannot select staff identities. Each original suggestion can apply one classification change and one separately reviewed routing change.
+
+1. In **Settings → Queues**, create or edit an active queue. Choose its supported ticket types, staff members and **Assignment Method**. Under **Ticket categories**, select the categories it should handle, or deliberately configure one **Default Queue**. Select **Save queue** when editing.
+2. For member selection, enable **Auto-Assign New Tickets** and choose round robin, workload or skill matching. Skill matching uses the configured category/tag requirements, minimum skill level, match threshold and fallback. Manual assignment or a manual fallback leaves the assignee unset. Named assignees in existing routing rules must remain active members of the destination queue.
+3. Publish ticket triage with both classification review and **Review configured ticket routing** included. This affects future eligible tickets; adding routing later does not widen older captured suggestions.
+4. Approve a new ticket's classification review, then open or reload the ticket. Staff with `tickets.view.all`, `tickets.edit.all`, `tickets.assign`, `queues.view` and `queues.assign` can select **Review routing**.
+5. Check **Destination queue**, **Assignee** and the reason. Select **Prepare routing review**, then **Review saved routing change**.
+6. Check the saved before values and destination. Select **Approve action**, **Reject**, or **Cancel proposal**. Open the ticket to verify an executed change.
+
+An enabled, supported matching routing rule takes precedence, with lower rule priority considered first. Conflicting targets at the same priority require manual routing. Otherwise, routing uses one matching category queue, then one explicit default. Missing, inactive, inaccessible, conflicting or unsupported configuration leaves the ticket unchanged; it does not create a fallback queue. Existing rules that also change priority or tags need ordinary routing rather than this bounded review.
+
+Routing never replaces an existing queue or assignee. A manual ticket edit, changed classification vocabulary, changed queue settings, ineligible assignee or reduced access can invalidate the review. Queue visibility is retained when editing category mappings. A new routing review supersedes older pending routing reviews, while classification decisions stay separate. The routing window ends 30 minutes after classification was applied, or earlier when the published policy expires. If it is unavailable or expired, use ordinary ticket editing. After a lost response, reload the saved review or retry the same decision; completed routing does not assign twice.
+
+This workflow and the queue category picker are awaiting application rollout. Unattended routing and automatic classification require separate future policy and quality gates.
 
 ## Disable or revoke a connection
 
