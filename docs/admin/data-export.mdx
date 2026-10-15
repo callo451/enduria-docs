@@ -1,0 +1,74 @@
+---
+title: Export service-desk data
+description: Arrange an operator-assisted export of records, retained history and owned files.
+---
+
+# Export service-desk data
+
+> **Awaiting rollout:** This operator-assisted export is awaiting application rollout. Confirm availability with your installation operator before arranging an exit or migration.
+
+Ask your installation operator for an export when you need a copy of your organisation's service-desk records and files. This operation covers the whole organisation, including every client, internal notes, retained deleted comments and knowledge drafts. It is intended for staff authorised to receive that scope. It is not a customer portal download or a requester-only export.
+
+## Arrange the export
+
+1. Agree the organisation and the authorised recipient with your operator. If you need a client-only or requester-only copy, request a separately reviewed scope; this command does not provide that filter.
+2. Review the included and omitted data below. Arrange separate copies of any omitted domains you use before treating the export as an exit package.
+3. Agree an access-controlled destination and a secure transfer method. Ticket text, history, drafts and file contents can contain sensitive information entered by users.
+4. Ask the operator to verify the completed directory and reconcile representative tickets, internal/public replies and file bytes with the source. Retain the manifest and completion marker with the exported files.
+
+Exporting does not suspend accounts, stop background work, delete records or erase backups. Arrange any access suspension and shutdown of integrations or scheduled work separately with your operator.
+
+## What is included
+
+| Records | Scope |
+| --- | --- |
+| Organisation and directory | Organisation name, mode and currency; basic user identity/contact and active state; client names and active state. |
+| Work items | Core records for all ticket types, including descriptions, current classification, ownership, relationships, resolution, metadata and custom fields. Related specialist workflows are separate. |
+| Conversation and history | Public and internal comments, retained soft-deleted comments, updates, lifecycle events and retained ticket facts. Visibility and deletion flags remain on the records. |
+| Time and SLA | Ticket time entries and ticket SLA tracking, including retained policy snapshots. Project time and appointment clocks are excluded. |
+| Tenant vocabulary | Queue names and descriptions, ticket statuses, priorities and resolution codes. Transport, webhook and routing configuration is excluded. |
+| Knowledge | Article text, current drafts, recorded versions, categories and media registered to existing articles. Audience and visibility fields remain on the articles. |
+| File bytes | Files owned by exported ticket attachment records and registered knowledge media. The records identify their exported paths. |
+
+The export uses JSON Lines (`.jsonl`): each line is one JSON record. Ticket attachment bytes use generated `.bin` filenames; their original names and declared content types remain in the attachment records. Do not execute files or assume that a declared type makes content safe. Knowledge media records include the original application image path and the exported `.png` path so a receiving system can rewrite article references.
+
+Timestamp columns retain fractional-second precision; values with a time zone include an offset. Lifecycle sequence values are decimal strings so large sequence numbers retain their precision. Preserve those values when mapping them into a receiving system.
+
+Configured authentication credentials, sessions, provider/mail settings and raw organisation settings are excluded. This does not redact passwords or other sensitive material that someone typed into a ticket, article, custom field or uploaded file.
+
+## What needs separate handling
+
+Assets, inventory, procurement, billing, project records, specialist work-item workflow evidence, source migration archives and AI evidence are outside this export. Links to those records remain references. Mail delivery logs, analytics caches, avatars, branding and unregistered storage objects are also excluded.
+
+External and recording-image URLs in knowledge text remain references; their bytes are not fetched or bundled. Media left for cleanup after an article was deleted is omitted, with its row count recorded in the manifest. A legacy inline ticket attachment URL causes a refusal, so the operator must review and arrange those bytes rather than silently lose them.
+
+The manifest lists the scope and omissions. This format has no automatic re-import facility: agree field mapping, file handling and reconciliation with the receiving system. A data export is separate from a [deployment backup and restore](../self-hosting/backups).
+
+## Installation operator procedure
+
+These commands require an authorised installation operator with database and object-storage read access. They do not use a staff user's application permissions. Run the tools from the intended application release with its installed dependencies and deployment configuration. The slim application runtime image does not contain the operator scripts; use the matching maintenance environment or release checkout.
+
+1. Confirm the organisation UUID, release and intended storage backend. Select a new directory under an existing access-controlled parent; an existing directory is refused, including a previous failed attempt.
+2. Run the export using the deployment's database and storage environment. Credentials are read from the environment and, when present, `.env.local` and `.env`; do not put them in the command:
+
+   ```bash
+   npx --no-install tsx scripts/pilot-export.ts --org "<organisation-uuid>" --out "<new-export-directory>"
+   ```
+
+3. Require a successful command result with `complete: true`. The directory contains `records/`, `objects/`, `manifest.json` and `COMPLETE.json`. The completion marker is written last and identifies the manifest hash. A partial directory without a valid marker is incomplete.
+4. Verify the directory before transfer and again after it reaches the destination:
+
+   ```bash
+   npx --no-install tsx scripts/pilot-export.ts --verify "<export-directory>"
+   ```
+
+5. Require `verified: true`. Verification reads local files only and does not require database or provider credentials. It checks required record files, organisation scope, record and byte counts, SHA-256 hashes, the completion marker and unlisted files. Symbolic links are refused. Hashes detect changes; they are not a digital signature proving who created the export.
+6. Compare representative source tickets and knowledge records with the files, including at least one internal note, public reply and attachment. Retain the exact verified directory and its scope statement with the handover record.
+
+Database records come from one read-only, repeatable snapshot. File bytes are copied afterwards through their recorded owners. Missing bytes or a recorded-size mismatch fails the export. If records or files are being deleted during capture, arrange a quiet period and retry; the export does not stop writers or establish a deployment-wide backup point.
+
+The initial limits are 100,000 rows per selected source table, 128 MiB of record data, 1 GiB of object bytes and a 32 MiB manifest. Some source tables are read before ticket-only or existing-article filtering. If a limit is reached, arrange a larger reviewed export with your operator rather than dividing the files by hand and calling them complete.
+
+## If an export or verification fails
+
+Keep the original records and bytes unchanged. Do not add a completion marker yourself, remove history, alter file sizes or widen a storage key to make a check pass. Ask the operator to investigate missing ownership, legacy attachment references, missing media, storage access or capacity. Retry a corrected source in a new directory and verify that result. Preserve or remove partial copies through your normal authorised data-handling process.
