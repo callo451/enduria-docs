@@ -16,3 +16,20 @@ Enduria resolves access through roles and dotted permissions such as `tickets.vi
 - Remove or suspend access promptly when responsibilities change.
 
 If a user can sign in but cannot see an expected area, compare their assigned role and permissions with a working account. Do not assume a legacy role label alone grants access.
+
+## Recover a user's password
+
+> **Awaiting rollout:** The password-reset access checks and replacement-password improvements described here are awaiting application rollout. Confirm availability with your operator.
+
+You need `users.edit` to reset another active user's password. Customer portal accounts cannot administer resets. Client-bound staff can reset only users of the same client, and you cannot reset an account holding permissions you do not have. Use your own profile to change your own password.
+
+1. Open **Settings → Identity & Access** and the **Users** tab.
+2. Open the user's row menu and choose **Reset Password**.
+3. The **Password Reset** confirmation shows a generated replacement password. Share it privately with the intended user, outside a ticket comment or public channel.
+4. Ask the user to sign in and change it from their profile's **Change Password** section, entering **Current Password**, **New Password** and **Confirm Password**.
+
+A successful reset signs the user out of existing sessions. Changing a password also requires signing in again. New passwords must contain at least eight characters and fit within 72 UTF-8 bytes; non-ASCII characters can use more than one byte.
+
+The replacement password remains valid until changed; this action does not enforce a password-change step at next sign-in. It does not remove MFA or recover an unavailable SSO provider. For a forgotten password, the user can instead request a reset link from the sign-in page, provided the installation's [system email](./email/overview#system-email) is working.
+
+If the action is refused, check that the account is active, within your client scope and within your permission level. Ask an appropriately authorised administrator to help; do not broaden your own role to bypass the refusal. If a password changes while another change request is in progress, sign in again using the latest password before retrying.
