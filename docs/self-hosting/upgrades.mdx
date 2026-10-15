@@ -29,3 +29,32 @@ Use the one-shot migration service for Docker Compose installations, or **`npm r
 If the command reports that stored migration history does not match the release, stop the upgrade and keep the error message. Confirm that you are using the intended release and its unchanged migration files. Preserve your database backup and contact support or your deployment maintainer for release-specific recovery guidance. Do not delete migration history, edit previously applied migrations, or manually mark migrations as applied to bypass the refusal.
 
 Start the application only after the migration service succeeds. A migration failure may require correcting the deployment files or restoring the pre-upgrade backup; changing the application image alone does not undo database changes.
+
+## Ticket reporting verification and recovery
+
+> **Awaiting rollout.** Ticket reporting input verification and the recovery functions below are awaiting application rollout. Confirm that the deployed release includes them before using these steps.
+
+The upgrade prepares ticket reporting inputs from current operational tickets and their existing recorded facts. Ticket reports verify those inputs before using them. The first report after an application restart can take longer while verification runs. An unavailable report must not be interpreted as zero work or a zero-percent outcome.
+
+This procedure requires an authorised database operator and access to the intended deployment's PostgreSQL database. SaaS administrators should contact their deployment provider. Keep a current backup and arrange a maintenance window: repair temporarily makes ticket and fact writers wait while it verifies a consistent source.
+
+1. Confirm the intended release and a successful migration run. If the upgrade or restore failed, resolve that failure first.
+2. In a database session for that deployment, replace `ORG_UUID` below with the intended organisation's UUID. The first query must return the organisation you intend to inspect:
+
+   ```sql
+   SELECT id, name FROM organizations WHERE id = 'ORG_UUID'::uuid;
+   SELECT verify_ticket_metric_sources('ORG_UUID'::uuid);
+   ```
+
+3. If verification returns `false`, repair the derived reporting inputs and verify again:
+
+   ```sql
+   SELECT rebuild_ticket_metric_sources('ORG_UUID'::uuid);
+   SELECT verify_ticket_metric_sources('ORG_UUID'::uuid);
+   ```
+
+   The repair returns a changed-row count, which can be zero when inputs already agree. Require verification to return `true`. An error or missing result is not a successful check.
+4. Restart the application instances after a restored database or a repair, then sign in and retry a representative tenant-scoped ticket report with the intended period and filters.
+5. If reporting remains unavailable, preserve the error and deployment logs and seek release-specific recovery assistance. Keep the released database protections enabled. Do not edit migration receipts, disable constraints or alter original ticket history to bypass refusal.
+
+This repair copies existing operational records and facts. Missing history stays unknown; it does not reconstruct transitions or policy decisions, create SLA clocks for imported backlog, materialise archive-only records or change source-system routing.
