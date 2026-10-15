@@ -22,6 +22,16 @@ Restart the affected service after changing environment values. Validate `/api/h
 
 Refer to the release's example environment file and deployment configuration for the complete variable list; supported variables can change between releases.
 
+## Public URL and reverse proxy
+
+> **Awaiting rollout:** Setup saves and branding uploads using the configured public origin behind a standalone reverse proxy are awaiting application rollout.
+
+Set `BETTER_AUTH_URL` to the public application URL that users open, for example `https://support.example.com`. `NEXTAUTH_URL` is the supported fallback when `BETTER_AUTH_URL` is unset. Use the public address rather than a container name or bind address such as `0.0.0.0`.
+
+Configure the reverse proxy to preserve the original **Host** header. Additional approved sign-in origins belong in `AUTH_TRUSTED_ORIGINS` as comma-separated exact origins, including the scheme and any non-default port. Each request must still use the Host belonging to its own approved origin; a forwarded-host header does not grant access from another origin.
+
+If setup or a logo upload reports **Invalid request origin**, check the browser address, public URL configuration and preserved Host, then restart the application after configuration changes. Keep the origin protection enabled; do not change the browser's Origin to an internal address to bypass the refusal.
+
 ## Enable MCP service connections
 
 > **Availability:** Scoped service keys are awaiting application rollout. Existing dedicated ticket keys keep their original access.
