@@ -1,0 +1,159 @@
+---
+title: AI settings
+description: Configure assistance, reviewed ticket suggestions, access, and usage limits.
+---
+
+# AI settings
+
+Control which assistance your team can use and review proposed changes before they run.
+
+> **Availability:** The central agent, revised classification controls, usage controls and shared module access rules described here are awaiting application rollout. Until rollout is confirmed, your screen may show older labels. Broader module automation remains planned separately.
+
+## Before you start
+
+Open **Settings → Artificial Intelligence** using an active staff account with no client binding. Viewing configuration and recent activity requires `ai.config.view`; saving requires `ai.config.edit`. The settings navigation is available to administrators. Staff use of the Agent requires `ai.copilot.use`, an allowed role, and the relevant permissions for the records or actions requested.
+
+Your operator must configure an AI provider for this deployment. The **Models** tab shows the configured provider and model tiers. Tenant settings choose tiers; they do not supply provider credentials.
+
+## Enable the shared staff Agent
+
+1. Open the **Features** tab and select **Enable Agent**.
+2. Choose a suitable context window.
+3. Select **Save Configuration**.
+4. Ask an eligible staff member to open **Agent** from the sidebar or bottom button and submit a question.
+
+The panel, expanded workspace, briefing questions and record shortcuts share one conversation. Staff do not choose separate module assistants. Their ordinary record permissions still apply, and proposed ticket actions need a separate human decision. The existing Copilot permission key remains the access requirement.
+
+Use the **Security** tab's usage profile to choose a starting limit. See [Using AI assistance](../product/ai-assistance) for saved drafts, context, stopping and checking action outcomes. Portal assistance has its own portal controls and requester limits.
+
+## Enable the portal assistant
+
+1. Open **Features → Portal assistant**.
+2. Select **Enable portal assistant** and enter an **Assistant name**.
+3. Choose whether to **Allow requesters to review and send a support request**. Leave this off if you want guidance and own-request lookups only.
+4. Select **Save portal assistant**. This saves separately from **Save Configuration**.
+5. Sign in as an eligible requester on your customer portal and open the assistant by its saved name.
+
+New portal configurations start off. Previously saved activation is preserved. The staff **Enable Agent** switch does not control the portal assistant. Both use your deployment's provider and AI usage limits. Only published customer-visible knowledge and the requester's own requests are available.
+
+When support requests are allowed, the requester selects their own messages, reviews what will be shared and explicitly sends the request. Normal permissions and ticket approvals still apply. Turning this control off prevents new AI-assisted ticket creation; requesters can still use the ordinary portal forms. See [customer portal assistance](../product/ai-assistance.mdx#customer-portal-assistance).
+
+After an interrupted save, select **Check saved status** before saving again. If another administrator changed the settings, load the current saved values and review your choices. To stop portal assistance, clear **Enable portal assistant** and save.
+
+## Enable ticket suggestions
+
+Configure active priorities and unrestricted service-catalogue categories for the work-item types you use. You need tenant-wide AI configuration view/edit, Agent access view/manage/publish and all-ticket view permissions. Customer scope and reviewed changes need their corresponding domain permissions.
+
+1. Open **Features → Ticket suggestions** and select **Enable ticket suggestions**.
+2. Choose **Internal tickets** and any **Customers** it may process.
+3. Choose whether staff can prepare reviewed classification changes. Optionally enable configured routing after classification; routing still needs its own review.
+4. Select **Review settings**, check the scope, configured model and access review date, then select **Save ticket suggestions**.
+5. Open a new eligible ticket or incident. Check its preparation state and review any suggested category and priority.
+
+The workflow saves separately from **Save Configuration**; no manually created agent connection or service key is needed. Saving an enabled workflow renews its access for one year. Use **Check saved status** after an interrupted response. To stop the workflow, clear **Enable ticket suggestions**, review and save. Other AI settings stay unchanged.
+
+With automatic categories off, suggestions never change ticket fields, route work or resolve an issue automatically. Existing tickets and historical imports are excluded. Changed sources, choices, settings or access can withhold a suggestion; review manually if the model fails or cannot classify the issue. See [triage setup and recovery](agent-access.mdx#set-up-built-in-ticket-triage), [classification review](agent-access.mdx#review-and-apply-a-classification) and [routing review](agent-access.mdx#review-routing-after-classification).
+
+This setup is awaiting rollout. Automatic category updates are limited to the supported opt-in below. Automatic resolution remains unavailable. Matching knowledge or offering an answer does not confirm resolution. **Auto-Generate on Ticket Resolve** remains unavailable; use manual article drafting.
+
+Start with suggestions and reviewed changes. Inspect saved outcomes before extending the workflow to more queues or customers.
+
+## Use automatic categories when supported
+
+Review remains the default. When your configured model supports this option, an administrator who can also edit all tickets can enable a limited automatic category update.
+
+1. Open **Features → Ticket suggestions** and include **Internal tickets**.
+2. Select **Automatically set categories for new internal support tickets**.
+3. Select **Review settings**. Check the automatic-category choice, then select **Save ticket suggestions**.
+4. Check a new eligible general support ticket. Its workspace states when the category was set automatically.
+
+Only new internal general support tickets with no category supplied are eligible. The ticket must still be untouched, unassigned and outside a queue or project, with no required ticket approval. Existing tickets, customer tickets, incidents and historical imports are excluded. Priority, routing, assignment and resolution remain with staff. Staff can change the resulting category in the ordinary fields.
+
+If the option is unavailable, continue using reviewed suggestions and ask your operator which model configuration is supported. An expired or withdrawn supported configuration stops automatic updates. Changing the model, its revision, configured choices or relevant generation settings can also pause them. You do not need to run model tests or manage a certification process.
+
+To stop automatic categories while keeping suggestions, clear this option, review and save. Use **Check saved status** after an interrupted save. Enabling it later does not process old tickets. A failed or uncertain attempt is not automatically resent.
+
+## Review proposed actions
+
+Read [Using AI assistance](../product/ai-assistance.mdx) for the review steps. A proposal must use current configured vocabulary and your current permissions. AI approval does not replace a separate required ticket approval: if that review is required, create the request through its ordinary workflow.
+
+Ticket investigation requires the appropriate ticket-view permission. Creating a general ticket requires `tickets.create`; creating an incident requires `tickets.createIncident`. Knowledge retrieval requires `kb.view` and the article's category access. These permissions do not grant access to other modules. Portal assistance uses the current requester's ticket scope and customer-visible published knowledge, including client audiences.
+
+## Control module access
+
+Staff assistance uses the relevant module permissions in addition to AI access. Staff accounts bound to a client must use their supported portal assistance; the staff AI surfaces do not provide tenant-wide access for those accounts.
+
+| Information requested | Required scope |
+| --- | --- |
+| Asset register and reported device facts | `assets.view` for unbound staff |
+| Directory profiles | `users.view`; profiles exclude credentials and permission overrides |
+| Projects | `projects.view.all`, managed projects through `projects.view.own`, or member projects through `projects.view.assigned` |
+| Project financial facts | Accessible project plus `projects.budget.view` |
+| Service catalogue | `catalog.view`, active items and the customer's current audience where applicable |
+| Ticket analytics | `tickets.view.all` or `tickets.view.own`; totals retain the account's ticket scope |
+
+The Agent can return charts and tables with a limited number of results. A shortened group list does not mean the remaining records are absent. SLA reports keep response and resolution outcomes separate; missing clocks remain unknown. Asset analyses count active register records by default. An asset's configured status and operational state are separate facts.
+
+Communication drafts prepare text for review. They do not send emails or notifications. Classification and queue guidance apply no changes. Catalogue guidance opens the selected service's normal request form; it does not submit a service request or bypass required fields and approvals.
+
+Existing dedicated MCP keys keep their documented ticket operations. Published service-connection keys provide allowed module reads and reviewed ticket proposals through [Agent access](agent-access.mdx); this setup is awaiting rollout. A signed-in staff reviewer approves a ticket change. Delegated sign-in and broader automation remain planned separately.
+
+## Review an external agent's ticket proposal
+
+> **Availability:** The revised MCP review, cancellation and stale outcomes are awaiting application rollout. Existing saved proposals retain their original approval and rejection flow.
+
+An external MCP client can prepare a general support ticket and return a review link. Its dedicated key cannot approve or create the ticket. Review requires an active staff account with no client binding and both `tickets.create` and `tickets.view.all`. It does not require Copilot to be enabled.
+
+1. Open the returned Enduria review link and sign in with your staff account.
+2. On **Review ticket proposal**, check the title, description, priority and category. You will become the ticket requester and be recorded as its creator and approver.
+3. Select **Approve and create ticket**, **Reject**, or, for a new proposal, **Cancel proposal**.
+4. Read the recorded status. An **executed** result includes a link to the created ticket. Rejection and cancellation create no ticket.
+
+New proposals expire after at most 30 minutes, or sooner if the proposing key expires. Current staff permissions, key authority, API enablement and configured ticket choices are checked again at approval. If relevant configuration changed, the proposal becomes **stale** and no ticket is created. Request a fresh proposal and review its updated fields. A required ordinary ticket approval must still use the normal ticket workflow.
+
+If a decision response is lost, retry the same decision or select **Reload proposal** to inspect its recorded outcome before asking the client for another proposal. The client must reuse its request key for retries of the same fields. Different fields require a new request key and review. If the proposing key was revoked, approval is refused; an authorised reviewer can still inspect and reject or cancel the saved intent.
+
+Read-only dedicated ticket keys can search bounded organisation-wide ticket summaries; they cannot prepare proposals. Those ticket tools do not provide asset actions, assignment, remote remediation or OAuth connection setup. Service keys use the separately published module and client scope in [Agent access](agent-access.mdx). An operator must enable and configure the endpoint before an external client can connect.
+
+## Limits and retained evidence
+
+Set a usage profile to keep AI activity within your team's limits:
+
+1. Open the **Security** tab.
+2. In **AI usage limits**, choose **Standard** or **Lower usage**. Lower usage allows shorter requests and fewer simultaneous calls.
+3. Select **Save Configuration**.
+4. Use **Recent AI activity → Refresh activity** to check recent requests.
+
+These limits cover staff assistance, portal help and background AI work. A request may make several model calls, including retries. Increasing a limit affects new requests; a running request keeps its original ceiling. Reductions apply before its next model call. Separate **Request limits** control how often people can start AI requests.
+
+Recording caption batches share one request budget. If a batch reaches a limit, no caption changes from the refused batch are saved. Use a smaller batch where supported, or ask your administrator to adjust the limits. When knowledge AI is disabled, basic captions can still be prepared. Review captions before publishing.
+
+Open **Advanced limits and cost estimates** only when you need individual limits or a cost estimate. Tokens measure the amount of text processed. A call limit of 0 pauses new calls. Enter input and output prices per million tokens for the models shown, select **Use entered prices**, then **Save Configuration**. Prices use the displayed currency. A price of 0 must be an explicit choice; an unknown price is left unavailable.
+
+The optional **Estimated hourly cost limit** uses your entered prices. It is an estimate, not an invoice; provider discounts and additional charges may differ. If a required price is missing, or unpriced calls remain in the last hour, new calls pause until the cost limit can be checked. Leave the amount blank to use the other usage limits without an estimated cost limit.
+
+**Recent AI activity** shows up to 25 requests. **Response finished** means the AI response ended; it does not mean a proposed ticket change ran. Check the action's own review. **Usage unavailable** keeps a cautious allowance against the limit until confirmed usage arrives. **Cost unavailable** means no compatible price is recorded. Neither means zero usage or free service. The **Support reference** can help your operator investigate a request without sharing conversation text.
+
+### Set history and activity retention
+
+> **Availability:** Conversation expiry and the revised retention label are awaiting application rollout.
+
+1. In **Security**, set **History and activity retention (days)** to the period your organisation needs. The default is 90 days.
+2. Select **Save Configuration**.
+3. Keep the application scheduler running. Cleanup removes inactive staff Agent and portal assistant conversations and ordinary activity in batches, so a large backlog may take several runs.
+
+Conversation inactivity is measured from its last saved draft or submitted message. Active or unrecovered responses are kept until their run has been closed. Expiry removes the saved transcript, draft and source results; users start a new conversation to continue. It does not delete tickets created from a conversation.
+
+Minimal operation references remain so an expired submission cannot start the same work again. Action proposals, decisions, effect receipts, model-use records and scheduled delivery claims are kept separately. This control does not purge their content, provider records, exports or backups. Ask your operator about those retention policies.
+
+## Common problems
+
+| Problem | Next step |
+| --- | --- |
+| Configuration cannot load | Select **Retry**. Ask an administrator to check your configuration permissions if it persists. |
+| No classification suggestion appears | Check feature settings, active categories and applicable priorities, provider availability, and request limits. A changed ticket may require a new manual investigation. |
+| Proposal is unavailable or expired | Start a new proposal with current information. Do not reuse a decision from another account. |
+| A separate ticket approval is required | Use ordinary ticket creation and its configured review. |
+| The assistant fails to respond | Retry the response or contact your operator. Check the action's current status before asking for another change. |
+| A usage limit pauses AI | Check recent activity and wait for the hourly allowance to recover, or adjust your limits. Avoid repeatedly submitting the same action. |
+| A cost limit pauses AI | Check prices for every configured model and whether recent requests have unavailable prices. Wait for those calls to leave the hourly window, or clear the estimated cost limit while keeping other usage limits. |

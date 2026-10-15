@@ -1,0 +1,191 @@
+---
+title: Agent access
+description: Prepare and review bounded access policies for agents, with retained publication and revocation history.
+---
+
+# Agent access
+
+Prepare a policy that states which modules, actions and records an agent may use. Keep saved drafts separate from published access, and review the exact scope before publishing.
+
+> **Availability:** Agent access administration, service keys, reviewed ticket actions and built-in ticket triage described here are awaiting application rollout. Delegated sign-in and unattended routing remain planned separately. Publishing external service access alone does not connect an agent.
+
+## Before you start
+
+Open **Settings → Agent access** using an active staff account with no client binding. Viewing requires `ai.connections.view`; creating, editing, disabling and revoking require `ai.connections.manage`; publishing additionally requires `ai.connections.publish`. Manage and publish permissions do not imply view permission.
+
+Your account also needs the permissions for each module action you select. Client names require `clients.view` in an MSP organisation. Delegate names require `users.view`; only active staff accounts without a client binding appear. These selectors omit customer accounts and records from other organisations.
+
+If the page is missing after an upgrade, ask the administrator responsible for roles to check the three agent-access permissions. Existing roles require explicit review and reconciliation; custom roles are not expanded automatically.
+
+## Create a disabled connection
+
+1. Enter a **Connection name** that identifies the intended external agent.
+2. Choose **External service agent** as its **Identity**. **Delegated staff agent** is not available yet. The identity is fixed when the connection is created.
+3. Select **Create disabled connection**.
+
+The connection has no published policy and starts disabled. Its initial draft grants no record scope. No credential is issued.
+
+For built-in ticket suggestions, use [AI settings](ai.mdx#enable-ticket-suggestions). You do not create an external connection or service key for that workflow.
+
+## Choose and save access
+
+1. Select the connection from the list.
+2. Choose an **Access mode**: **Disabled**, **Read only**, or **Read + reviewed changes**. Ticket changes need a separate human decision. Any other required approvals still apply.
+3. In **What the agent can do**, use **Tickets only**, **Assets only**, or **All available modules** as a starting point. Presets select supported actions allowed by your current permissions and access mode. Open **Customise actions** only when you need to inspect or adjust individual actions. Later additions are not automatically included in an existing publication.
+4. In **Which records the agent can access**, choose whether internal records are included, select the permitted clients, and set any client exclusions. Exclusions take precedence. An enabled policy needs internal records or at least one selected client.
+5. Choose an **Expiry (your local time)** within the next 366 days.
+6. Select **Save draft**.
+
+For ordinary setup, keep **Advanced access and limits** closed. New drafts leave sensitive fields off and include default call, output and time limits. Closing this section keeps its current values; it does not reset them. Open it when the agent needs project financial facts, asset purchase details, directory email addresses or internal knowledge, or when you need to adjust individual limits. Field selections do not replace the relevant module permissions. MCP requests finish within 60 seconds or a shorter published duration.
+
+An action labelled **Not available yet** cannot be newly selected. An older saved policy may retain such an action; remove it or choose a preset. **Human review required** means an agent can prepare that change for a person's decision. **Endpoint not enabled** means the action is supported but your operator must configure the MCP endpoint before connection.
+
+Saving changes the draft revision. It does not change the published policy. **Discard edits** reloads the saved draft. If another administrator saved first, reload the connection and review their changes before saving again.
+
+## Review and publish
+
+1. Save any edits, then select **Review saved draft**.
+2. Inspect the connection type and delegate, mode, selected and excluded clients, internal record access, actions, sensitive fields, expiry and bounds. If your current permissions do not disclose a name, the retained identifier appears instead.
+3. Enter a **Publication reason**.
+4. Select **Publish reviewed policy**.
+
+The exact reviewed policy becomes a retained, numbered publication. If the saved revision or preview has changed, publication is refused; reload and review again. The preview identifies supported actions and any saved actions that are not available yet. **Inspect published access** shows each published action's availability separately from the editable draft. **Current policy authority** reflects current permissions, expiry and connection status; a retained publication alone does not guarantee usable authority.
+
+Later policy reductions narrow authority for work bound to an older publication. A later expansion does not enlarge that older publication's ceiling. Loss of an owner's, publisher's or delegate's required authority, an unavailable selected client, expiry, disabling or revocation can prevent use. Service keys, requests and ticket proposals also keep their original access limits.
+
+Publication also retains the publisher's and any delegate's authority at review time. Later role changes cannot silently turn an older policy's access from own records into all records. Current record visibility is checked for the required people as well as the selected client scope. If an older policy becomes unavailable after an upgrade, check current authority and expiry, then review and publish a fresh saved draft; an older publication's authority is never reconstructed from today's broader roles.
+
+## Connect an external agent with a service key
+
+You need both manage and publish permissions and the selected module permissions to create or revoke keys. Your operator must enable the MCP endpoint, and your organisation's API access must be enabled. A key also retains its creator's original permissions; later permission increases do not enlarge that key's access.
+
+1. Choose a connection created with the **External service agent** identity and publish its reviewed access.
+2. In **Connect an agent**, select **Copy address**.
+3. Enter a **Key name**, choose **Key expires** within the published access period, and select **Standard** or **Lower usage**.
+4. Select **Create connection key**, then **Copy key**. Save it in your agent's secure credential settings before selecting **Done saving key**.
+5. Configure the agent to use the copied MCP address and the key as an HTTP Bearer token. Keep the key out of the address.
+6. Ask the agent to list its tools and perform an allowed read. The available tools reflect the connection's modules, client scope and current permissions.
+
+The endpoint uses Streamable HTTP with JSON responses. Use a client that accepts a Bearer token; browser sign-in through delegated OAuth is not available yet. Existing dedicated ticket keys keep their original ticket-only access. A service key cannot be used as a REST API key. An external agent can prepare allowed ticket proposals; a signed-in staff reviewer makes the change.
+
+The secret is shown once. If the response is lost, select **Refresh keys** and check whether the key was created. Repeating the same saved creation cannot show its secret again. Revoke an unsaved key before deliberately creating a replacement.
+
+Existing keys retain their original grant. Publish broader access and create a new key when expansion is intended. A reduced or disabled policy restricts new reads and approvals of saved proposals; unreadable results are withheld.
+
+### Choose a usage profile
+
+Standard permits up to 30 requests a minute and 500 an hour per key. Lower usage permits 10 a minute and 100 an hour. Each key has up to three simultaneous request slots. Shared organisation limits also apply, and each request must finish within its retained deadline, up to 60 seconds or the shorter published duration. These limits count MCP requests, including setup and tool discovery; they are separate from AI model usage.
+
+Each connection may have five active keys. The screen shows all active keys and recent history, up to 25 keys. A connection retains at most 250 issued keys; create a new reviewed connection when that retained limit is reached.
+
+### Revoke one key
+
+1. Find the key in **Connection keys** and select **Revoke key**.
+2. Check its name, enter a reason, and confirm **Revoke key**.
+
+New calls are refused. Revocation does not reverse earlier actions. To replace a working key, create and configure another within the active-key limit, verify it, then revoke the old key.
+
+## Review an external agent's change
+
+Select **Read + reviewed changes** and the ticket actions you need before publishing access and creating a key. Available actions are support-ticket or incident creation, status, priority or category, assignment and notes. The key cannot approve its own proposal.
+
+1. Ask the agent to prepare the change and open the returned review link in Enduria.
+2. Sign in with an active staff account without a client binding. You need all-ticket view permission and the permission to make the proposed change.
+3. On **Review proposed action**, check the destination ticket, **Before this change**, client, proposed fields and note visibility. Creation also shows its **Initial status**.
+4. Select **Approve action**, **Reject**, or **Cancel proposal**.
+5. Check the recorded status and open the ticket to verify the result.
+
+Status changes follow your normal ticket rules. If resolving or closing a ticket requires a **Resolution code** and **Resolution details**, include them in the proposal and check both on the review. A change to the code, resolution requirement or allowed transition can require a fresh proposal. AI approval does not replace a separate domain approval.
+
+To let an external agent read the current resolution choices, explicitly include **Read ticket resolution choices** when reviewing its access. Existing published access and keys do not gain this capability automatically. The required people still need permission to read and edit the ticket.
+
+Approval records you as the person making the change. For a new ticket or incident, you are also the requester. Creation chooses the reviewed client or your organisation; other ticket links and fields use separate ordinary workflows. If no supported starting status is configured, use the ordinary workflow and ask an administrator to check the type's default status. The agent does not invent a replacement.
+
+Proposals expire after at most 30 minutes, or earlier when the key or published access expires. Changed records, retired choices or reduced access can make a proposal **stale**. No change runs in that case; request a fresh proposal. Required ticket and change approvals still apply.
+
+If saved ticket or client details are no longer available, approval is disabled. Reject or cancel the proposal and request a fresh one. Revoking a key stops approval of its pending changes; an eligible human can still close the saved review.
+
+After a lost response, select **Reload proposal** or retry the same decision to inspect the saved outcome. Ask the external client to keep the same request key when retrying exactly the same proposal. New fields need a new request key and review. Retrying a completed decision does not apply the change again.
+
+## Set up built-in ticket triage
+
+Use **Ticket suggestions** in AI settings to suggest a category and priority for future support tickets and incidents. You do not need to create a connection or key for this built-in workflow. Staff still review changes; suggestions do not assign work, send replies or resolve tickets.
+
+You need tenant-wide AI configuration view/edit, Agent access view/manage/publish and all-ticket view access. Enabling classification review also needs all-ticket edit. Configured routing needs ticket assignment and queue view/assignment access. Customer selection needs current customer-view access.
+
+1. Open **Settings → Artificial Intelligence → Features** and find **Ticket suggestions**.
+2. Select **Enable ticket suggestions**. Choose **Internal tickets** and, where available, expand **Customers** to select the customers it may process.
+3. Choose **Let staff prepare reviewed classification changes** if staff should prepare an exact change for separate approval. Optionally select **Offer configured routing after classification**; configure its queues in **Settings → Queues**.
+4. Select **Review settings**. Check the record scope, review options, configured model and access review date. Select **Save ticket suggestions**.
+5. Create a new eligible ticket or incident and open its workspace. Its preparation state advances to a suggestion or a recorded unavailable outcome. Review it through the steps below.
+
+The workflow saves separately from **Save Configuration**. Its activation sends no model request; future eligible tickets send their title and description to the configured AI provider. Existing tickets and historical imports are not processed. New settings do not widen an older captured suggestion's access.
+
+Saving an enabled workflow renews its access for one year. The current review date and **Saved state** appear in the card. To turn it off, clear **Enable ticket suggestions**, then review and save. This stops new work and leaves other AI settings unchanged; an already sent request may finish, but changed access can withhold its result.
+
+After a lost response, use **Check saved status** before retrying. If settings or permissions changed during review, load the current saved state and review again. A paused workflow needs its model, access or review date checked. If the app reports an unpublished draft, resolve that existing workflow in **Agent access** first. Saved customer access outside your current list or permissions cannot be silently replaced here; you can still turn the workflow off.
+
+If the previous owner no longer has access, the review explains that a new workflow will be owned by you. Saving disables the unavailable workflow and retains its records and drafts. Its pending work is not transferred to your authority.
+
+This simpler setup is awaiting application rollout. Until then, your installation may show the earlier separate workflow and classification switches. The limited [automatic-category option](ai.mdx#use-automatic-categories-when-supported) is configured in AI settings. Unattended routing remains planned separately.
+
+### Review and apply a classification
+
+You need `tickets.view.all` and `tickets.edit.all`, with an active staff account that is not restricted to a client. You do not need permission to configure AI or a service key to review a change.
+
+1. In the ticket workspace, select **Review classification**. Compare the current category and priority with the suggestion.
+2. Keep the suggested choices or choose an available priority and category. Changed choices are saved as your manual override; the original suggestion is retained separately.
+3. Select **Prepare classification review**, then **Review saved classification change**. Preparing saves the exact choices and does not edit the ticket.
+4. Check **Before this change** and the saved fields. Select **Approve action**, **Reject**, or **Cancel proposal**.
+5. Check the recorded outcome. An executed change records you as the person making it. Open or reload the ticket to see its current classification.
+
+A review expires within 30 minutes, or earlier when its published access expires. A newer prepared review supersedes older pending reviews. Each original suggestion can apply at most one reviewed classification change. If the ticket, available choices or permitted access changes, the saved review cannot execute; use the current ticket's ordinary editing flow. A current eligible editor can still reject or cancel a pending review after the workflow is disabled, without seeing withdrawn details.
+
+After a lost response, retry the same preparation with the same choices or select **Reload proposal** on the saved review. Check the recorded outcome before requesting another change. A completed decision does not apply twice. Adding classification review to a later publication does not grant it to suggestions captured under an older suggestion-only policy; use a future eligible ticket or ordinary editing.
+
+Only one ticket-triage workflow may be active in an organisation. Disable it before publishing a replacement. No service key is required. Earlier automation policies require a new built-in ticket-triage connection; publication does not convert them or process old tickets.
+
+Staff, email, portal, API and proactive creation use the same eligibility rules. Historical imports, changes, problems and service requests are excluded. Classification uses current active priorities for the ticket type and active categories available organisation-wide. Configure these choices first; client-restricted categories are not used by this initial workflow.
+
+The published time limit runs from ticket creation, including time in the queue. Keep enough time for the scheduler and model to finish. A changed ticket, retired choice, reduced access, disabled workflow or expired policy prevents a result from being applied. The ticket workspace withholds an outdated suggestion. If generation fails or times out, review the ticket manually; uncertain model attempts are not automatically resent. Ordinary ticket fields remain available.
+
+Disabling the workflow stops pending work when it next checks access; a model request already sent may finish, but its result still needs current authority. Retained triage evidence protects the ticket from ordinary deletion; close or cancel it when appropriate. Ask your operator to check the scheduler if queued work does not advance.
+
+### Review routing after classification
+
+Routing is separate from classification. It proposes a queue and, when configured, an assignee using existing queue settings. The model cannot select staff identities. Each original suggestion can apply one classification change and one separately reviewed routing change.
+
+1. In **Settings → Queues**, create or edit an active queue. Choose its supported ticket types, staff members and **Assignment Method**. Under **Ticket categories**, select the categories it should handle, or deliberately configure one **Default Queue**. Select **Save queue** when editing.
+2. For member selection, enable **Auto-Assign New Tickets** and choose round robin, workload or skill matching. Skill matching uses the configured category/tag requirements, minimum skill level, match threshold and fallback. Manual assignment or a manual fallback leaves the assignee unset. Named assignees in existing routing rules must remain active members of the destination queue.
+3. In **Ticket suggestions**, select **Let staff prepare reviewed classification changes** and **Offer configured routing after classification**, then review and save. This affects future eligible tickets; adding routing later does not widen older captured suggestions.
+4. Approve a new ticket's classification review, then open or reload the ticket. Staff with `tickets.view.all`, `tickets.edit.all`, `tickets.assign`, `queues.view` and `queues.assign` can select **Review routing**.
+5. Check **Destination queue**, **Assignee** and the reason. Select **Prepare routing review**, then **Review saved routing change**.
+6. Check the saved before values and destination. Select **Approve action**, **Reject**, or **Cancel proposal**. Open the ticket to verify an executed change.
+
+An enabled, supported matching routing rule takes precedence, with lower rule priority considered first. Conflicting targets at the same priority require manual routing. Otherwise, routing uses one matching category queue, then one explicit default. Missing, inactive, inaccessible, conflicting or unsupported configuration leaves the ticket unchanged; it does not create a fallback queue. Existing rules that also change priority or tags need ordinary routing rather than this bounded review.
+
+Routing never replaces an existing queue or assignee. A manual ticket edit, changed classification vocabulary, changed queue settings, ineligible assignee or reduced access can invalidate the review. Queue visibility is retained when editing category mappings. A new routing review supersedes older pending routing reviews, while classification decisions stay separate. The routing window ends 30 minutes after classification was applied, or earlier when the published policy expires. If it is unavailable or expired, use ordinary ticket editing. After a lost response, reload the saved review or retry the same decision; completed routing does not assign twice.
+
+This workflow and the queue category picker are awaiting application rollout. Unattended routing remains planned separately. The optional automatic-category update does not provide this routing review; staff use ordinary routing fields for those tickets.
+
+## Disable or revoke a connection
+
+1. Open the connection and select **Disable connection** or **Revoke connection**.
+2. Enter a reason and confirm the named action in the dialog.
+
+Disabling retains the connection and its evidence; a new reviewed publication can activate it again. Revocation is permanent: create a new connection if access is needed later. Published policies and decision history remain available for inspection. The page shows up to 50 recent publications and events and indicates when more history exists.
+
+## Common problems
+
+| Problem | Next step |
+| --- | --- |
+| Access records fail to load | Select **Reload**. Check current agent-access permissions if the error persists. |
+| An action is unavailable | Check its availability label, the relevant module permission and access mode. Read-only excludes changes. Actions marked **Not available yet** require a future release. |
+| A client or delegate is missing | Check active status, account scope and client/directory visibility. Lists show at most 1,000 choices and indicate truncation. |
+| Saving or publication reports a conflict | Reload the connection, inspect the saved draft and obtain a new preview. |
+| Current authority is unavailable | Check the connection status, expiry, selected clients and current owner, publisher and delegate permissions. |
+| The agent cannot connect after publication | Check the service identity, MCP address, saved Bearer key, API enablement, expiry and current authority. Built-in ticket triage does not use a key. Delegated sign-in is not available yet. |
+| The key secret was not saved | Select **Refresh keys**. Revoke the unsaved key and deliberately create a replacement; its secret cannot be retrieved. |
+| A request limit is reached | Wait before retrying. Check the selected usage profile and whether other requests are still running. |
+
+For staff assistance and provider settings, see [AI settings](ai.mdx) and [Using AI assistance](../product/ai-assistance.mdx).
