@@ -10,7 +10,7 @@ Plan application and schema upgrades together. Enduria commits SQL migrations as
 ## Upgrade procedure
 
 1. Read the release notes and identify configuration or compatibility changes.
-2. Back up the database and user-managed file storage.
+2. Arrange a maintenance window and stop the application instances and scheduler. Back up the database, user-managed file storage and protected recovery configuration together; follow the [backup and isolation procedure](./backups.mdx).
 3. Confirm the backup can be restored and record the currently deployed version.
 4. Pull or build the intended release image.
 5. Run the one-shot migration service successfully.
@@ -18,7 +18,7 @@ Plan application and schema upgrades together. Enduria commits SQL migrations as
 7. Check `/api/health`, authentication, a tenant-scoped read, and scheduled processing.
 8. Monitor logs and key workflows before declaring the upgrade complete.
 
-If an upgrade fails after a migration, use the release-specific recovery guidance. Do not assume that deploying an older image against a newer schema is safe. A rollback may require restoring the pre-upgrade database backup.
+If an upgrade fails after a migration, keep the application and scheduler stopped and use the release-specific recovery guidance. Preserve the failed command's result and inspect migration completion before retrying the guarded command. Do not assume that deploying an older image against a newer schema is safe. A rollback may require restoring the pre-upgrade database backup into an isolated target and reconciling later external activity before restarting workers.
 
 ## Migration history checks
 
