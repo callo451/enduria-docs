@@ -21,7 +21,7 @@ const sidebars: SidebarsConfig = {
       'admin/ticket-imports', 'admin/ticket-import-analytics',
     ]}, 'admin/ticket-numbering', 'admin/service-level-targets', 'admin/customer-satisfaction',
     {type: 'category', label: 'Email', link: {type: 'doc', id: 'admin/email/overview'}, items: [
-      'admin/email/outbound', 'admin/email/inbound', 'admin/email/notifications', 'admin/email/deliverability', 'admin/email/troubleshooting',
+      'admin/email/outbound', 'admin/email/inbound', 'admin/email/microsoft365', 'admin/email/notifications', 'admin/email/deliverability', 'admin/email/troubleshooting',
     ]},
     'admin/integrations', 'admin/storage', 'admin/ai', 'admin/agent-access',
   ],

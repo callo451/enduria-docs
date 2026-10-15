@@ -5,7 +5,9 @@ description: Choose how Enduria sends email for your organisation, set the sende
 
 # Outbound email
 
-Outbound settings decide how Enduria sends mail for your organisation. Open **Settings → Email Integration**; the page is titled **Email**. You need the **Manage Settings** (`settings.manage`) permission.
+For commercial Exchange Online, follow [Microsoft 365 OAuth setup](./microsoft365), which is awaiting rollout. It uses a tenant-owned application and the configured mailbox as sender. Other SMTP providers keep their password settings.
+
+Outbound settings decide how Enduria sends mail for your organisation. Open **Settings → Email Integration**; the page is titled **Email**. You need current tenant-wide staff access and the **Manage Settings** (`settings.manage`) permission; portal and client-bound accounts cannot manage the organisation's mail connection.
 
 Changes are not applied until you select **Save** in the page header. **Discard** returns to the saved settings. The header also shows where your settings stand: *Not configured*, *Saved, not verified*, *Verified*, or *Unsaved changes*.
 

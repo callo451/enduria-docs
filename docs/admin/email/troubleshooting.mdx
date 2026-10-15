@@ -55,7 +55,7 @@ description: Causes and fixes for the messages Enduria shows when sending or rec
 
 | Message | What to check |
 | --- | --- |
-| The mail server rejected the sign-in. Check the username and password, or whether the provider requires an app password. | Credentials; whether IMAP access is enabled for the account. |
+| The mail server rejected the sign-in. Check the mailbox credentials and provider permissions. | Password credentials for ordinary IMAP, or application consent, secret expiry and mailbox grants for [Microsoft 365 OAuth](./microsoft365). Confirm IMAP is enabled. |
 | A secure connection could not be established or the server certificate could not be verified. | The host name matches the server's certificate; the TLS setting matches the port. |
 | The mail server host name could not be found. Check the IMAP host. | Spelling of the host. |
 | The mail server address is not allowed: it is invalid or on a private network. | Use the provider's public IMAP host. A server on your own network must be allowed by the operator of your installation. |
