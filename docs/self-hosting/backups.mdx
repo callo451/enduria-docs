@@ -9,13 +9,35 @@ A backup is useful only when it is complete, protected, and restorable within yo
 
 Back up at least:
 
-- The PostgreSQL database.
+- The whole PostgreSQL database, including application records, migration history and any Workflow/queue schemas. A ticket report or customer export does not replace this backup.
 - [File storage](./file-storage.mdx): the local storage volume, or the S3 bucket (versioning plus replication or AWS Backup).
 - Deployment configuration needed to reconstruct services.
-- Encryption keys and provider configuration through an appropriately protected recovery process.
+- Encryption and authentication keys and provider configuration through an appropriately protected recovery process. A database backup alone cannot recover encrypted credentials when their keys are missing.
 
 Keep multiple restore points, encrypt backup media, restrict access, and store a copy outside the failure domain of the running deployment.
 
-## Test recovery
+## Keep a restore isolated
 
-Regularly restore into an isolated environment, start a compatible Enduria release, run health checks, and verify representative tenant data and attachments. Record the achieved recovery time and the newest recovered transaction so you can compare them with your recovery objectives.
+> **Awaiting rollout:** The retained queued-mail recovery behaviour described below applies to the upcoming release. Confirm the behaviour of your selected release before reconnecting restored services.
+
+A restored database can contain queued work that has already reached an external provider since the backup was taken. Starting the application can start background workers even when the separate scheduler is stopped.
+
+1. Fence the original deployment so its application instances and scheduler cannot accept traffic or continue background work. For a cold backup, stop those processes before capturing the database and files, and keep them stopped until the capture is complete. Arrange an appropriate maintenance window if other organisations share the deployment.
+2. Restore into a separate database and file location. Keep the restored application and scheduler stopped, deny external traffic and outbound provider access, and allow only the maintenance connections needed to inspect the restored database and storage.
+3. Verify the database, files, migration history and required keys before starting services. Keep backup credentials and key escrow out of diagnostic logs and customer exports.
+4. Reconcile activity after the backup point against provider records and the fenced source. Review queued messages, integrations and other pending effects before allowing workers to resume. Do not delete delivery evidence or reset attempts to force a replay.
+5. Confirm that only the intended deployment can run, then deliberately restore its approved provider access and start the compatible application and scheduler. Verify representative journeys before opening access to users.
+
+If you cannot reconcile an external effect, keep that activity isolated and seek deployment-specific recovery assistance. Do not treat an old pending row as proof that the provider has never received the action.
+
+## Handle uncertain mail
+
+If a worker stops after sending has begun but before delivery is confirmed, the upcoming release retains the message as **uncertain** when the next worker acquires it. It does not automatically resend that uncertain message. A provider might already have accepted it; inspect provider records before choosing a manual retry and acknowledging the duplicate-delivery risk. Restoring an older backup can remove that later delivery evidence, which is why reconciliation before worker startup is necessary.
+
+## Test usable recovery
+
+Regularly exercise this procedure with owned test data. After the isolation and reconciliation checks, start a compatible Enduria release, run health checks, and verify authentication, representative tenant records, attachment bytes, knowledge images, credential decryption and queued-work outcomes. A successful `/api/health` response alone does not establish usable recovery.
+
+Record the newest recovered transaction, the time required to regain usable service, the operator steps and any provider uncertainty. Compare those observations with your agreed recovery objectives. Include an interrupted delivery in the exercise and verify that it remains available for review without an automatic resend.
+
+Include a tenant-scoped ticket report in the restored-environment check. If figures remain unavailable, follow [ticket reporting verification and recovery](./upgrades#ticket-reporting-verification-and-recovery) for releases that include it. Preserve unknown history and the imported backlog's no-SLA-clock rule during recovery.

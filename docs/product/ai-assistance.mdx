@@ -1,0 +1,154 @@
+---
+title: Using AI assistance
+description: Ask for help, review suggestions, and distinguish proposals from completed actions.
+---
+
+# Using AI assistance
+
+Use AI assistance to investigate work and prepare changes that you can review. The available records and actions depend on your account, permissions, and your administrator's feature settings.
+
+> **Availability:** The central agent, revised portal assistant, action-state labels and shared module access rules described here are awaiting application rollout. Your current service may still show the older Copilot, portal chat and AI Search screens.
+
+## Ask for help
+
+Staff use one **Agent** when enabled for their account. Open it from the sidebar or the **Agent** button. On smaller screens, this button is in the top bar; on desktop, it is near the bottom corner. AI briefing questions and record shortcuts enter this same conversation. Existing AI Search links open the expanded agent workspace.
+
+1. Open **Agent** and describe what you need in **Message the agent**.
+2. Select **Send**, or press Enter. Use Shift+Enter for a new line.
+3. Check the returned sources and any **Review required** action.
+4. Select **Expand agent workspace** when you need more space. Your conversation, draft and selected context stay with you.
+
+An answer is guidance; it does not establish that a ticket is resolved or a change has been completed. There is no need to choose a different assistant for each module.
+
+## Keep your work when moving between pages
+
+**Close agent panel** hides the panel while keeping the same conversation. Changing staff pages or moving between the panel and workspace does not start a new request. Drafts save automatically; wait for **Draft saved** before reloading the browser. If a draft cannot save, its text stays in the current app session so you can try again.
+
+Use **Conversations** to choose a recent saved conversation. **New conversation** starts a separate task without changing earlier proposals. The agent shows the latest 20 requests in a conversation; start a new conversation when it asks you to continue there. Older AI Search records are not converted into new agent conversations.
+
+Use **Stop response** to stop new generation calls and disconnect the streamed answer. A provider call already sent may still finish. Stopping does not reverse an applied action or cancel a pending review. After an interrupted or lost response, select **Check saved status** before starting another request. A retry of the same saved submission does not automatically send the model request again.
+
+Earlier response details may be withheld when a source changes or becomes unreadable. Current retained action outcomes can still appear. Ask a fresh question for up-to-date guidance.
+
+## Add a record to your next request
+
+1. Open a ticket, active asset, accessible project or published knowledge article.
+2. Select its **Ask agent** control.
+3. Check the named record and select **Add context**.
+4. Add your question and select **Send**.
+
+Context applies to the next request. It does not change the target of an existing proposal. Select **Remove** to clear the next request's context, or **Dismiss** to ignore a suggested record or question. If there is already a draft, a suggested question is offered for you to add rather than replacing your text.
+
+Use a complete ticket number or record ID when asking about one ticket. Use keywords when searching. Ticket details include a bounded recent conversation, so open the linked ticket for its complete history.
+
+Your administrator may limit AI usage. If a request reaches a limit or cannot finish, check any saved action's review before trying again. A finished response is separate from an applied ticket change. An interrupted response does not undo an action that was already recorded.
+
+Knowledge answers use published articles available to your account. Drafts and project pages are excluded. Portal assistance also excludes internal articles and internal ticket notes. If access changes while information is being retrieved, the assistant may ask you to try again instead of returning the earlier result.
+
+## Investigate across modules
+
+Use the Agent for questions about accessible projects, assets and ticket analytics. Use a complete project number or code, or an exact asset tag, serial number or record ID, when asking for one record. Use search keywords to find candidates first if you do not know the exact identifier. Open the cited workspace to inspect the complete record.
+
+Project membership and management permissions determine which projects can appear. Project financial information needs a separate budget-view permission. Asset investigation returns selected register and reported device facts; it does not run repairs, move custody or restore an archived asset. Active assets are used by default.
+
+Check the period and any limitations on an analytical response. Counts remain scoped to your accessible records. A short list of groups may be truncated even when the total includes the full matching cohort. A missing SLA outcome is unknown, and a percentage change from a previous period with no records is unavailable.
+
+If specialist assistance prepares an email or notification, review the text yourself. A draft has not been sent. Queue choices and classification guidance do not apply field changes.
+
+## Review a proposed change
+
+1. Look for **Review required** and **Review proposed action** in the response. A completed action uses **View action outcome**.
+2. Open the review link using the same account that requested the action.
+3. Check the destination record and every saved field, including whether a note is internal or public.
+4. Select **Approve action** to execute the saved proposal, or **Reject** to leave it unexecuted.
+5. Read the resulting status and open the linked ticket to verify the result.
+
+Approval uses your current permissions. Proposals expire after 30 minutes. If the proposal is wrong, reject it and request a new one; approving does not replace its saved fields. Required domain reviews still apply.
+
+New ticket-action proposals also keep the access they were prepared with. Gaining broader access does not expand a saved action. **Cancel proposal** is available for these new proposals; older saved reviews may show only **Approve action** and **Reject**. Cancellation and rejection leave the proposed change unexecuted.
+
+If the review reports **stale**, the source or configuration changed and no action ran. Request a fresh suggestion and review its updated details. After a lost response, retry the same decision or use **Reload proposal** to inspect the recorded outcome before requesting another change.
+
+An assignment can move a ticket out of your own-ticket access. In that case the review confirms that the action was recorded and withholds the ticket details. A colleague with current access can verify the result.
+
+Status and classification suggestions must use your organisation's current choices. A classification action needs a priority or category. If a choice has been retired or changed, request a fresh suggestion using the available choices.
+
+When asking to resolve or close a ticket, supply the required resolution code and explain what fixed the issue. Check **Resolution code** and **Resolution details** on the review before approving. The Agent follows the same allowed transitions and resolution rules as the ticket screen. If those rules or the selected code change, request a fresh proposal. The Agent does not resolve tickets without your review.
+
+External agents with published service access can also offer ticket review links. An eligible staff reviewer opens **Review proposed action**, checks **Before this change** and the saved fields, then selects **Approve action**, **Reject** or **Cancel proposal**. Approval records that reviewer as the person making the change; new tickets also use them as requester. The external agent cannot approve the change. See [Agent access](../admin/agent-access.mdx) for setup and recovery steps.
+
+| Label | Meaning |
+| --- | --- |
+| Working | A tool response is still being prepared. |
+| Review required | A decision is needed; the proposed business action has not run. |
+| Result available | A tool returned information. This alone is not an execution receipt. |
+| Executed | The returned action state records execution. Verify the linked record. |
+| Not executed | The action was denied, rejected or cancelled. |
+| Failed | The response or operation failed. Inspect current status before requesting another change. |
+| Outcome uncertain | The outcome needs verification; do not assume the effect did or did not happen. |
+
+## Review ticket classification
+
+A ticket workspace may show **Classification is queued**, then **Preparing a classification suggestion…**, followed by **Suggested classification** with a category and priority. No fields have changed automatically. Suggestions do not route, assign or resolve the ticket.
+
+If your administrator has enabled classification review and you have all-ticket view and edit access, select **Review classification**. Compare the current fields, keep the suggestion or adjust the choices, then select **Prepare classification review**. Open **Review saved classification change**, check the exact fields, and select **Approve action**, **Reject**, or **Cancel proposal**. Approval records you as the person changing the ticket. Reload the ticket after an executed change. Without this review option, use the ordinary ticket fields.
+
+A newer prepared review supersedes an older pending one. Changed tickets, retired choices or reduced access prevent the saved review from executing. After a lost response, reload the saved review and check its outcome before requesting another change. A completed decision does not apply twice. Each original suggestion can apply at most one reviewed classification change; later edits use the ordinary ticket workflow.
+
+If the ticket changes, its old suggestion no longer applies. A timed-out or unavailable classification asks you to review manually; do not wait for it to do the work. An older suggestion may still show **AI suggestion awaiting review** and a confidence score. Confidence is an estimate, not a verified outcome or permission to change a ticket.
+
+Your administrator enables **Ticket suggestions** in AI settings and chooses its eligible records. You do not need AI configuration access to review a saved suggestion. See [built-in ticket triage](../admin/agent-access.mdx#set-up-built-in-ticket-triage). This workflow is awaiting rollout. The limited automatic-category option below also requires a supported configuration and explicit administrator opt-in.
+
+### Check an automatic category update
+
+On an eligible new internal general support ticket, the workspace may say **The category was set automatically** and name the recorded category. Priority, routing, assignment and resolution were unchanged. You can edit the category in the ordinary ticket fields; an AI response does not confirm resolution.
+
+This option excludes supplied categories, touched tickets, customer tickets, incidents, historical imports, assigned work, queues, projects and required approvals. If the supported configuration becomes unavailable, use ordinary classification and reviewed suggestions. Contact your administrator if you expected an update; do not repeatedly submit the ticket to try to trigger one.
+
+### Review a routing destination
+
+After classification is applied, a suitably authorised staff member may see **Review routing**. Open it to see the configured **Destination queue**, **Assignee** and reason. Select **Prepare routing review**, then **Review saved routing change**. Check the saved destination and choose **Approve action**, **Reject**, or **Cancel proposal**. Routing uses queue settings and needs its own approval; classification approval does not assign the ticket.
+
+Existing ownership is preserved. If no supported unambiguous destination is available, or the ticket, queue, member access or policy changes, route the ticket through its ordinary fields. A completed routing decision does not run twice. The routing window ends within 30 minutes of classification being applied; opening or preparing another review does not extend it. See [routing setup and recovery](../admin/agent-access.mdx#review-routing-after-classification). This capability is awaiting rollout.
+
+## Saved conversation expiry
+
+Your organisation sets how long inactive staff Agent and portal assistant conversations are kept. When a conversation expires, its saved messages, draft and source results are removed. Select **New conversation** to continue; do not resend an expired operation. Tickets and separately saved action reviews remain subject to their own access and retention rules. This expiry feature is awaiting rollout.
+
+## Customer portal assistance
+
+When enabled, the portal shows a **Support assistant** button; your organisation may give it another name. It can find published knowledge available to your account, check your own requests and prepare a support-ticket proposal.
+
+1. Open **Support assistant** and wait for **Checking saved status** to finish.
+2. Describe the issue in **Message**, then select **Send**. Do not include passwords or access keys.
+3. Open **Sources** to read the linked guidance or request.
+4. If the assistant proposes a ticket, open its review link and check the details before approving. A proposal has not created a ticket yet.
+
+The assistant can also find active services available to your customer account. Where it offers a service-request link, open the service's form, complete its required fields and submit through the normal request flow. Offering a link does not create a request.
+
+Closing the panel keeps your draft and conversation. On a phone, the panel fills the screen. **Stop response** ends generation; it does not undo an approved action or cancel a saved proposal. A provider request already sent may still finish. **New conversation** starts a separate conversation; your submitted requests remain in **My tickets**.
+
+After an interruption, select **Check saved status**. If the message has not been found yet, **Send again** retries that same message without starting a second saved request. If you select **Stop waiting**, check saved status before starting a new conversation. A stopped response stays stopped after reload.
+
+Saved guidance and source links can become unavailable when their source or your access changes. The assistant checks again when you open it, return to the browser or select **Check saved status**. It shows recent messages; open **My tickets** for submitted requests. Earlier portal chat history is not restored when its sources cannot be verified.
+
+### Say whether guidance helped
+
+When **Did this guidance help?** appears below a saved answer, select **Helped** or **Still need help**. The assistant records your decision about that answer once. It does not change a ticket's status. If the response is interrupted, use **Check saved status** before trying again. Feedback is unavailable when its guidance sources are no longer available to you.
+
+### Share selected messages with support
+
+1. After the response ends, select **Ask support for help**.
+2. Check the **Request title**, choose your organisation's **Priority** and **Category**, and select **Your messages to share**. Select **Review sharing**.
+3. Read the exact preview, including **Messages shared with your support team**. Tick **I agree to share these messages in a new support request**, then select **Send request**.
+4. When the request is created, select **Open request** to continue with your support team.
+
+Only your selected messages are included. AI answers and article text are excluded. Reviewing the preview does not send anything. You can choose up to ten recent messages, with 8,000 characters in total; deselect messages you do not need to share.
+
+Use **Check support request** to return to the prepared request. After an interrupted response, select **Check saved status** before trying again. Sending the same prepared request again does not create another ticket. **Cancel prepared request** cancels an unsent proposal; it does not undo a ticket that was already created.
+
+If the preview expires, your access changes or your team requires a separate request approval, use the normal request form in **My tickets**. Required approvals still apply. A created request is waiting for support; it does not mean the issue is resolved.
+
+**Contact support** opens your tickets without sending the conversation. Receiving guidance or selecting **Still need help** does not send a request on its own.
+
+If saved status cannot load, your draft stays in this browser tab while you check again or use the normal portal request flow. Check existing proposals and tickets first so you do not submit the same request twice. Signing out clears the assistant's local recovery details. If the assistant is absent, ask your service provider whether it is enabled for your portal.

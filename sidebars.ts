@@ -9,21 +9,21 @@ const sidebars: SidebarsConfig = {
       {type: 'category', label: 'Asset management', link: {type: 'doc', id: 'product/assets'}, items: [
         'product/asset-imports', 'product/asset-data-quality', 'product/asset-custody', 'product/asset-acceptance', 'product/asset-loans-and-leavers', 'product/asset-statuses', 'product/asset-lifecycle', 'product/asset-approvals', 'product/asset-event-rules', 'product/asset-follow-up-tickets', 'product/inventory', 'product/stock-reservations', 'product/purchase-orders', 'product/supplier-invoices', 'product/client-stock-and-billing', 'product/counts-and-audits', 'product/asset-repairs-and-maintenance', 'product/asset-planning', 'product/software-catalogue', 'product/asset-fields', 'product/client-estate-reviews', 'product/agreement-coverage', 'product/asset-assistance',
       ]},
-      'product/projects', 'product/knowledge-base', 'product/customer-portal', 'product/email-notifications',
+      'product/projects', 'product/knowledge-base', 'product/customer-portal', 'product/email-notifications', 'product/ai-assistance',
     ]},
     'troubleshooting',
   ],
   adminSidebar: [
     {type: 'doc', id: 'admin/overview', label: 'Administration overview'},
-    'admin/users-and-permissions', 'admin/branding', 'admin/ticket-administration', 'admin/ticket-statuses', {type: 'category', label: 'Ticket migration', link: {type: 'doc', id: 'admin/ticket-migration-workspace'}, items: [
+    'admin/users-and-permissions', 'admin/data-export', 'admin/branding', 'admin/ticket-administration', 'admin/ticket-statuses', {type: 'category', label: 'Ticket migration', link: {type: 'doc', id: 'admin/ticket-migration-workspace'}, items: [
       'admin/ticket-migration-sources', 'admin/ticket-migration-evidence', 'admin/ticket-migration-plans',
       'admin/ticket-migration-activation', 'admin/ticket-migration-adoption', 'admin/ticket-migration-corrections', 'admin/ticket-migration-reconciliation', 'admin/ticket-migration-handover', 'admin/ticket-migration-exceptions',
       'admin/ticket-imports', 'admin/ticket-import-analytics',
     ]}, 'admin/ticket-numbering', 'admin/service-level-targets', 'admin/customer-satisfaction',
     {type: 'category', label: 'Email', link: {type: 'doc', id: 'admin/email/overview'}, items: [
-      'admin/email/outbound', 'admin/email/inbound', 'admin/email/notifications', 'admin/email/deliverability', 'admin/email/troubleshooting',
+      'admin/email/outbound', 'admin/email/inbound', 'admin/email/microsoft365', 'admin/email/notifications', 'admin/email/deliverability', 'admin/email/troubleshooting',
     ]},
-    'admin/integrations', 'admin/storage',
+    'admin/integrations', 'admin/storage', 'admin/ai', 'admin/agent-access',
   ],
   apiSidebar: [
     {type: 'doc', id: 'api/overview', label: 'API overview'},

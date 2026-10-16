@@ -21,3 +21,57 @@ Keep deployment configuration outside the container image and source repository.
 Restart the affected service after changing environment values. Validate `/api/health`, sign-in, and one representative background job after material configuration changes.
 
 Refer to the release's example environment file and deployment configuration for the complete variable list; supported variables can change between releases.
+
+## Public URL and reverse proxy
+
+> **Awaiting rollout:** Setup saves and branding uploads using the configured public origin behind a standalone reverse proxy are awaiting application rollout.
+
+Set `BETTER_AUTH_URL` to the public application URL that users open, for example `https://support.example.com`. `NEXTAUTH_URL` is the supported fallback when `BETTER_AUTH_URL` is unset. Use the public address rather than a container name or bind address such as `0.0.0.0`.
+
+Configure the reverse proxy to preserve the original **Host** header. Additional approved sign-in origins belong in `AUTH_TRUSTED_ORIGINS` as comma-separated exact origins, including the scheme and any non-default port. Each request must still use the Host belonging to its own approved origin; a forwarded-host header does not grant access from another origin.
+
+If setup or a logo upload reports **Invalid request origin**, check the browser address, public URL configuration and preserved Host, then restart the application after configuration changes. Keep the origin protection enabled; do not change the browser's Origin to an internal address to bypass the refusal.
+
+## Enable MCP service connections
+
+> **Availability:** Scoped service keys are awaiting application rollout. Existing dedicated ticket keys keep their original access.
+
+1. Set `MCP_ENABLED=true` for the application service.
+2. Set `MCP_PUBLIC_URL` to its public root address, for example `https://support.example.com/`. Do not include `/api/mcp`, credentials, a query or a fragment.
+3. Use HTTPS and configure the reverse proxy to preserve the public Host header. HTTP is accepted only for loopback testing.
+4. Restart the application service and verify normal sign-in and `/api/health`.
+5. Ask an authorised administrator to publish service access and create a key through [Agent access](../admin/agent-access.mdx). Organisation API access must remain enabled.
+
+The administrator copies the complete MCP address from that screen. Clients authenticate each request with a Bearer key. JSON Streamable HTTP is supported; GET event streams and delegated OAuth sign-in are not available in this increment. Allowed reads and preparation of reviewed ticket changes do not require Enduria to call an AI model provider. A signed-in staff reviewer approves changes in Enduria; the Bearer key cannot make that decision.
+
+## Run built-in ticket triage
+
+> **Availability:** The durable ticket-triage workflow is awaiting application rollout.
+
+Apply the release's committed database migrations, configure an AI provider and keep the bundled scheduler running with the same `CRON_SECRET` as the application. The scheduler's manifest includes `/api/cron/agent-triage` every minute. Existing self-hosted Workflow SDK configuration also applies; retain its durable PostgreSQL world across restarts.
+
+An authorised administrator enables **Ticket suggestions** in AI settings, reviews its eligible records and saves the [built-in ticket-triage workflow](../admin/agent-access.mdx#set-up-built-in-ticket-triage). MCP configuration and a service key are not required for this workflow. Verify it with one new in-scope ticket: queued work should advance to a suggestion or a recorded unavailable, stale, failed or expired state. Check scheduler and application health when pending work does not advance.
+
+The workflow retains creation intents and provider-attempt claims. Recovery does not resend an uncertain model attempt. Turn off **Ticket suggestions** through its reviewed settings flow to stop pending work, then inspect retained outcomes; do not delete claims or run historical tickets through it to force a retry.
+
+New triage attempts retain a fingerprint of their model configuration. Changing that configuration during generation prevents the result from being saved. Keep a strong `BETTER_AUTH_SECRET` (or the supported `NEXTAUTH_SECRET` fallback); rotating it also invalidates in-flight configuration bindings. Model endpoint addresses and credentials are not included in this retained fingerprint metadata.
+
+You may set `AI_MODEL_REVISION` to an operator-reviewed deployment or model revision (up to 200 characters). Update it when the serving deployment changes and restart the application. This optional label helps track configuration changes. It does not verify the provider's model version or enable automatic ticket changes.
+
+### Support automatic internal-ticket categories
+
+This optional first-release feature is awaiting rollout. Configure the fixed model revision in `AI_MODEL_REVISION` and use an engineering-reviewed supported configuration before an administrator enables [automatic categories](../admin/ai.mdx#use-automatic-categories-when-supported). Provider compatibility and a model confidence score do not establish that support. The model, provider binding, installed adapter, prompt, configured choices and relevant generation limits must match the reviewed configuration.
+
+Ordinary administrators only choose the opt-in in AI settings. Engineering evidence and its review stay internal; no customer model lab is required. If support expires or is withdrawn, new automatic effects stop. Keep reviewed suggestions available and investigate the saved state before changing configuration or retrying work. No automatic priority, assignment, routing or resolution is included.
+
+## Maintain AI history
+
+> **Availability:** Bounded conversation expiry and atomic tenant-deletion refusal are awaiting application rollout.
+
+Keep the bundled scheduler running with the application's `CRON_SECRET`. The existing `/api/cron/ai-monitoring` schedule starts daily retention work during its midnight UTC window, including when monitoring assistance is off. The administrator's **History and activity retention (days)** setting controls ordinary logs and inactive staff/portal transcripts; it defaults to 90 days.
+
+Each retention step removes up to 25 inactive conversations from each assistant and up to 500 ordinary records from each activity family. Further scheduled runs drain a backlog. Active or unrecovered model runs keep their conversations. Investigate their saved status and close or stop them through the supported assistant controls; do not delete accounting or dispatch claims to force progress. Workflow retries may finish another eligible batch safely.
+
+Minimal operation references prevent expired submissions from being admitted again. Command proposals, decisions, ticket-effect evidence, model-use records, engineering quality evidence, report objects and Workflow SDK storage have separate retained lifetimes. Configure provider, export, object-storage and backup handling separately; transcript expiry does not erase those copies.
+
+Organisation deletion now commits its database changes together or refuses them together. Retained or linked records may require operator review; a refusal deletes nothing. It does not override asset holds or other domain evidence policies. External email identity cleanup runs only after a successful database commit and is best effort. A complete retained-evidence erasure procedure remains separately governed; do not disable database guards.

@@ -178,6 +178,19 @@ Tick assets in the register to select them, across pages, up to 200 at a time. C
 
 On a phone, the register shows each asset as a card, and **Sections** opens the other asset pages.
 
+### Investigate with AI assistance
+
+> **Availability:** The shared asset assistance described here is awaiting application rollout. It requires enabled staff AI assistance and `assets.view` on an unbound staff account.
+
+For external agents, an administrator can publish asset read access and create a service key through [Agent access](../admin/agent-access.mdx). This setup is also awaiting rollout. The selected client scope and current permissions apply to each read. A read key does not permit custody, repair, archive or disposal actions.
+
+1. Open **Agent** to search for an asset, or select **Ask agent** on the asset record and then **Add context**.
+2. Provide search keywords, or an exact asset tag, serial number or record ID for a detail lookup.
+3. Review the returned facts and open the cited asset for its complete record.
+4. For distribution questions, check whether archived records are included and read any chart limitations.
+
+Asset assistance reads selected facts. It does not change custody, stock, archive state or disposal evidence. Active register records are used by default; an explicit archived-record investigation does not restore them. Reported device observations are measurements, not proof that a repair succeeded. See [Using AI assistance](./ai-assistance) for review and permission guidance.
+
 ## Create an asset
 
 You need asset-create permission.

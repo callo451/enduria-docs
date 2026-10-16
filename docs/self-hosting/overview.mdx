@@ -7,6 +7,12 @@ description: Plan a supported Enduria deployment.
 
 Enduria is an AGPL-3.0 web platform designed to run with PostgreSQL and its supporting services. The repository's Docker Compose configuration is the normal starting point for a self-hosted deployment.
 
+## Build resources
+
+> **Awaiting rollout:** The updated source-build memory setting is awaiting release. Use the build instructions for your selected application release.
+
+When building the current Docker image from source, use a build host with room for a 12 GiB Node heap plus the operating system and other build workers. The setting applies to compilation and type checking. Measure runtime capacity separately against your workload; you can build the image on a separate machine and transfer it to the deployment host.
+
 ## Production responsibilities
 
 A production operator is responsible for:
@@ -21,6 +27,4 @@ A production operator is responsible for:
 
 The public `/api/health` endpoint reports application liveness and database reachability without exposing internal error details.
 
-:::caution
-Do not use `db:push` as a production upgrade mechanism. Production upgrades apply the committed migrations shipped with the release.
-:::
+> **Upgrade with committed migrations:** Do not use `db:push` as a production upgrade mechanism. Production upgrades apply the committed migrations shipped with the release.

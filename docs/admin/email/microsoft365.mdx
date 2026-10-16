@@ -1,0 +1,60 @@
+---
+title: Microsoft 365 mail
+description: Connect an Exchange Online support mailbox using a tenant-owned application and OAuth.
+---
+
+# Microsoft 365 mail
+
+Connect a commercial Microsoft 365 mailbox to receive tickets over IMAP and send replies over SMTP using OAuth. You need current tenant-wide staff access and **Manage Settings** (`settings.manage`) in Enduria, plus a Microsoft administrator who can configure application consent and mailbox access.
+
+> **Awaiting rollout.** The **Microsoft 365 OAuth** controls described here are awaiting application rollout. Confirm that they are available in your installation before configuring the mailbox. Successful setup still requires your Microsoft tenant's consent, mailbox grants and security policies.
+
+Use a tenant-owned, single-tenant Entra application. This connection is separate from calendar, device and licence integrations. Personal Outlook accounts, sovereign Microsoft clouds and delegated user-consent sign-in are outside this setup.
+
+## Prepare Microsoft 365
+
+Ask your Microsoft administrator to complete [Microsoft's application-permission and Exchange service-principal setup](https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth#use-client-credentials-grant-flow-to-authenticate-smtp-imap-and-pop-connections):
+
+1. Register an Entra application for accounts in your organisation only. Record its **Directory (tenant) ID** and **Application (client) ID**.
+2. Add the **Office 365 Exchange Online** application permissions `IMAP.AccessAsApp` for inbound mail and `SMTP.SendAsApp` for outbound mail. Grant administrator consent. Microsoft Graph permissions alone do not supply these protocol permissions.
+3. Register the application's service principal in Exchange Online and grant it access to the intended mailbox. Follow Microsoft's distinction between the enterprise application's object ID and the app-registration object ID. Configure the required mailbox access and SendAs permission for sending.
+4. Create an application client secret and retain its **value**, expiry date and owner. Enduria needs the value, not the secret's ID. Confirm that IMAP and SMTP AUTH are permitted for the mailbox under your tenant's policies; resolve policy restrictions with your Microsoft administrator.
+
+Start with one support mailbox and limit the application's mailbox grants to the intended accounts. Enduria obtains short-lived access tokens automatically. Renew the application secret before it expires; token renewal does not renew that secret.
+
+## Receive requests and replies
+
+1. Open **Settings → Inbound Email**, then **Add Account**. Enter the account name and support mailbox address on **Basic**.
+2. On **IMAP**, choose **Authentication → Microsoft 365 OAuth**.
+3. Confirm the fixed host `outlook.office365.com`, port `993` and enabled **Use SSL/TLS**. Enter the full mailbox address as **Username**.
+4. Enter **Microsoft tenant ID**, **Application client ID** and **Application client secret** from the prepared application.
+5. Choose the polling interval, processed-message handling and sender policy using the [inbound guide](./inbound). OAuth authenticates Enduria to the mailbox; it does not establish that an incoming sender is trusted or entitled to reply publicly.
+6. Select **Create** or **Update**, then use the account's connection-test button. A successful connection check does not process a message. Use **Poll Now** and review the processing log for actual intake.
+
+The host, port and TLS setting are fixed in this authentication mode. Other mail providers can continue using **Password** authentication with their own settings.
+
+## Send replies
+
+1. Open **Settings → Email Integration** and choose **Your own SMTP server**.
+2. Set **Authentication** to **Microsoft 365 OAuth**. The host is `smtp.office365.com`, port `587`, with required STARTTLS.
+3. Enter the mailbox address as **Username** and use that same address for **From address**. Set **Reply-To address** to the support mailbox connected under Inbound Email.
+4. Enter the application's tenant ID, client ID and client secret. Inbound and outbound settings are saved separately, even when they use the same application.
+5. Save. Select **Test connection**, then **Send test email**. The test message goes to your signed-in Enduria account's address. Saving alone does not verify the connection.
+
+Microsoft 365 OAuth in this setup sends as the configured mailbox. Use **From name** for its display name; a different From address is refused.
+
+Password resets and invitations follow the installation's system-mail routing, which may use a separate platform sender. A custom-SMTP test does not certify that system-mail path; check invitations and recovery separately with your operator.
+
+## Update credentials and recover a connection
+
+Saved secrets appear masked. Leave the mask unchanged to retain the secret, or enter its replacement and save. Changing a tenant or application ID clears the mask and requires a new secret. A transport or credential change clears outbound verification; test again after saving. Update both inbound and outbound settings when both use the changed application.
+
+| Result | Next action |
+| --- | --- |
+| Microsoft 365 authentication failed | Check the tenant/client IDs, secret value and expiry, administrator consent, Exchange service principal, mailbox access and SendAs grants. Confirm the mailbox's protocol policies. |
+| Token service unavailable | Wait and retry the connection check. Ask the installation operator to check connectivity if it persists. |
+| Sender must be the authenticated mailbox | Make **From address** match **Username**. |
+| New application secret required | Enter the new application's secret value rather than retaining the old mask. |
+| Connection passes but intake fails | Review polling, processed-folder and sender-policy results in the [inbound processing log](./inbound#the-processing-log). |
+
+After setup, complete an actual conversation: send a request from an authorised test address, receive it as a ticket, add a staff-only note, send a public reply and reply back from the requester. Confirm that the private note stays private and the reply appears on the same ticket. A connection test alone does not establish delivery, sender verification or threading.

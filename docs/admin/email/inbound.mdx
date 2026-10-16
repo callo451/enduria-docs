@@ -13,6 +13,8 @@ Inbound email turns accepted messages sent to a support mailbox into tickets, an
 
 Enduria reads mailboxes over IMAP with an encrypted connection (TLS or STARTTLS).
 
+For commercial Exchange Online, use [Microsoft 365 OAuth setup](./microsoft365), which is awaiting rollout. The password steps below apply to other providers; an app password is not a substitute for Microsoft 365 OAuth.
+
 1. Select **Add Account**.
 2. Enter a name, the mailbox address, and the IMAP host, port, username and password from your mail provider.
 3. Set the **Polling Interval** — how often Enduria checks the mailbox, from 60 seconds to 24 hours.

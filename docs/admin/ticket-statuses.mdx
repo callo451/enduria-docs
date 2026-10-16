@@ -77,6 +77,10 @@ A successful rename updates matching tickets together with the configuration. A 
 
 The ticket workspace shows your configured priority names and ordering. A renamed priority remains selected on matching tickets. Active priorities are available only for their applicable work-item types; an empty type selection in the configuration applies to all five types.
 
+> **Awaiting rollout.** Automatically derived incident and problem priorities following a renamed entry are awaiting application rollout.
+
+When incident or problem creation derives its priority from impact and urgency, it follows that priority entry's current name after a rename. An explicitly selected priority takes precedence. If the derived entry has been retired or no longer applies to that work-item type, select an active applicable priority before retrying creation.
+
 The rename is retained for audit. Renaming a label does not complete or reopen a ticket, replace its completion timestamps, or restart its SLA clock. Earlier ticket history and frozen selections keep the names recorded at the time.
 
 Former status and priority names remain reserved for the same entry. You can rename that entry back to a former name, but cannot give the name to a different entry in the same list. To retire a status or priority, turn **Active** off and save; retain the entry so earlier evidence remains meaningful. Before retiring a default or automatic-action destination, configure its replacement.

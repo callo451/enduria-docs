@@ -50,3 +50,14 @@ Select **Remove** beside an asset to unlink it. Links and removals are recorded 
 
 The list shows only assets you can see. If others are linked, it says how many without naming them. Archived assets stay linked and are marked **Archived**. If an asset later moves to a different customer, its link is marked as no longer fitting the project so you can remove it. Deleting a project removes its asset links.
 
+## Investigate a project with the Agent
+
+> **Availability:** The shared project assistance described here is awaiting application rollout.
+
+An administrator can also connect an external agent for published project read access through [Agent access](../admin/agent-access.mdx). This setup is also awaiting rollout. Project visibility and any separate financial permission still apply; the connection cannot update projects or tasks in this release.
+
+1. Open **Agent** when staff assistance is enabled for your account, or select **Ask agent** on the project and then **Add context**.
+2. Ask about a project using its complete number, code or record ID. If you need to find it first, search by name.
+3. Check the cited project and open its workspace for the full task and governance history.
+
+AI uses your current project scope: all projects, projects you manage, or projects where you are a member, according to your permissions. Budget and recorded spending require the separate `projects.budget.view` permission. An older, unreviewed budget is identified as such; it is not evidence of an approved financial baseline. AI investigation does not update a project or its tasks.
